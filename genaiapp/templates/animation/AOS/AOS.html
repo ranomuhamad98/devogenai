@@ -1,0 +1,70 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+<!-- Plugins css start-->
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/aos.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/photoswipe.scss' %}">
+<!-- Plugins css Ends-->
+{% endblock css %}
+{% block content %}
+<div class="page-body">
+  <div class="container-fluid">
+    <div class="page-header">
+      <div class="row">
+        <div class="col-sm-6">
+          <h3>AOS Animation</h3>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i data-feather="home"></i></a></li>
+            <li class="breadcrumb-item">Animation</li>
+            <li class="breadcrumb-item active">AOS Animation</li>
+          </ol>
+        </div>
+        <div class="col-sm-6">
+          <!-- Bookmark Start-->
+          <div class="bookmark">
+            <ul>
+              <li><a href="/chat_chat_app" data-container="body" data-bs-toggle="popover" data-placement="top" title=""
+                  data-original-title="Chat"><i data-feather="message-square"></i></a>
+              </li>
+              <li><a href="/ecommerce_product_page" data-container="body" data-bs-toggle="popover" data-placement="top"
+                  title="" data-original-title="Icons"><i data-feather="shopping-bag"> </i></a>
+              </li>
+              <li><a href="/users_users_profile" data-container="body" data-bs-toggle="popover" data-placement="top"
+                  title="" data-original-title="Learning"><i data-feather="users"></i></a></li>
+              <li><a href="javascript:void(0)"><i class="bookmark-search" data-feather="heart"></i></a>
+                <form class="form-inline search-form">
+                  <div class="form-group form-control-search">
+                    <input type="text" placeholder="Search..">
+                  </div>
+                </form>
+              </li>
+            </ul>
+          </div>
+          <!-- Bookmark Ends-->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        {% include 'animation/AOS/components/aos-cards.html' %}
+        {% include 'animation/AOS/components/aos-info-top.html' %}
+        {% include 'animation/AOS/components/aos-info-bottom.html' %}
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/isotope.pkgd.js' %}"></script>
+<script src="{% static 'assets/js/animation/aos/aos.js' %}"></script>
+<script src="{% static 'assets/js/animation/aos/aos-init.js' %}"></script>
+<script src="{% static 'assets/js/photoswipe/photoswipe.min.js' %}"></script>
+<script src="{% static 'assets/js/photoswipe/photoswipe-ui-default.min.js' %}"></script>
+<script src="{% static 'assets/js/photoswipe/photoswipe.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

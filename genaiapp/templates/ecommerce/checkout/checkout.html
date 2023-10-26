@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block content %}
+<div class="page-body checkout">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  {% include 'ecommerce/checkout/components/checkout.html' %}
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}

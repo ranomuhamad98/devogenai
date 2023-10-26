@@ -1,0 +1,41 @@
+{% load static %}
+{% load sass_tags %}
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid custom-container">
+    <div class="row w-100">
+      <div class="col-md-3 col-4"><a class="navbar-brand" href="/"> <img
+            src="{% static 'documentation/assets/images/logo/logo.png' %}" alt=""></a></div>
+      <div class="col-lg-6 col-2">
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation"><i class="fa fa-bars"> </i></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav menu">
+            <li class="nav-item active"><a class="nav-link" href="https://1.envato.market/3GVzd" role="button"
+                aria-haspopup="true" aria-expanded="false" target="_blank">Purchase</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://pixelstrap.freshdesk.com/" role="button"
+                aria-haspopup="true" aria-expanded="false" target="_blank">Support</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://admin.pixelstrap.com/wingo/theme/landing-page.html"
+                role="button" aria-haspopup="true" aria-expanded="false" target="_blank">Demo</a></li>
+            <li class="nav-item"><a class="nav-link"
+                href="http://admin.pixelstrap.com/wingo/theme/landing-page.html#framework" role="button"
+                aria-haspopup="true" aria-expanded="false" target="_blank">Feature </a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <ul class="nav-right">
+          <li>
+            <div class="d-lg-none d-block"><a class="toggle-sidebar" href="#"><i class="fa fa-sliders"></i></a></div>
+          </li>
+          <li>
+            <div class="btn-group"><a class="decrease btn btn-doc" href="#" title="Decrease font size">A-</a><a
+                class="reset btn btn-doc" href="#" title="Default font size">A</a><a class="increase btn btn-doc"
+                href="#" title="Increase font size">A+</a></div>
+          </li>
+          <li><a class="btn btn-dark mode" href="#" title="Dark"><i class="fa fa-moon-o"></i><span>Dark</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

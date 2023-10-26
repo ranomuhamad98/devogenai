@@ -1,0 +1,243 @@
+{% load static %}
+{% load sass_tags %}
+<div class="col-sm-12 col-md-6">
+  <div class="card b-r-0">
+    <div class="card-header pb-0">
+      <ul class="nav nav-tabs" id="icon-tab" role="tablist">
+        <li class="nav-item"><a class="nav-link active" id="step-1-tab" data-bs-toggle="tab" href="#step-1" role="tab" aria-controls="step-1" aria-selected="false">Step 1 - Document Test</a></li>
+        <li class="nav-item"><a class="nav-link" id="step-2-tab" data-bs-toggle="tab" href="#step-2" role="tab" aria-controls="step-2" aria-selected="true">Step 2 - Parser</a></li>
+      </ul>
+      <div class="card-header-right">
+        <ul class="setting-option">
+          <li>
+            <div class="setting-badge"><i class="fa fa-spin fa-cog font-primary"></i></div>
+          </li>
+          <!-- <li><i class="view-html fa fa-code font-primary"></i></li> -->
+          <li><i class="icofont icofont-maximize full-card font-primary"></i></li>
+          <li><i class="icofont icofont-minus minimize-card font-primary"></i></li>
+          <!-- <li><i class="icofont icofont-refresh reload-card font-primary"></i></li> -->
+          <!-- <li><i class="icofont icofont-error close-card font-primary"></i></li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="tab-content" id="icon-tabContent">
+        <div class="tab-pane fade active show" id="step-1" role="tabpanel" aria-labelledby="step-1-tab">
+          <p class="m-0">
+            <div class="row">
+              <div class="col-sm-12 col-lg-12 col-xl-12">
+                <div class="table-responsive table-bordered">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Document Name</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Table cell</td>
+                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>Table cell</td>
+                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>Table cell</td>
+                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </p>
+        </div>
+        <div class="tab-pane fade" id="step-2" role="tabpanel" aria-labelledby="step-2-tab">
+          <p class="m-0">
+            <div class="row">
+              <div class="col-sm-12 col-lg-12 col-xl-12">
+                <div class="table-responsive table-bordered">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Document Name</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Table cell</td>
+                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>Table cell</td>
+                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>Table cell</td>
+                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-sm-12 col-md-6">
+  <div class="card b-r-0">
+    <div class="card-header pb-0">
+      <h6>Step 3 - Document Test</h6>
+      <div class="card-header-right">
+        <ul class="setting-option">
+          <li>
+            <div class="setting-badge"><i class="fa fa-spin fa-cog font-primary"></i></div>
+          </li>
+          <!-- <li><i class="view-html fa fa-code font-primary"></i></li> -->
+          <li><i class="icofont icofont-maximize full-card font-primary"></i></li>
+          <li><i class="icofont icofont-minus minimize-card font-primary"></i></li>
+          <!-- <li><i class="icofont icofont-refresh reload-card font-primary"></i></li> -->
+          <!-- <li><i class="icofont icofont-error close-card font-primary"></i></li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="m-0">
+        <form class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label class="form-label">Document Test</label>
+            <input class="form-control" name="document_test" id="document_test" type="text" placeholder="" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Choose your model</label>
+            <div class="form-check radio radio-primary">
+              <input class="form-check-input" id="radio11" type="radio" name="radio1" value="model1">
+              <label class="form-check-label" style="font-weight: 400;" for="radio11">Model 1 : Both are used for very complex paragraph arrangements and have different formats</label>
+            </div>
+            <div class="form-check radio radio-primary">
+              <input class="form-check-input" id="radio22" type="radio" name="radio1" value="model2">
+              <label class="form-check-label" style="font-weight: 400;" for="radio22">Model 2 : Best used for paragraphs that have medium complexity</label>
+            </div>
+            <div class="form-check radio radio-primary">
+              <input class="form-check-input" id="radio33" type="radio" name="radio1" value="model3">
+              <label class="form-check-label" style="font-weight: 400;" for="radio33">Model 3 : Best used for paragraphs that have low complexity</label>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Model Number</label>
+              <input class="form-control" name="model_number" id="model_number" type="text" placeholder="" readonly>
+            </div>
+            <div class="col-md-8">
+              <label class="form-label">Model Name</label>
+              <input class="form-control" name="model_name" id="model_name" type="text" placeholder="">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="validationCustom01">Prompt used</label>
+            <textarea class="form-control" id="prompt_used" name="prompt_used" placeholder="" required="" rows="3"></textarea>
+            <div class="invalid-feedback">Need to enter Prompt used</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">First Regex Spliter</label>
+              <input class="form-control" name="first_regex_spillter" id="first_regex_spillter" type="text" placeholder="">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Query Used (Optional)</label>
+              <input class="form-control" name="query_used" id="query_used" type="text" placeholder="">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Second Regex Spliter</label>
+              <input class="form-control" name="second_regex_spillter" id="second_regex_spillter" type="text" placeholder="">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Last Regex Filter Used (Optional)</label>
+              <input class="form-control" name="last_regex_filter_used" id="last_regex_filter_used" type="text" placeholder="">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Third Spliter</label>
+              <input class="form-control" name="third_spliter" id="third_spliter" type="text" placeholder="">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Insert Duplication</label>
+              <input class="touchspin" name="insert_duplication" id="insert_duplication" type="text" value="0" data-bts-min="0" data-bts-max="100">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Insert K Value</label>
+              <input class="touchspin" name="third_spliter" id="third_spliter" type="text" value="0" data-bts-min="0" data-bts-max="100">
+              <!-- <input class="form-control" name="third_spliter" id="third_spliter" type="text" placeholder=""> -->
+            </div>
+          </div>
+          <button class="btn btn-primary" id="save_model" type="submit">Save Model</button>
+          <button class="btn btn-light" id="test_model" type="submit">Test Model</button>
+          <button class="btn btn-light" id="update_model" type="submit">Update Model</button>
+        </form>
+      </p>
+    </div>
+  </div>
+
+  <div class="card b-r-0">
+    <div class="card-header pb-0">
+      <!-- <h6>Step 4</h6> -->
+      <div class="card-header-right">
+        <ul class="setting-option">
+          <li>
+            <div class="setting-badge"><i class="fa fa-spin fa-cog font-primary"></i></div>
+          </li>
+          <!-- <li><i class="view-html fa fa-code font-primary"></i></li> -->
+          <li><i class="icofont icofont-maximize full-card font-primary"></i></li>
+          <li><i class="icofont icofont-minus minimize-card font-primary"></i></li>
+          <!-- <li><i class="icofont icofont-refresh reload-card font-primary"></i></li> -->
+          <!-- <li><i class="icofont icofont-error close-card font-primary"></i></li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="m-0">
+        <form class="needs-validation" novalidate>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Processing Time</label>
+              <input class="form-control" name="processing_time" id="processing_time" type="text" placeholder="" readonly>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">OCR Quality</label>
+              <input class="form-control" name="ocr_quality" id="ocr_quality" type="text" placeholder="" readonly>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="validationCustom01">Result Test</label>
+            <textarea class="form-control" id="result_test" name="result_test" placeholder="" required="" rows="3"></textarea>
+            <div class="invalid-feedback">Need to enter Result Test</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">OCR Confidence Score Model Test</label>
+              <input class="form-control" name="ocr_conf_score_model_test" id="ocr_conf_score_model_test" type="text" placeholder="" readonly>
+          </div>
+          <button class="btn btn-primary" type="submit">Show The Confidence</button>
+        </form>
+      </p>
+    </div>
+  </div>
+</div>

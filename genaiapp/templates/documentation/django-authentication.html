@@ -1,0 +1,170 @@
+{% load static %}
+{% load sass_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pixelstrap - Admin Document">
+  <meta name="keywords" content="Pixelstrap - Admin Document">
+  <meta name="author" content="pixelstrap">
+  <link rel="icon" href="{% static 'documentation/assets/images/favicon.png' %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'documentation/assets/images/favicon.png' %}" type="image/x-icon">
+  <title>Pixelstrap - Admin Document</title>
+  <!-- Google font-->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Commissioner:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/vendors/prism.scss' %}">
+  <!-- Font Awesome-->
+  <link rel="stylesheet" type="text/css" href="{% static 'documentation/assets/css/fontawesome.css' %}">
+  <!-- Feather icon-->
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/vendors/feather-icon.scss' %}">
+  <!-- animate-->
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/vendors/animate.scss' %}">
+  <!-- Bootstrap css-->
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/vendors/bootstrap.scss' %}">
+  <!-- App css-->
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/style.scss' %}">
+</head>
+
+<body class="document full-width-doc sticky-nav-doc" data-bs-spy="scroll" data-bs-target="#myScrollspy" data-offset="0">
+  <!-- tap on top starts-->
+  <div class="tap-top"><i data-feather="chevrons-up"></i>
+    <p>Top</p>
+  </div>
+  <!-- tap on tap ends-->
+  <!-- page-wrapper Start-->
+  <div class="page-wrapper compact-wrapper">
+    <div>
+      {% include 'documentation/components/navbar.html' %}
+    </div>
+    <div class="body-wrapper sticky_menu">
+      <section class="document-area" id="sticky-page">
+        <div class="overlay_bg"></div>
+        <div class="container-fluid custom-container">
+          <div class="row doc-container">
+            {% include 'documentation/components/sidebar.html' %}
+
+            <div class="col-xxl-10 col-xl-9 content component-col">
+              <div id="section-5">
+                <div class="card">
+
+                  <div id="section58">
+                    <div class="card-body">
+                      <hr>
+                      <h5>Authentication</h5>
+
+
+                      <h6 class="pb-2">How does Authenticaton work in this site?</h6>
+                      <h6 class="pb-2">Step 1. Run the initial migrations in terminal.</h6>
+                      <p class="pb-2">- python manage.py makemigration</p>
+                      <p class="pb-2">- python manage.py migrate</p>
+                      <h6 class="pb-2">Step 2. Create a Super User to access the database with the following command.
+                      </h6>
+                      <p class="pb-2">- python manage.py createsuperuser</p>
+
+                      <h6 class="pb-2">Step 3. Import login_required decorators in view.py file. </h6>
+
+
+                      <div class="mb-4">
+                        <div class="code-box-copy">
+                          <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#todocode"
+                            title="Copy"><i class="fa fa-files-o"></i></button>
+                          <pre><code class="language-html" id="todocode">&lt;!-- views.py  --&gt;
+from django.contrib.auth.decorators import login_required
+                              
+                            </code></pre>
+                        </div>
+                      </div>
+
+                      <h6 class="pb-2">Step 4. Write the logic for login in views.py. </h6>
+                      <h6 class="pb-2">Make sure not to add the decorator about login or sign-up or any other page which
+                        do not require authentication to open. </h6>
+                      <div class="mb-4">
+                        <div class="code-box-copy">
+                          <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#todocode"
+                            title="Copy"><i class="fa fa-files-o"></i></button>
+                          <pre><code class="language-html" id="todocode">&lt;!-- views.py  --&gt;
+def login_simple&lpar;request&rpar;:
+if request.method == 'POST':
+    form = AuthenticationForm&lpar;data=request.POST&rpar;
+    if form.is_valid&lpar;&rpar;:
+        user = form.get_user&lpar;&rpar;
+        login&lpar;request,user&rpar;
+        if 'next' in request.GET:
+            nextPage = request.GET&lsqb;'next&rsqb;
+            return HttpResponseRedirect&lpar;nextPage&rpar;
+        else:
+            return redirect&lpar;'dashboard_ecommerce'&rpar;
+else:
+    form =AuthenticationForm&lpar;&rpar;
+context=&lcub;"form":form&rcub;
+return render&lpar;request,'others/authentication/login/login.html',context&rpar;
+
+                          
+
+  </code></pre>
+                        </div>
+                      </div>
+                      <h6 class="pb-2">Step 5. Add the decorator above those views which will require authentication
+                        before accessing the page.</h6>
+                      <h6 class="pb-2">In login_url="&lcub;&lcub;redirect_page_path&rcub;&rcub;" ,write the path of the
+                        page you want to redirect to, usually it is to Login Page.</h6>
+                      <div class="mb-4">
+                        <div class="code-box-copy">
+                          <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#todocode"
+                            title="Copy"><i class="fa fa-files-o"></i></button>
+                          <pre><code class="language-html" id="todocode">&lt;!-- views.py  --&gt;
+  @login_required&lpar;login_url="/login"&rpar;
+  def page_view&lpar;request&rpar;:
+      return render&lpar;request,'general/dashboard/default/index.html',&rpar;
+
+  @login_required&lpar;login_url="/login"&rpar;
+  def page_view_2&lpar;request&rpar;:
+      return render&lpar;request,'general/dashboard/default/index2.html',&rpar;
+
+  </code></pre>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </div>
+                  <div id="section59">
+                    <div class="card-body">
+                      <hr>
+                      <h5>All Set</h5>
+                      <h6 class="pb-2">Note: Do not forget to add correct paths in urls.py file.</h6>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+<!-- latest jquery-->
+<script src="{% static 'documentation/assets/js/jquery-3.5.1.min.js' %}"></script>
+<!-- Bootstrap js-->
+<script src="{% static 'documentation/assets/js/bootstrap/bootstrap.bundle.min.js' %}"></script>
+<!-- popover js-->
+<!-- code copy box js-->
+<script src="{% static 'documentation/assets/js/prism/prism.min.js' %}"></script>
+<script src="{% static 'documentation/assets/js/clipboard/clipboard.min.js' %}"></script>
+<script src="{% static 'documentation/assets/js/custom-card/custom-card.js' %}"></script>
+<!-- feather icon js-->
+<script src="{% static 'documentation/assets/js/icons/feather-icon/feather.min.js' %}"></script>
+<script src="{% static 'documentation/assets/js/icons/feather-icon/feather-icon.js' %}"></script>
+<script src="{% static 'documentation/assets/js/document/main.js' %}"></script>
+<script src="{% static 'documentation/assets/js/script.js' %}"></script>
+
+</html>

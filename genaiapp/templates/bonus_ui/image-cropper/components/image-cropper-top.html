@@ -1,0 +1,51 @@
+{% load static %}
+{% load sass_tags %}
+<div class="card">
+  <div class="card-header pb-0">
+    <h5>Image Cropper</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-xl-9 col-md-12">
+        <div class="img-container"><img id="image" src="{% static 'assets/images/other-images/img-cropper.jpg' %}"
+            alt="Picture"></div>
+      </div>
+      <div class="col-xl-3 col-md-12">
+        <!-- <h3>Preview:</h3>-->
+        <div class="docs-preview clearfix">
+          <!-- <div class="img-preview preview-lg"></div>-->
+          <div class="img-preview preview-md"></div>
+          <div class="img-preview preview-sm"></div>
+          <div class="img-preview preview-xs"></div>
+        </div>
+        <!-- <h3>Data:</h3>-->
+        <div class="docs-data">
+          <div class="input-group input-group-sm"><span class="input-group-text" for="dataX">X</span>
+            <input class="form-control" id="dataX" type="text" placeholder="x"><span class="input-group-text">px</span>
+          </div>
+          <div class="input-group input-group-sm"><span class="input-group-text" for="dataY">Y</span>
+            <input class="form-control" id="dataY" type="text" placeholder="y"><span class="input-group-text">px</span>
+          </div>
+          <div class="input-group input-group-sm"><span class="input-group-text" for="dataWidth">Width</span>
+            <input class="form-control" id="dataWidth" type="text" placeholder="width"><span
+              class="input-group-text">px</span>
+          </div>
+          <div class="input-group input-group-sm"><span class="input-group-text" for="dataHeight">Height </span>
+            <input class="form-control" id="dataHeight" type="text" placeholder="height"><span
+              class="input-group-text">px</span>
+          </div>
+          <div class="input-group input-group-sm"><span class="input-group-text" for="dataRotate">Rotate</span>
+            <input class="form-control" id="dataRotate" type="text" placeholder="rotate"><span
+              class="input-group-text">deg</span>
+          </div>
+          <div class="input-group input-group-sm"><span class="input-group-text" for="dataScaleX">ScaleX</span>
+            <input class="form-control" id="dataScaleX" type="text" placeholder="scaleX">
+          </div>
+          <div class="input-group input-group-sm"><span class="input-group-text" for="dataScaleY">ScaleY</span>
+            <input class="form-control" id="dataScaleY" type="text" placeholder="scaleY">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

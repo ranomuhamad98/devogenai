@@ -1,0 +1,286 @@
+{% load static %}
+{% load sass_tags %}
+<div class="col-sm-12 col-md-6">
+  <div class="card">
+    <div class="card-header pb-0">
+      <h5>Upload New Document</h5>
+      <div class="card-header-right">
+        <ul class="setting-option">
+          <li>
+            <div class="setting-badge"><i class="fa fa-spin fa-cog font-primary"></i></div>
+          </li>
+          <!-- <li><i class="view-html fa fa-code font-primary"></i></li> -->
+          <li><i class="icofont icofont-maximize full-card font-primary"></i></li>
+          <li><i class="icofont icofont-minus minimize-card font-primary"></i></li>
+          <!-- <li><i class="icofont icofont-refresh reload-card font-primary"></i></li> -->
+          <!-- <li><i class="icofont icofont-error close-card font-primary"></i></li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <form class="needs-validation" novalidate>
+        <div class="mb-3">
+          <label class="form-label" for="validationCustom01">Document Bank Statement</label>
+          <input class="form-control" type="file" aria-label="file example" required="">
+          <div class="invalid-feedback">Need to enter document bank statement</div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="validationCustom02">Bank Name</label>
+          <select class="form-select" required="" aria-label="select example">
+            <option value="">Select Bank Name...</option>
+            <option value="BCA">BCA</option>
+            <option value="CIMB">CIMB</option>
+            <option value="BRI">BRI</option>
+          </select>
+          <div class="invalid-feedback">Need to enter bank name</div>
+        </div>
+        <button class="btn btn-primary" type="submit">Process</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="col-sm-12 col-md-6">
+  <div class="card b-r-0">
+    <div class="card-header pb-0">
+      <ul class="nav nav-tabs" id="icon-tab" role="tablist">
+        <li class="nav-item"><a class="nav-link active" id="ocr-result-tab" data-bs-toggle="tab" href="#ocr-result" role="tab" aria-controls="ocr-result" aria-selected="false">OCR Result</a></li>
+        <li class="nav-item"><a class="nav-link" id="free-prompt-tab" data-bs-toggle="tab" href="#free-prompt" role="tab" aria-controls="free-prompt" aria-selected="true">Free Prompt</a></li>
+      </ul>
+      <div class="card-header-right">
+        <ul class="setting-option">
+          <li>
+            <div class="setting-badge"><i class="fa fa-spin fa-cog font-primary"></i></div>
+          </li>
+          <!-- <li><i class="view-html fa fa-code font-primary"></i></li> -->
+          <li><i class="icofont icofont-maximize full-card font-primary"></i></li>
+          <li><i class="icofont icofont-minus minimize-card font-primary"></i></li>
+          <!-- <li><i class="icofont icofont-refresh reload-card font-primary"></i></li> -->
+          <!-- <li><i class="icofont icofont-error close-card font-primary"></i></li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="tab-content" id="icon-tabContent">
+        <div class="tab-pane fade active show" id="ocr-result" role="tabpanel" aria-labelledby="ocr-result-tab">
+          <p class="m-0">
+            <form class="needs-validation" novalidate>
+              <div class="mb-3">
+                <label class="form-label">Prefix</label>
+                <input class="form-control" name="prefix" id="prefix" type="text" placeholder="" readonly>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Sufix</label>
+                <input class="form-control" name="sufix" id="sufix" type="text" placeholder="" readonly>
+              </div>
+            </form>
+            <div class="row">
+              <div class="col-sm-12 col-lg-12 col-xl-12">
+                <div class="table-responsive table-bordered">
+                  <label class="form-label">Transaction Detail</label>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">A</th>
+                        <th scope="col">B</th>
+                        <th scope="col">C</th>
+                        <th scope="col">D</th>
+                        <th scope="col">E</th>
+                        <th scope="col">F</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </p>
+        </div>
+        <div class="tab-pane fade" id="free-prompt" role="tabpanel" aria-labelledby="free-prompt-tab">
+          <p class="m-0">
+            <div class="row">
+              <div class="col-sm-12 col-lg-12 col-xl-12">
+                <div class="table-responsive table-bordered">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">A</th>
+                        <th scope="col">B</th>
+                        <th scope="col">C</th>
+                        <th scope="col">D</th>
+                        <th scope="col">E</th>
+                        <th scope="col">F</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                        <td>Table cell</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <form class="needs-validation" novalidate>
+              <div class="mb-3 mt-3">
+                <label class="form-label" for="validationCustom01">Prefix OCR</label>
+                <textarea class="form-control" id="prefix_ocr" placeholder="" required=""></textarea>
+                <div class="invalid-feedback">Need to enter prefix OCR</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="validationCustom02">Prompt Dataframe</label>
+                <input class="form-control" name="prompt_df" id="prompt_df" type="text" placeholder="" required="">
+                <div class="invalid-feedback">Need to enter prompt dataframe</div>
+              </div>
+              <button class="btn btn-primary" type="submit">Process</button>
+            </form>
+            <div class="mt-3">
+              <label class="form-label" for="">Result Dataframe Search</label>
+              <textarea class="form-control" id="" placeholder="" required=""></textarea>
+              <div class="invalid-feedback">Need to enter prefix OCR</div>
+            </div>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-sm-12 col-md-12">
+  <div class="card b-r-0">
+    <div class="card-header pb-0">
+      <h5>Extraction Result</h5>
+      <div class="card-header-right">
+        <ul class="setting-option">
+          <li>
+            <div class="setting-badge"><i class="fa fa-spin fa-cog font-primary"></i></div>
+          </li>
+          <!-- <li><i class="view-html fa fa-code font-primary"></i></li> -->
+          <li><i class="icofont icofont-maximize full-card font-primary"></i></li>
+          <li><i class="icofont icofont-minus minimize-card font-primary"></i></li>
+          <!-- <li><i class="icofont icofont-refresh reload-card font-primary"></i></li> -->
+          <!-- <li><i class="icofont icofont-error close-card font-primary"></i></li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="m-3">
+        <form class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label class="form-label">Bank Name</label>
+            <input class="form-control" name="bank_name" id="bank_name" type="text" placeholder="" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Account Number</label>
+            <input class="form-control" name="account_number" id="account_number" type="text" placeholder="" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Account Holder</label>
+            <input class="form-control" name="account_holder" id="account_holder" type="text" placeholder="" readonly>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-sm-12 col-lg-12 col-xl-12">
+            <div class="table-responsive table-bordered">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">A</th>
+                    <th scope="col">B</th>
+                    <th scope="col">C</th>
+                    <th scope="col">D</th>
+                    <th scope="col">E</th>
+                    <th scope="col">F</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                    <td>Table cell</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </p>
+    </div>
+  </div>
+</div>

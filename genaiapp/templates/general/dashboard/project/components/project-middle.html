@@ -1,0 +1,150 @@
+{% load static %}
+{% load sass_tags %}
+<div class="col-xl-8 des-xl-100 box-col-6">
+  <div class="card annual-earning-sec">
+    <div class="card-header justify-content-between">
+      <h5>Annually Earnings</h5>
+      <div class="center-content">
+        <div class="center-content-left">
+          <div class="round bg-primary d-inline-block"></div>
+          <p>Archive</p>
+        </div>
+        <div class="center-content-right">
+          <p>Expected</p>
+        </div>
+      </div>
+      <div class="card-header-right">
+        <ul class="setting-option">
+          <li>
+            <div class="setting-badge"><i class="fa fa-spin fa-cog font-primary"></i></div>
+          </li>
+          <li><i class="view-html fa fa-code font-primary"></i></li>
+          <li><i class="icofont icofont-maximize full-card font-primary"></i></li>
+          <li><i class="icofont icofont-minus minimize-card font-primary"></i></li>
+          <li><i class="icofont icofont-refresh reload-card font-primary"></i></li>
+          <li><i class="icofont icofont-error close-card font-primary"></i></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-body py-0 p-0">
+      <div id="earnings-chart"></div>
+      <div class="code-box-copy">
+        <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#annually-earnings" title="Copy"><i
+            class="icofont icofont-copy-alt"></i></button>
+        <pre><code class="language-html" id="annually-earnings">&lt;div class="card annual-earning-sec"&gt;
+&lt;div class="card-header justify-content-between"&gt;
+&lt;h5&gt;Annually Earnings&lt;/h5&gt;
+&lt;div class="center-content"&gt;
+&lt;div class="center-content-left"&gt;
+&lt;div class="round bg-primary d-inline-block"&gt;&lt;/div&gt;
+&lt;p&gt;Archive&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="center-content-right"&gt;
+&lt;p&gt;Expected&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="card-header-right"&gt;
+&lt;ul class="setting-option"&gt;
+&lt;li&gt;&lt;div class="setting-badge"&gt;&lt;i class="fa fa-spin fa-cog font-primary"&gt;&lt;/i&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;&lt;i class="view-html fa fa-code font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+&lt;li&gt;&lt;i class="icofont icofont-maximize full-card font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+&lt;li&gt;&lt;i class="icofont icofont-minus minimize-card font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+&lt;li&gt;&lt;i class="icofont icofont-refresh reload-card font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+&lt;li&gt;&lt;i class="icofont icofont-error close-card font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="card-body py-0 p-0"&gt;
+&lt;div id="earnings-chart"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-xl-4 des-xl-100 box-col-6">
+  <div class="card visitor-sec">
+    <div class="card-header justify-content-between">
+      <h5>Visitors Countries</h5>
+      <div class="center-content">
+        <p>Country</p><span>195</span>
+      </div>
+      <div class="card-header-right">
+        <ul class="setting-option">
+          <li>
+            <div class="setting-badge"><i class="fa fa-spin fa-cog font-primary"></i></div>
+          </li>
+          <li><i class="view-html fa fa-code font-primary"></i></li>
+          <li><i class="icofont icofont-maximize full-card font-primary"></i></li>
+          <li><i class="icofont icofont-minus minimize-card font-primary"></i></li>
+          <li><i class="icofont icofont-refresh reload-card font-primary"></i></li>
+          <li><i class="icofont icofont-error close-card font-primary"></i></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <div class="jvector-map-height" id="world-map2"></div>
+      <div class="show-value-top d-flex">
+        <div class="counry-data d-inline-block">
+          <div class="round bg-primary d-inline-block"></div><span>South America</span>
+        </div>
+        <div class="counry-data d-inline-block">
+          <div class="round bg-secondary d-inline-block"></div><span>Europe</span>
+        </div>
+        <div class="counry-data d-inline-block">
+          <div class="round bg-warning d-inline-block"></div><span>London</span>
+        </div>
+        <div class="counry-data d-inline-block">
+          <div class="round bg-success d-inline-block"></div><span>Australia</span>
+        </div>
+      </div>
+      <div class="code-box-copy">
+        <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#visitor-countris" title="Copy"><i
+            class="icofont icofont-copy-alt"></i></button>
+        <pre><code class="language-html" id="visitor-countris">&lt;div class="card visitor-sec"&gt;
+&lt;div class="card-header justify-content-between"&gt;
+&lt;h5&gt;Visitors Countries&lt;/h5&gt;
+&lt;div class="center-content"&gt;
+&lt;p&gt;Country&lt;/p&gt;&lt;span&gt;195&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="card-header-right"&gt;
+&lt;ul class="setting-option"&gt;
+&lt;li&gt;
+&lt;div class="setting-badge"&gt;
+&lt;i class="fa fa-spin fa-cog font-primary"&gt;&lt;/i&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;i class="view-html fa fa-code font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+&lt;li&gt;&lt;i class="icofont icofont-maximize full-card font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+&lt;li&gt;&lt;i class="icofont icofont-minus minimize-card font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+&lt;li&gt;&lt;i class="icofont icofont-refresh reload-card font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+&lt;li&gt;&lt;i class="icofont icofont-error close-card font-primary"&gt;&lt;/i&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="card-body p-0"&gt;
+&lt;div class="jvector-map-height" id="world-map2"&gt;&lt;/div&gt;
+&lt;div class="show-value-top d-flex"&gt;
+&lt;div class="counry-data d-inline-block"&gt;
+&lt;div class="round bg-primary d-inline-block"&gt;&lt;/div&gt;
+&lt;span&gt;South America&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="counry-data d-inline-block"&gt;
+&lt;div class="round bg-secondary d-inline-block"&gt;&lt;/div&gt;
+&lt;span&gt;Europe&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="counry-data d-inline-block"&gt;
+&lt;div class="round bg-warning d-inline-block"&gt;&lt;/div&gt;
+&lt;span&gt;London&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="counry-data d-inline-block"&gt;
+&lt;div class="round bg-success d-inline-block"&gt;&lt;/div&gt;
+&lt;span&gt;Australia&lt;/span&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+    </div>
+  </div>
+</div>

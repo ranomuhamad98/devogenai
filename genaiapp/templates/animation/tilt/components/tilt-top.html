@@ -1,0 +1,30 @@
+{% load static %}
+{% load sass_tags %}
+<div class="col-sm-12">
+  <div class="card text-center">
+    <div class="card-header pb-0">
+      <h5>Parallax hover tilt effect </h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div><img class="img-fluid img-thumbnail js-tilt" src="{% static 'assets/images/lightgallry/02.jpg' %}"
+              data-tilt-perspective="300" data-tilt-speed="400" data-tilt-max="5" alt=""></div>
+          <div>
+            <h6 class="sub-title mt-4 mb-0">The most basic usage:</h6>
+            <ul>
+              <li>
+                <div class="line"><code><span> &lt;script src="tilt.jquery.js' %}"&gt;&lt;/script&gt;</span></code>
+                </div>
+              </li>
+              <li>
+                <div class="line">Mark your elements with<code><span> &lt;span data-tilt"&gt;&lt;/span&gt;</span></code>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

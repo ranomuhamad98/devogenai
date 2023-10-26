@@ -1,0 +1,26 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- row 1-3 -->
+      {% include 'buttons/button-group/components/group-1.html' %}
+      <!-- row 4-6 -->
+      {% include 'buttons/button-group/components/group-2.html' %}
+      <!-- row 7-9 -->
+      {% include 'buttons/button-group/components/group-3.html' %}
+      <!-- row 10-13 -->
+      {% include 'buttons/button-group/components/group-4.html' %}
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/height-equal.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

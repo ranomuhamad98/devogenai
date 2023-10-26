@@ -1,0 +1,21 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  {% include 'builders/form-builder-1/components/form-builder-1.html' %}
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/counter/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'assets/js/counter/jquery.counterup.min.js' %}"></script>
+<script src="{% static 'assets/js/counter/counter-custom.js' %}"></script>
+<!-- Plugins JS Ends-->
+<!-- Theme js-->
+<script src="{% static 'assets/js/form-builder/form-builder-1/require.js' %}"></script>
+<script src="{% static 'assets/js/form-builder/form-builder-1/main-built.js' %}"></script>
+
+{% endblock scriptcontent %}

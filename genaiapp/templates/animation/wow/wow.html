@@ -1,0 +1,34 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+<!-- Plugins css start-->
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/animate.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/photoswipe.scss' %}">
+<!-- Plugins css Ends-->
+{% endblock css %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        {% include 'animation/wow/components/wow-cards.html' %}
+        {% include 'animation/wow/components/wow-info-top.html' %}
+        {% include 'animation/wow/components/wow-info-bottom.html' %}
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/isotope.pkgd.js' %}"></script>
+<script src="{% static 'assets/js/photoswipe/photoswipe.min.js' %}"></script>
+<script src="{% static 'assets/js/photoswipe/photoswipe-ui-default.min.js' %}"></script>
+<script src="{% static 'assets/js/photoswipe/photoswipe.js' %}"></script>
+<script src="{% static 'assets/js/animation/wow/wow.min.js' %}"></script>
+<script src="{% static 'assets/js/animation/wow/wow-init.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

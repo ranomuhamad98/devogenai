@@ -1,0 +1,23 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row tilt-showcase">
+      {% include 'animation/tilt/components/tilt-top.html' %}
+      {% include 'animation/tilt/components/tilt-middle.html' %}
+      {% include 'animation/tilt/components/tilt-bottom.html' %}
+    </div>
+  </div>
+  <!-- Container-fluid ends                    -->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/animation/tilt/tilt.jquery.js' %}"></script>
+<script src="{% static 'assets/js/animation/tilt/tilt-custom.js' %}"></script>
+<script src="{% static 'assets/js/height-equal.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

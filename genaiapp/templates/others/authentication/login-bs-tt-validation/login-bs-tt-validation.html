@@ -1,0 +1,29 @@
+{% extends 'base-other-page.html' %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+<!-- Plugins css start-->
+
+<!-- Plugins css Ends-->
+{% endblock css %}
+{% block content %}
+{% include 'others/authentication/login-bs-tt-validation/components/login-bs-tt-validation.html' %}
+<script>
+  (function () {
+    'use strict';
+    window.addEventListener('load', function () {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function (form) {
+        form.addEventListener('submit', function (event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+</script>
+{% endblock content %}

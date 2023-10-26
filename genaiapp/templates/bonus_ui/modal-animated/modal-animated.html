@@ -1,0 +1,73 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/animate.scss' %}">
+{% endblock css %}
+{% block content %}
+<div class="page-body">
+    {% include 'layout/breadcrumb.html' %}
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-header pb-0">
+              <h5>Modal with animate.js</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-xl-6 col-md-8 offset-xl-3 offset-md-2">
+                  <div id="animation-box">
+                    <div class="card">
+                      <div class="animate-widget">
+                        <div><img class="img-fluid" src="{% static 'assets/images/banner/3.jpg' %}" alt=""></div>
+                        <div class="text-center p-25">
+                          <p class="text-muted mb-0">Denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 text-center">
+                  <div class="form-inline theme-form row justify-content-center animated-modal d-flex">
+                    {% include 'bonus_ui/modal-animated/components/entrances.html' %}
+                    {% include 'bonus_ui/modal-animated/components/exits.html' %}
+                    <!-- Button trigger modal-->
+                    <div class="mb-2 mb-0 me-0 w-auto">
+                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Launch demo modal</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Modal-->
+              <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                  <div>
+                    <button class="btn-close theme-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-body">
+                      <div class="card">
+                        <div class="animate-widget">
+                          <div><img class="img-fluid" src="{% static 'assets/images/banner/3.jpg' %}" alt=""></div>
+                          <div class="text-center p-25">
+                            <p class="text-muted mb-0">Denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Container-fluid Ends-->
+  </div>
+{% endblock content %}
+{% block scriptcontent %}
+<script src="{% static 'assets/js/modal-animated.js' %}"></script>
+
+{% endblock scriptcontent %}

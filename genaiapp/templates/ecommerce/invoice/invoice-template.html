@@ -1,0 +1,23 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+<!-- Plugins css start-->
+<!-- Plugins css Ends-->
+{% endblock css %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  {% include 'ecommerce/invoice/components/invoice-template.html' %}
+
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/counter/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'assets/js/counter/jquery.counterup.min.js' %}"></script>
+<script src="{% static 'assets/js/counter/counter-custom.js' %}"></script>
+<script src="{% static 'assets/js/print.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

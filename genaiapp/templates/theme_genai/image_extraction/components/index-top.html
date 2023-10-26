@@ -1,0 +1,148 @@
+{% load static %}
+{% load sass_tags %}
+<div class="col-sm-12 col-md-6">
+  <div class="card b-r-0">
+    <div class="card-header pb-0">
+      <ul class="nav nav-tabs" id="icon-tab" role="tablist">
+        <li class="nav-item"><a class="nav-link active" id="step-1-tab" data-bs-toggle="tab" href="#step-1" role="tab" aria-controls="step-1" aria-selected="false">Upload New Doc</a></li>
+        <li class="nav-item"><a class="nav-link" id="step-2-tab" data-bs-toggle="tab" href="#step-2" role="tab" aria-controls="step-2" aria-selected="true">List Doc</a></li>
+      </ul>
+      <div class="card-header-right">
+        <ul class="setting-option">
+          <li>
+            <div class="setting-badge"><i class="fa fa-spin fa-cog font-primary"></i></div>
+          </li>
+          <!-- <li><i class="view-html fa fa-code font-primary"></i></li> -->
+          <li><i class="icofont icofont-maximize full-card font-primary"></i></li>
+          <li><i class="icofont icofont-minus minimize-card font-primary"></i></li>
+          <!-- <li><i class="icofont icofont-refresh reload-card font-primary"></i></li> -->
+          <!-- <li><i class="icofont icofont-error close-card font-primary"></i></li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="tab-content" id="icon-tabContent">
+        <div class="tab-pane fade active show" id="step-1" role="tabpanel" aria-labelledby="step-1-tab">
+          <p class="m-0">
+            <form class="needs-validation" novalidate>
+              <div class="mb-3">
+                <label class="form-label" for="validationCustom01">Upload new document</label>
+                <input class="form-control" type="file" aria-label="file example" required="">
+                <div class="invalid-feedback">Need to enter Upload new document</div>
+              </div>
+              <button class="btn btn-primary" type="submit">Upload</button>
+            </form>
+          </p>
+        </div>
+        <div class="tab-pane fade" id="step-2" role="tabpanel" aria-labelledby="step-2-tab">
+          <p class="m-0">
+            <div class="row">
+              <div class="col-sm-12 col-lg-12 col-xl-12">
+                <div class="table-responsive table-bordered">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Document Name</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Table cell</td>
+                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>Table cell</td>
+                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>Table cell</td>
+                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-sm-12 col-md-6">
+  <div class="card b-r-0">
+    <div class="card-header pb-0">
+      <!-- <h6>Step 2</h6> -->
+      <div class="card-header-right">
+        <ul class="setting-option">
+          <li>
+            <div class="setting-badge"><i class="fa fa-spin fa-cog font-primary"></i></div>
+          </li>
+          <!-- <li><i class="view-html fa fa-code font-primary"></i></li> -->
+          <li><i class="icofont icofont-maximize full-card font-primary"></i></li>
+          <li><i class="icofont icofont-minus minimize-card font-primary"></i></li>
+          <!-- <li><i class="icofont icofont-refresh reload-card font-primary"></i></li> -->
+          <!-- <li><i class="icofont icofont-error close-card font-primary"></i></li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="m-0">
+        <form class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label class="form-label">Processing Time</label>
+            <input class="form-control" name="processing_time" id="processing_time" type="text" placeholder="" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Ocr_conf</label>
+            <input class="form-control" name="ocr_conf" id="ocr_conf" type="text" placeholder="" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="validationCustom01">Preview OCR Result</label>
+            <textarea class="form-control" id="preview_ocr_result" name="preview_ocr_result" placeholder="" required="" rows="3"></textarea>
+            <div class="invalid-feedback">Need to enter Preview OCR Result</div>
+          </div>
+          <button class="btn btn-primary" type="submit">Show The Confidence</button>
+        </form>
+      </p>
+    </div>
+  </div>
+
+  <div class="card b-r-0">
+    <div class="card-header pb-0">
+      <!-- <h6>Step 2</h6> -->
+      <div class="card-header-right">
+        <ul class="setting-option">
+          <li>
+            <div class="setting-badge"><i class="fa fa-spin fa-cog font-primary"></i></div>
+          </li>
+          <!-- <li><i class="view-html fa fa-code font-primary"></i></li> -->
+          <li><i class="icofont icofont-maximize full-card font-primary"></i></li>
+          <li><i class="icofont icofont-minus minimize-card font-primary"></i></li>
+          <!-- <li><i class="icofont icofont-refresh reload-card font-primary"></i></li> -->
+          <!-- <li><i class="icofont icofont-error close-card font-primary"></i></li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="m-0">
+        <form class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label class="form-label">K Value</label>
+            <input class="form-control" name="k_value" id="k_value" type="text" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Prompt Input</label>
+            <input class="form-control" name="prompt_input" id="prompt_input" type="text" placeholder="">
+          </div>
+          <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+      </p>
+    </div>
+  </div>
+</div>

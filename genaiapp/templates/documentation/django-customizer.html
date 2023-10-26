@@ -1,0 +1,227 @@
+{% load static %}
+{% load sass_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pixelstrap - Admin Document">
+  <meta name="keywords" content="Pixelstrap - Admin Document">
+  <meta name="author" content="pixelstrap">
+  <link rel="icon" href="{% static 'documentation/assets/images/favicon.png' %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'documentation/assets/images/favicon.png' %}" type="image/x-icon">
+  <title>Pixelstrap - Admin Document</title>
+  <!-- Google font-->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Commissioner:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/vendors/prism.scss' %}">
+  <!-- Font Awesome-->
+  <link rel="stylesheet" type="text/css" href="{% static 'documentation/assets/css/fontawesome.css' %}">
+  <!-- Feather icon-->
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/vendors/feather-icon.scss' %}">
+  <!-- animate-->
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/vendors/animate.scss' %}">
+  <!-- Bootstrap css-->
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/vendors/bootstrap.scss' %}">
+  <!-- App css-->
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/style.scss' %}">
+</head>
+
+<body class="document full-width-doc sticky-nav-doc" data-bs-spy="scroll" data-bs-target="#myScrollspy" data-offset="0">
+  <!-- tap on top starts-->
+  <div class="tap-top"><i data-feather="chevrons-up"></i>
+    <p>Top</p>
+  </div>
+  <!-- tap on tap ends-->
+  <!-- page-wrapper Start-->
+  <div class="page-wrapper compact-wrapper">
+    <div>
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid custom-container">
+          <div class="row w-100">
+            <div class="col-md-3 col-4"><a class="navbar-brand" href="/documentation_index"> <img
+                  src="{% static 'documentation/assets/images/logo/logo.png' %}" alt=""></a></div>
+            <div class="col-lg-6 col-2">
+              <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation"><i class="fa fa-bars"> </i></button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav menu">
+                  <li class="nav-item active"><a class="nav-link" href="https://1.envato.market/3GVzd" role="button"
+                      aria-haspopup="true" aria-expanded="false" target="_blank">Purchase</a></li>
+                  <li class="nav-item"><a class="nav-link" href="https://pixelstrap.freshdesk.com/" role="button"
+                      aria-haspopup="true" aria-expanded="false" target="_blank">Support</a></li>
+                  <li class="nav-item"><a class="nav-link"
+                      href="http://admin.pixelstrap.com/zeta/theme/landing-page.html" role="button" aria-haspopup="true"
+                      aria-expanded="false" target="_blank">Demo</a></li>
+                  <li class="nav-item"><a class="nav-link"
+                      href="http://admin.pixelstrap.com/zeta/theme/landing-page.html#framework" role="button"
+                      aria-haspopup="true" aria-expanded="false" target="_blank">Feature </a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-3 col-6">
+              <ul class="nav-right">
+                <li>
+                  <div class="d-lg-none d-block"><a class="toggle-sidebar" href="#"><i class="fa fa-sliders"></i></a>
+                  </div>
+                </li>
+                <li>
+                  <div class="btn-group"><a class="decrease btn btn-doc" href="#" title="Decrease font size">A-</a><a
+                      class="reset btn btn-doc" href="#" title="Default font size">A</a><a class="increase btn btn-doc"
+                      href="#" title="Increase font size">A+</a></div>
+                </li>
+                <li><a class="btn btn-dark mode" href="#" title="Dark"><i class="fa fa-moon-o"></i><span>Dark
+                      <!-- Page Body Start-->
+                    </span></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="body-wrapper sticky_menu">
+      <section class="document-area" id="sticky-page">
+        <div class="overlay_bg"></div>
+        <div class="container-fluid custom-container">
+          <div class="row doc-container">
+            {% include 'documentation/components/sidebar.html' %}
+
+            <div class="col-xxl-10 col-xl-9 content component-col">
+              <div id="section-5">
+                <div class="card">
+
+                  <div id="section58">
+                    <div class="card-body">
+                      <hr>
+                      <h5>Customizations</h5>
+
+
+                      <h6 class="pb-2">How does switch to dark mode work?</h6>
+                      <h6 class="pb-2">We have added the following code in script.js file to make the functionality
+                        work.</h6>
+
+
+                      <div class="mb-4">
+                        <div class="code-box-copy">
+                          <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#todocode"
+                            title="Copy"><i class="fa fa-files-o"></i></button>
+                          <pre><code class="language-html" id="todocode">&lt;!-- script.js  --&gt;
+$&lpar;document&rpar;.ready&lpar;function &lpar;&rpar; &lcub;
+  document.body.classList.add&lpar;localStorage.getItem&lpar;"body"&rpar;&rpar;;
+  
+    &rcub;
+  &rcub;
+
+
+$&lpar;".mode"&rpar;.on&lpar;"click", function &lpar;&rpar; &lcub;
+  $&lpar;".mode"&rpar;.toggleClass&lpar;"dark"&rpar;;
+  $&lpar;"body"&rpar;.toggleClass&lpar;"dark-only"&rpar;;
+  var color = $&lpar;this&rpar;.attr&lpar;"data-attr"&rpar;;
+  var darkInBody = document.body.classList.contains&lpar;'dark-only'&rpar;;
+  if&lpar;darkInBody&rpar;&lcub;
+    localStorage.setItem&lpar;"body", "dark-only"&rpar;;
+    &rcub;
+  else&lcub;
+    localStorage.setItem&lpar;"body", ""&rpar;;
+    &rcub;
+  
+&rcub;&rpar;;
+                              
+                            </code></pre>
+                        </div>
+                      </div>
+                      <h6 class="pb-2">This change remain even if you change to different page or reload the page.</h6>
+
+                      <h5>Permanent Layouts</h5>
+
+                      <h6 class="pb-2">Similarly if you want to keep the change to the layout even after the page change
+                        than modify the customizer.js file as follows.</h6>
+                      <h6 class="pb-2">Add the following code in document.ready function in customizer.js file </h6>
+                      <div class="mb-4">
+                        <div class="code-box-copy">
+                          <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#todocode"
+                            title="Copy"><i class="fa fa-files-o"></i></button>
+                          <pre><code class="language-html" id="todocode">&lt;!-- customizer.js  --&gt;
+$(document).ready(function () {
+document.body.classList.add(localStorage.getItem("layout"));
+$("html").attr("dir", localStorage.getItem("layout"));
+}
+
+                          
+
+  </code></pre>
+                        </div>
+                      </div>
+                      <h6 class="pb-2">And add the layout value to localstorage in customizer.js file in below given
+                        functions</h6>
+                      <div class="mb-4">
+                        <div class="code-box-copy">
+                          <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#todocode"
+                            title="Copy"><i class="fa fa-files-o"></i></button>
+                          <pre><code class="language-html" id="todocode">&lt;!-- customizer.js  --&gt;
+$('.main-layout li').on('click', function () {
+  $(".main-layout li").removeClass('active');
+  $(this).addClass("active");
+  var layout = $(this).attr("data-attr");
+  $("body").attr("class", layout);
+  $("html").attr("dir", layout);
+
+  localStorage.setItem("layout",layout);
+});
+
+$('.main-layout .box-layout').on('click', function () {
+  $(".main-layout .box-layout").removeClass('active');
+  $(this).addClass("active");
+  var layout = $(this).attr("data-attr");
+  $("body").attr("class", "box-layout");
+  $("html").attr("dir", layout);
+
+  localStorage.setItem("layout","box-layout");
+});
+
+  </code></pre>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </div>
+                  {% comment %} <div id="section59">
+                    <div class="card-body">
+                      <hr>
+                      <h5>All Set</h5>
+                      <h6 class="pb-2">Note: Do not forget to add correct paths in urls.py file.</h6>
+                    </div>
+                  </div> {% endcomment %}
+
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+<!-- latest jquery-->
+<script src="{% static 'documentation/assets/js/jquery-3.5.1.min.js' %}"></script>
+<!-- Bootstrap js-->
+<script src="{% static 'documentation/assets/js/bootstrap/bootstrap.bundle.min.js' %}"></script>
+<!-- popover js-->
+<!-- code copy box js-->
+<script src="{% static 'documentation/assets/js/prism/prism.min.js' %}"></script>
+<script src="{% static 'documentation/assets/js/clipboard/clipboard.min.js' %}"></script>
+<script src="{% static 'documentation/assets/js/custom-card/custom-card.js' %}"></script>
+<!-- feather icon js-->
+<script src="{% static 'documentation/assets/js/icons/feather-icon/feather.min.js' %}"></script>
+<script src="{% static 'documentation/assets/js/icons/feather-icon/feather-icon.js' %}"></script>
+<script src="{% static 'documentation/assets/js/document/main.js' %}"></script>
+<script src="{% static 'documentation/assets/js/script.js' %}"></script>
+
+</html>

@@ -1,0 +1,48 @@
+{% load static %}
+{% load sass_tags %}
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header pb-0">
+        <h5>Disabled Zoom</h5>
+      </div>
+      <div class="card-body">
+        <div class="img-container"><img class="crop-zoomable img-fluid"
+            src="{% static 'assets/images/other-images/img-cropper.jpg' %}" alt=""></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header pb-0">
+        <h5>Autocrop Disable</h5>
+      </div>
+      <div class="card-body">
+        <div class="img-container"><img class="crop-auto img-fluid"
+            src="{% static 'assets/images/other-images/img-cropper.jpg' %}" alt=""></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header pb-0">
+        <h5>Disabled Image Drag</h5>
+      </div>
+      <div class="card-body">
+        <div class="img-container"><img class="crop-drag img-fluid"
+            src="{% static 'assets/images/other-images/img-cropper.jpg' %}" alt=""></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header pb-0">
+        <h5>Minimum Zone Size</h5>
+      </div>
+      <div class="card-body">
+        <div class="img-container"><img class="crop-min img-fluid"
+            src="{% static 'assets/images/other-images/img-cropper.jpg' %}" alt=""></div>
+      </div>
+    </div>
+  </div>
+</div>

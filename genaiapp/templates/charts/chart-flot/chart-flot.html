@@ -1,0 +1,32 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+<!-- Plugins css start-->
+
+<!-- Plugins css Ends-->
+{% endblock css %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row all-chart">
+      {% include 'charts/chart-flot/components/charts-1.html' %}
+      {% include 'charts/chart-flot/components/charts-2.html' %}
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/chart/flot-chart/excanvas.js' %}"></script>
+<script src="{% static 'assets/js/chart/flot-chart/jquery.flot.js' %}"></script>
+<script src="{% static 'assets/js/chart/flot-chart/jquery.flot.time.js' %}"></script>
+<script src="{% static 'assets/js/chart/flot-chart/jquery.flot.categories.js' %}"></script>
+<script src="{% static 'assets/js/chart/flot-chart/jquery.flot.stack.js' %}"></script>
+<script src="{% static 'assets/js/chart/flot-chart/jquery.flot.pie.js' %}"></script>
+<script src="{% static 'assets/js/chart/flot-chart/jquery.flot.symbol.js' %}"></script>
+<script src="{% static 'assets/js/chart/flot-chart/flot-script.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

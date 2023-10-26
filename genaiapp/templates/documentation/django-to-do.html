@@ -1,0 +1,183 @@
+{% load static %}
+{% load sass_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pixelstrap - Admin Document">
+  <meta name="keywords" content="Pixelstrap - Admin Document">
+  <meta name="author" content="pixelstrap">
+  <link rel="icon" href="{% static 'documentation/assets/images/favicon.png' %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'documentation/assets/images/favicon.png' %}" type="image/x-icon">
+  <title>Pixelstrap - Admin Document</title>
+  <!-- Google font-->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Commissioner:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/vendors/prism.scss' %}">
+  <!-- Font Awesome-->
+  <link rel="stylesheet" type="text/css" href="{% static 'documentation/assets/css/fontawesome.css' %}">
+  <!-- Feather icon-->
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/vendors/feather-icon.scss' %}">
+  <!-- animate-->
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/vendors/animate.scss' %}">
+  <!-- Bootstrap css-->
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/vendors/bootstrap.scss' %}">
+  <!-- App css-->
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'documentation/assets/scss/style.scss' %}">
+</head>
+
+<body class="document full-width-doc sticky-nav-doc" data-bs-spy="scroll" data-bs-target="#myScrollspy" data-offset="0">
+  <!-- tap on top starts-->
+  <div class="tap-top"><i data-feather="chevrons-up"></i>
+    <p>Top</p>
+  </div>
+  <!-- tap on tap ends-->
+  <!-- page-wrapper Start-->
+  <div class="page-wrapper compact-wrapper">
+    <div>
+      {% include 'documentation/components/navbar.html' %}
+    </div>
+    <div class="body-wrapper sticky_menu">
+      <section class="document-area" id="sticky-page">
+        <div class="overlay_bg"></div>
+        <div class="container-fluid custom-container">
+          <div class="row doc-container">
+            {% include 'documentation/components/sidebar.html' %}
+
+            <div class="col-xxl-10 col-xl-9 content component-col">
+              <div id="section-5">
+                <div class="card">
+
+                  <div id="section58">
+                    <div class="card-body">
+                      <hr>
+                      <h5>TODO</h5>
+
+
+                      <h6 class="pb-2">To use the functionalities of this app follow the steps give below. </h6>
+                      <h6 class="pb-2">1. Add the following in models.py </h6>
+
+
+                      <div class="mb-4">
+                        <div class="code-box-copy">
+                          <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#todocode"
+                            title="Copy"><i class="fa fa-files-o"></i></button>
+                          <pre><code class="language-html" id="todocode">&lt;!-- modles.py Todo list table --&gt;
+class Task&lpar;models.Model&rpar;&colon;
+  title = models.charField&lpar;max_length=200&rpar;
+  complete = models.BooleanField&lpar;default=False&rpar;
+  created = models.DateTimeField&lpar;auto_now_add=True&rpar;
+</code></pre>
+                        </div>
+                      </div>
+                      <h6 class="pb-2">Now run the following commands in terminal. </h6>
+                      <p class="pb-2">- python manage.py makermigrations </p>
+                      <p class="pb-2">- python manage.py migrate</p>
+                      <h6 class="pb-2">2. create a form in forms.py file.</h6>
+                      <div class="mb-4">
+                        <div class="code-box-copy">
+                          <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#todocode"
+                            title="Copy"><i class="fa fa-files-o"></i></button>
+                          <pre><code class="language-html" id="todocode">&lt;!-- Forms.py --&gt;
+from django import forms
+
+from .models import *
+
+class TaskForm(forms.ModelForm):
+    title = forms.CharField(max_length=200, widget= forms.Textarea(attrs={'placeholder':'Enter new task here. . .'}))
+
+    class Meta:
+        model = Task
+        fields = '__all__'
+</code></pre>
+
+
+                        </div>
+                      </div>
+                      <h6 class="pb-2">3. Write the logic for adding the to-do list in views.py file.</h6>
+                      <div class="mb-4">
+                        <div class="code-box-copy">
+                          <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#todocode"
+                            title="Copy"><i class="fa fa-files-o"></i></button>
+                          <pre><code class="language-html" id="todocode">&lt;!-- views.py --&gt;
+def to_do_database(request):
+tasks = Task.objects.all()
+
+form = TaskForm()
+if request.method == 'POST':
+    form = TaskForm(request.POST)
+    if form.is_valid():
+        form.save()
+    return redirect('/to_do_database')
+
+completedTasks = True
+for t in tasks:
+    if t.complete == False:
+        completedTasks = False
+
+context = {'tasks': tasks, 'form': form,'completedTasks': completedTasks, "breadcrumb":{"parent":"Todo", "child":"Todo with database"}}
+
+return render(request,'to_do_database/to-do-database.html',context)
+</code></pre>
+
+
+                        </div>
+                      </div>
+                      <h6 class="pb-2">4. Render the form through html and add required styling.</h6>
+                      <div class="mb-4">
+                        <div class="code-box-copy">
+                          <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#todocode"
+                            title="Copy"><i class="fa fa-files-o"></i></button>
+                          <pre><code class="language-html" id="todocode">&lt;!-- to-do.html --&gt;
+&lt;form method="POST" action="&lcub;% url 'to_do_database' %&rcub;"&gt;
+&lcub;&percnt; csrf_token &percnt;&rcub;
+  &lcub;&lcub; form.title &rcub;&rcub;
+    &lt;span class="btn btn-danger cancel-btn" id="close-task-panel"&gt;Close&lt;/span &gt;
+    &lt;button class="btn btn-success ms-3 add-new-task-btn" id="add-task" type="submit" &gt;Add Task&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="section59">
+                    <div class="card-body">
+                      <hr>
+                      <h5>All Set</h5>
+                      <h6 class="pb-2">Now you can add the item to your to-do list.</h6>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+<!-- latest jquery-->
+<script src="{% static 'documentation/assets/js/jquery-3.5.1.min.js' %}"></script>
+<!-- Bootstrap js-->
+<script src="{% static 'documentation/assets/js/bootstrap/bootstrap.bundle.min.js' %}"></script>
+<!-- popover js-->
+<!-- code copy box js-->
+<script src="{% static 'documentation/assets/js/prism/prism.min.js' %}"></script>
+<script src="{% static 'documentation/assets/js/clipboard/clipboard.min.js' %}"></script>
+<script src="{% static 'documentation/assets/js/custom-card/custom-card.js' %}"></script>
+<!-- feather icon js-->
+<script src="{% static 'documentation/assets/js/icons/feather-icon/feather.min.js' %}"></script>
+<script src="{% static 'documentation/assets/js/icons/feather-icon/feather-icon.js' %}"></script>
+<script src="{% static 'documentation/assets/js/document/main.js' %}"></script>
+<script src="{% static 'documentation/assets/js/script.js' %}"></script>
+
+</html>

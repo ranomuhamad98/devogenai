@@ -1,0 +1,45 @@
+{% extends "base.html" %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+<!-- Plugins css start-->
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/prism.scss' %}">
+<!-- Plugins css Ends-->
+{% endblock css %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card alert alert-primary" role="alert">
+          <h4 class="alert-heading">Tip!</h4>
+          <p>
+            Add class="box-layout" attribute to get this layout. The boxed layout is helpful when working on
+            large screens because it prevents the site from stretching very wide.
+          </p>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header pb-0 d-flex align-items-center justify-content-between">
+            <h5>Title </h5>
+          </div>
+          <div class="card-body"><span>Start creating your amazing application! </span></div>
+          <div class="card-footer">
+            <h6 class="mb-0">Card Footer</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/prism/prism.min.js' %}"></script>
+<script src="{% static 'assets/js/clipboard/clipboard.min.js' %}"></script>
+<script src="{% static 'assets/js/custom-card/custom-card.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

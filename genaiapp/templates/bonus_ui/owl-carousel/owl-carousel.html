@@ -1,0 +1,29 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+<!-- Plugins css start-->
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/owlcarousel.scss' %}">
+<!-- Plugins css Ends-->
+{% endblock css %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        {% include 'bonus_ui/owl-carousel/components/owl-carousel-1.html' %}
+        {% include 'bonus_ui/owl-carousel/components/owl-carousel-2.html' %}
+        {% include 'bonus_ui/owl-carousel/components/owl-carousel-3.html' %}
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/owlcarousel/owl.carousel.js' %}"></script>
+<script src="{% static 'assets/js/owlcarousel/owl-custom.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

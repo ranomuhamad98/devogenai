@@ -1,0 +1,26 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+<!-- Plugins css start-->
+
+<!-- Plugins css Ends-->
+{% endblock css %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      {% include 'charts/chart-sparkline/components/charts-top.html' %}
+      {% include 'charts/chart-sparkline/components/charts-bottom.html' %}
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/chart/sparkline/sparkline.js' %}"></script>
+<script src="{% static 'assets/js/chart/sparkline/sparkline-script.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

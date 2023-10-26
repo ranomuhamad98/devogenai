@@ -1,0 +1,27 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+<!-- Plugins css start-->
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/scrollable.scss' %}">
+<!-- Plugins css Ends-->
+{% endblock css %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      {% include 'bonus_ui/scrollable/components/scrollable-top.html' %}
+      {% include 'bonus_ui/scrollable/components/scrollable-middle.html' %}
+      {% include 'bonus_ui/scrollable/components/scrollable-bottom.html' %}
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/scrollable/perfect-scrollbar.min.js' %}"></script>
+<script src="{% static 'assets/js/scrollable/scrollable-custom.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

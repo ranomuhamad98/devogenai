@@ -1,0 +1,37 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+<!-- Plugins css start-->
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/photoswipe.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/tour.scss' %}">
+<!-- Plugins css Ends-->
+{% endblock css %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="user-profile">
+      <div class="row">
+        {% include 'bonus_ui/tour/components/tour-top.html' %}
+        {% include 'bonus_ui/tour/components/tour-side.html' %}
+        {% include 'bonus_ui/tour/components/tour-main.html' %}
+        {% include 'bonus_ui/tour/components/tour-picture-expand.html' %}
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/counter/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'assets/js/counter/jquery.counterup.min.js' %}"></script>
+<script src="{% static 'assets/js/counter/counter-custom.js' %}"></script>
+<script src="{% static 'assets/js/photoswipe/photoswipe.min.js' %}"></script>
+<script src="{% static 'assets/js/photoswipe/photoswipe-ui-default.min.js' %}"></script>
+<script src="{% static 'assets/js/photoswipe/photoswipe.js' %}"></script>
+<script src="{% static 'assets/js/tour/intro.js' %}"></script>
+<script src="{% static 'assets/js/tour/intro-init.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

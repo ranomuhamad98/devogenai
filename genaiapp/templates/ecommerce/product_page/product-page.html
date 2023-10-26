@@ -1,0 +1,29 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+<!-- Plugins css start-->
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/rating.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/slick.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/slick-theme.scss' %}">
+<!-- Plugins css Ends-->
+{% endblock css %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    {% include 'ecommerce/product_page/components/product-page-top.html' %}
+    {% include 'ecommerce/product_page/components/product-page-bottom.html' %}
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/rating/jquery.barrating.js' %}"></script>
+<script src="{% static 'assets/js/rating/rating-script.js' %}"></script>
+<script src="{% static 'assets/js/tooltip-init.js' %}"></script>
+<script src="{% static 'assets/js/slick-slider/slick.min.js' %}"></script>
+<script src="{% static 'assets/js/slick-slider/slick-theme.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

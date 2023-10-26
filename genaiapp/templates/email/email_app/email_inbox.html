@@ -1,0 +1,18 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="email-wrap">
+      <div class="row">
+        {% include 'email/email_app/components/email-side.html' %}
+        {% include 'email/email_app/components/email-main.html' %}
+
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}

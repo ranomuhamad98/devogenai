@@ -1,0 +1,46 @@
+{% load static %}
+{% load sass_tags %}
+<div class="left-sidebar">
+  <aside>
+    <ul class="list-unstyled nav-sidebar doc-nav">
+      <li class="nav-item direct"><a class="nav-link" href="/documentation_index"><img
+            src="{% static 'documentation/assets/images/document/list.png' %}" alt="">Themes List</a></li>
+      <li class="nav-item direct"><a class="nav-link" href="/documentation_feature_list"><img
+            src="{% static 'documentation/assets/images/document/features.png' %}" alt="">Avaiable Features</a></li>
+      <li class="nav-item direct"><a class="nav-link" href="/documentation_customer_review"><img
+            src="{% static 'documentation/assets/images/document/review.png' %}" alt="">Customer Reviews</a></li>
+      <li class="parent-title"><span>Detail Document</span></li>
+      <li class="nav-item direct"><a class="nav-link" href="/documentation_layout_setting"><img
+            src="{% static 'documentation/assets/images/document/list.png' %}" alt="">Layout settingss</a></li>
+      <li class="nav-item">
+        <div class="title"><img src="{% static 'documentation/assets/images/document/html.png' %}" alt="">Html<span
+            class="icon"><i class="fa fa-plus"></i><i class="fa fa-minus"></i></span></div>
+        <ul class="dropdown-nav">
+          <li class="nav-item"><a class="nav-link" href="/documentation_getting_started">Getting Started</a></li>
+          <li class="nav-item"><a class="nav-link" href="/documentation_tree">Tree</a></li>
+          <li class="nav-item"><a class="nav-link" href="/documentation_options">Options</a></li>
+          <li class="nav-item"><a class="nav-link" href="/documentation_component">Component</a></li>
+          <li class="nav-item"><a class="nav-link" href="/documentation_app">App</a></li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <div class="title"><img src="{% static 'documentation/assets/images/document/features/django/django.png' %}"
+            alt="">Django<span class="icon"><i class="fa fa-plus"></i><i class="fa fa-minus"></i></span></div>
+        <ul class="dropdown-nav">
+          <li class="nav-item"><a class="nav-link" href="/documentation_django_getting_started">Getting
+              Started</a></li>
+          <li class="nav-item"><a class="nav-link" href="/documentation_django_tree">Tree</a></li>
+          <li class="nav-item"><a class="nav-link" href="/documentation_django_tree">Options</a></li>
+          <li class="nav-item"><a class="nav-link" href="/documentation_django_components">Component</a></li>
+          <li class="nav-item"><a class="nav-link" href="/documentation_django_app">App</a></li>
+          <li class="nav-item"><a class="nav-link" href="/documentation_django_to_do">To Do App</a></li>
+          <li class="nav-item"><a class="nav-link" href="/documentation_django_authentication">Authentication</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/documentation_django_customizer">Customizer</a></li>
+        </ul>
+      </li>
+      <li class="nav-item direct"><a class="nav-link" href="/documentation_change_log"><img
+            src="{% static 'documentation/assets/images/document/list.png' %}" alt="">Change log</a></li>
+    </ul>
+  </aside>
+</div>

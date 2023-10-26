@@ -1,0 +1,16 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+
+  <!-- Container-fluid starts-->
+  <div class="container-fluid user-card">
+    <div class="row">
+      {% include 'users/users_cards/components/user-cards-top.html' %}
+      {% include 'users/users_cards/components/user-cards-bottom.html' %}
+
+    </div>
+  </div>
+</div>
+{% endblock content %}

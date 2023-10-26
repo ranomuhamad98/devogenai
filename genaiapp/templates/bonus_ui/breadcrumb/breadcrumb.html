@@ -1,0 +1,18 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block content %}
+<div class="page-body">
+  {% include 'layout/breadcrumb.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- default breadcrumb and Nav breadcrumb start-->
+      {% include 'bonus_ui/breadcrumb/components/breadcrumb-top.html' %}
+      <!-- default breadcrumb and Nav breadcrumb ends-->
+      <!-- colored navigation start-->
+      {% include 'bonus_ui/breadcrumb/components/breadcrumb-bottom.html' %}
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
