@@ -1634,7 +1634,7 @@ def login_simple(request):
                 nextPage = request.GET['next']
                 return HttpResponseRedirect(nextPage)
             else:
-                return redirect('dashboard_ecommerce')
+                return redirect('dashboard_default')
     else:
         form =AuthenticationForm()
     context={"breadcrumb":{"parent":"parent","child":"child"},"form":form}
