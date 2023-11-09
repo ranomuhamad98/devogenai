@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -5,7 +6,10 @@ from django.contrib.auth import login, logout
 from django.http.response import HttpResponseRedirect
 from .models import *
 from .forms import *
-
+from django.http import HttpResponse
+import json
+import random
+import base64
 
 # dashboard pages
 
@@ -16,42 +20,494 @@ def indexPage(request):
 # .......
 @login_required(login_url="/login")
 def upload_document(request):
-    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Upload Document"}}
+    data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
+    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Upload Document"}, "data": data_doc}
     return render(request,'theme_genai/document_extraction/index-1.html',context)
 @login_required(login_url="/login")
 def parser_setup(request):
-    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Parser Set UP"}}
+    data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
+    data_parser = {"parser_name":"table cell 1","id":"1"},{"parser_name":"table cell 2","id":"2"},{"parser_name":"table cell 3","id":"3"}
+    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Parser Set UP"}, "data_doc": data_doc, "data_parser": data_parser}
     return render(request,'theme_genai/document_extraction/index-2.html',context)
 @login_required(login_url="/login")
 def extraction_process(request):
-    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Extraction Process"}}
+    data_extraction = {"document":"a","bank_name":"b","rekening_number": "c", "luas_lahan": "d", "telp": "e", "waktu_sewa": "f", "rekening_number": "g"},{"document":"a","bank_name":"b","rekening_number": "c", "luas_lahan": "d", "telp": "e", "waktu_sewa": "f", "rekening_number": "g"},{"document":"a","bank_name":"b","rekening_number": "c", "luas_lahan": "d", "telp": "e", "waktu_sewa": "f", "rekening_number": "g"}
+    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Extraction Process"}, "data_extraction": data_extraction}
     return render(request,'theme_genai/document_extraction/index-3.html',context)
 
 @login_required(login_url="/login")
 def document_translation(request):
-    context={"breadcrumb":{"parent":"Dashboard","child":"Document Translation"}}
+    data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
+    context={"breadcrumb":{"parent":"Dashboard","child":"Document Translation"},"data": data_doc}
     return render(request,'theme_genai/document_translation/index.html',context)
 
 @login_required(login_url="/login")
 def bank_statement(request):
-    context={"breadcrumb":{"parent":"Dashboard","child":"Bank Statement"}}
+    data_prompt = {"a":"prompt table cell 1","b":"prompt table cell 1","c":"prompt table cell 1","d":"prompt table cell 1","e":"prompt table cell 1","f":"prompt table cell 1"},{"a":"prompt table cell 2","b":"prompt table cell 2","c":"prompt table cell 2","d":"prompt table cell 2","e":"prompt table cell 2","f":"prompt table cell 2"},{"a":"prompt table cell 3","b":"prompt table cell 3","c":"prompt table cell 3","d":"prompt table cell 3","e":"prompt table cell 3","f":"prompt table cell 3"}
+    data_ocr = {"a":"ocr table cell 1","b":"ocr table cell 1","c":"ocr table cell 1","d":"ocr table cell 1","e":"ocr table cell 1","f":"ocr table cell 1"},{"a":"ocr table cell 2","b":"ocr table cell 2","c":"ocr table cell 2","d":"ocr table cell 2","e":"ocr table cell 2","f":"ocr table cell 2"},{"a":"ocr table cell 3","b":"ocr table cell 3","c":"ocr table cell 3","d":"ocr table cell 3","e":"ocr table cell 3","f":"ocr table cell 3"}
+    data_extraction = {"a":"extraction table cell 1","b":"extraction table cell 1","c":"extraction table cell 1","d":"extraction table cell 1","e":"extraction table cell 1","f":"extraction table cell 1"},{"a":"extraction table cell 2","b":"extraction table cell 2","c":"extraction table cell 2","d":"extraction table cell 2","e":"extraction table cell 2","f":"extraction table cell 2"},{"a":"extraction table cell 3","b":"extraction table cell 3","c":"extraction table cell 3","d":"extraction table cell 3","e":"extraction table cell 3","f":"extraction table cell 3"}
+    data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
+    
+    context={"breadcrumb":{"parent":"Dashboard","child":"Bank Statement"}, "data_doc": data_doc, "data_prompt": data_prompt, "data_ocr": data_ocr, "data_extraction": data_extraction}
     return render(request,'theme_genai/bank_statement/index.html',context)
 
 @login_required(login_url="/login")
 def ktp_extraction(request):
-    context={"breadcrumb":{"parent":"Dashboard","child":"KTP Extraction"}}
+    data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
+    context={"breadcrumb":{"parent":"Dashboard","child":"KTP Extraction"},"data_doc": data_doc}
     return render(request,'theme_genai/ktp_extraction/index.html',context)
 
 @login_required(login_url="/login")
 def image_extraction(request):
-    context={"breadcrumb":{"parent":"Dashboard","child":"Image Extraction"}}
+    data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
+    context={"breadcrumb":{"parent":"Dashboard","child":"Image Extraction"},"data_doc": data_doc}
     return render(request,'theme_genai/image_extraction/index.html',context)
+
+# [START] PROCESS
+# [start] document extraction - upload document
+@login_required(login_url="/login")
+def de_ud_action_newdoc(request):
+    if request.method == "POST":
+        data = request.POST
+
+        newdoc_str = data.get("new_doc")
+
+        # start - upload file
+        format, imgstr = newdoc_str.split(';base64,') 
+        ext = format.split('/')[-1] 
+        filename = ""+str(datetime.now().strftime("%Y%m%d%H%M%S"))+"_document-extraction."+ext
+        file_content=base64.b64decode(imgstr)
+        with open("genaiapp/static/assets/"+filename, 'wb') as f:
+            f.write(file_content)
+        # end - upload file
+        
+        data_response = json.dumps({"status":1, "message": "bs_action_newdoc berhasil","data":data, "processing_time":"test processing time","ocr_conf":"ocr conf","preview_ocr_result": "lorem ipsum"})
+
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def de_ud_action_docname(request):
+    if request.method == "GET":
+        idx = request.GET['post_id']
+        data_response = json.dumps({"processing_time":"test processing time ("+idx+")","ocr_conf":"ocr conf ("+idx+")","preview_ocr_result": "lorem ipsum ("+idx+")"})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def de_ud_action_docdel(request):
+    if request.method == "GET":
+        idx = request.GET['post_id']
+        data_response = json.dumps({"data_delete":"id "+idx+""})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def de_ud_action_showconf(request):
+    if request.method == "POST":
+        data = request.POST
+        dt_processing_time = data.get("processing_time")
+        dt_ocr_conf = data.get("ocr_conf")
+        dt_preview_ocr_result = data.get("preview_ocr_result")
+        result_conf = "<span><span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(251, 236, 93); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> SAPRATI</span><span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(255, 170, 170); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> ENY</span><span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(251, 236, 93); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> *</span><span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(255, 170, 170); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> #F</span><span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(251, 236, 93); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> NOTARIS</span><span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(251, 236, 93); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> KABU</span> PERJANJIAN SEWA TANAH / BANGUNAN<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(251, 236, 93); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> KARAWANG</span> Antara PT MENARA<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(251, 236, 93); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> SELULAR</span><span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(251, 236, 93); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> NUSANTARA</span> Dan<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(251, 236, 93); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> [</span> Sunardi<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(251, 236, 93); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> ]</span> NOMOR<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(251, 236, 93); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> :</span> .075 . / PKSL /<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(251, 236, 93); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> MSN</span><span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(251, 236, 93); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> /</span><span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(255, 170, 170); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> II</span> </span>"
+        data_response = json.dumps({"result_conf":result_conf, "dt_processing_time": dt_processing_time, "dt_ocr_conf": dt_ocr_conf, "dt_preview_ocr_result": dt_preview_ocr_result})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def de_ud_action_search(request):
+    if request.method == "POST":
+        data = request.POST
+        data_response = json.dumps({"preview_prompt_result":"kvalue - ("+data.get("k_value")+") : promptinput - ("+data.get("prompt_input")+")"})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+# [end] document extraction - upload document
+
+# [start] document extraction - parser setup
+@login_required(login_url="/login")
+def de_ps_action_view(request):
+    if request.method == "GET":
+        data = request.GET['post_id']
+        data_response = json.dumps({"document_test":data})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def de_ps_action_parser(request):
+    if request.method == "GET":
+        data = request.GET['post_id'];
+        data_response = json.dumps({"model_name" : "model_name "+data+"", "prompt_used" : "prompt_used "+data+"", "first_regex_spillter" : "first_regex_spillter "+data+"", "query_used" : "query_used "+data+"", "second_regex_spillter" : "second_regex_spillter "+data+"", "last_regex_filter_used" : "last_regex_filter_used "+data+"", "third_spliter" : "third_spliter "+data+"", "insert_duplication" : ""+str(random.randint(0, 30))+"", "insert_k_value": ""+str(random.randint(0, 30))+""})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def de_ps_action_del(request):
+    if request.method == "GET":
+        idx = request.GET['post_id']
+        data_response = json.dumps({"status": 1,"data_delete":"id "+idx+""})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def de_ps_action_save(request):
+    if request.method == "POST":
+        # status 1 = success, status 0 = failed
+        data_response = json.dumps({"status": 1,"ps_action_save":"success","random":""+str(random.randint(0, 30))+""})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def de_ps_action_test(request):
+    if request.method == "POST":
+        # status 1 = success, status 0 = failed
+        data = request.POST
+        data_response = json.dumps({"status": 1, "processing_time": "processing_time "+str(random.randint(0,30))+"","ocr_quality": "ocr_quality "+str(random.randint(0,30))+"","result_test": "result_test "+str(random.randint(0,30))+"","ocr_conf_score_model_test": "ocr_conf_score_model_test "+str(random.randint(0,30))+"", "data": data})
+        # data_response = json.dumps({"status": 0, "data": data})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def de_ps_action_update(request):
+    if request.method == "POST":
+        # status 1 = success, status 0 = failed
+        data = request.POST
+        data_response = json.dumps({"status": 1, "data": data})
+        # data_response = json.dumps({"status": 0, "data": data})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def de_ps_action_showconf(request):
+    if request.method == "POST":
+        data = request.POST
+        result_conf = "<span> 4 akan dilakukan dengan transfer ke rekening bank pemilik sebagaimana diuraikan di bawah ini : nomor rekening<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(255, 170, 170); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> :</span> 5806-01-016798-53-5 nama pemegang rekening : sunardi bank bank rakyat indonesia pemilik dengan ini menyatakan dan menjamin bahwa rekening bank diatas adalah rekening bank yang benar dan sah dari</span>"
+        data_response = json.dumps({"status":1,"result_conf": result_conf, "data": data})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+# [end] document extraction - parser setup
+
+# [start] document extraction - extraction process
+@login_required(login_url="/login")
+def de_ep_action_downjson(request,id):
+    if request.method == "GET":
+        return HttpResponse("download file json ("+id+")")
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def de_ep_action_downcsv(request,id):
+    if request.method == "GET":
+        return HttpResponse("download file csv ("+id+")")
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def de_ep_action_alldoc(request,id):
+    if request.method == "GET":
+        return HttpResponse("download all file ("+id+")")
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+# [end] document extraction - extraction process
+
+# [start] document translation
+@login_required(login_url="/login")
+def dt_action_newdoc(request):
+    if request.method == "POST":
+        data = request.POST
+
+        newdoc_str = data.get("new_doc")
+        # start - upload file
+        format, imgstr = newdoc_str.split(';base64,') 
+        ext = format.split('/')[-1] 
+        filename = ""+str(datetime.now().strftime("%Y%m%d%H%M%S"))+"_document-translation."+ext
+        file_content=base64.b64decode(imgstr)
+        with open("genaiapp/static/assets/"+filename, 'wb') as f:
+            f.write(file_content)
+        # end - upload file
+
+        data_response = json.dumps({"status":1, "message": "dt_action_newdoc berhasil","processing_time":"processing time","ocr_conf":"ocr conf","preview_ocr_result":"preview ocr result","preview_translate_result":"preview translate result"})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def dt_action_docname(request):
+    if request.method == "GET":
+        data = request.GET['post_id']
+        data_response = json.dumps({"status":1, "message": "dt_action_docname berhasil","processing_time":"processing time "+str(data)+"","ocr_conf":"ocr conf "+str(data)+"","preview_ocr_result":"preview ocr result "+str(data)+"","preview_translate_result":"preview translate result "+str(data)+""})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def dt_action_docdel(request):
+    if request.method == "GET":
+        idx = request.GET['post_id']
+        data_response = json.dumps({"data_delete":"id "+idx+""})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def dt_action_showconf(request):
+    if request.method == "POST":
+        data = request.POST
+        result_conf = "<span> 4 akan dilakukan dengan transfer ke rekening bank pemilik sebagaimana diuraikan di bawah ini : nomor rekening<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(255, 170, 170); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> :</span> 5806-01-016798-53-5 nama pemegang rekening : sunardi bank bank rakyat indonesia pemilik dengan ini menyatakan dan menjamin bahwa rekening bank diatas adalah rekening bank yang benar dan sah dari</span>"
+        data_response = json.dumps({"status":1,"message": "dt_action_showconf berhasil","result_conf": result_conf, "data": data})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+# [end] document translation
+
+# [start] bank statement
+@login_required(login_url="/login")
+def bs_action_newdoc(request):
+    if request.method == "POST":
+        data = request.POST
+ 
+        newdoc_str = data.get("new_doc")
+        bankname_str = data.get("bank_name")
+
+        # start - upload file
+        format, imgstr = newdoc_str.split(';base64,') 
+        ext = format.split('/')[-1] 
+        filename = ""+str(datetime.now().strftime("%Y%m%d%H%M%S"))+"_bank-statement."+ext
+        file_content=base64.b64decode(imgstr)
+        with open("genaiapp/static/assets/"+filename, 'wb') as f:
+            f.write(file_content)
+        # end - upload file
+
+        # tab ocr result
+        data_trx = {"a":"prompt table cell 1","b":"prompt table cell 1","c":"prompt table cell 1","d":"prompt table cell 1","e":"prompt table cell 1","f":"prompt table cell 1"},{"a":"prompt table cell 2","b":"prompt table cell 2","c":"prompt table cell 2","d":"prompt table cell 2","e":"prompt table cell 2","f":"prompt table cell 2"},{"a":"prompt table cell 3","b":"prompt table cell 3","c":"prompt table cell 3","d":"prompt table cell 3","e":"prompt table cell 3","f":"prompt table cell 3"}
+        ocr_result = {"prefix": "data_prefix","sufix":"data_sufix","table": data_trx}
+
+        data_fp = {"a":"fp table cell 1","b":"fp table cell 1","c":"fp table cell 1","d":"fp table cell 1","e":"fp table cell 1","f":"fp table cell 1"},{"a":"fp table cell 2","b":"fp table cell 2","c":"fp table cell 2","d":"fp table cell 2","e":"fp table cell 2","f":"fp table cell 2"},{"a":"fp table cell 3","b":"fp table cell 3","c":"fp table cell 3","d":"fp table cell 3","e":"fp table cell 3","f":"fp table cell 3"}
+        free_prompt = {"table": data_fp, "prefix_ocr":"data prefix ocr", "prompt_dataframe": "prompt data frame"}
+        
+        data_er = {"a":"er table cell 1","b":"er table cell 1","c":"er table cell 1","d":"er table cell 1","e":"er table cell 1","f":"er table cell 1"},{"a":"er table cell 2","b":"er table cell 2","c":"er table cell 2","d":"er table cell 2","e":"er table cell 2","f":"er table cell 2"},{"a":"er table cell 3","b":"er table cell 3","c":"er table cell 3","d":"er table cell 3","e":"er table cell 3","f":"er table cell 3"}
+        extraction_result = {"bank_name": ""+bankname_str+"", "account_number": "account number", "account_holder": "account holder", "table": data_er}
+
+        data_response = json.dumps({"status":1, "message": "bs_action_newdoc berhasil","data":data, "ocr_result": ocr_result, "free_prompt": free_prompt, "extraction_result": extraction_result})
+
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def bs_action_docname(request):
+    if request.method == "GET":
+        data = request.GET['post_id']
+ 
+        # tab ocr result
+        data_trx = {"a":"prompt table cell 1","b":"prompt table cell 1","c":"prompt table cell 1","d":"prompt table cell 1","e":"prompt table cell 1","f":"prompt table cell 1"},{"a":"prompt table cell 2","b":"prompt table cell 2","c":"prompt table cell 2","d":"prompt table cell 2","e":"prompt table cell 2","f":"prompt table cell 2"},{"a":"prompt table cell 3","b":"prompt table cell 3","c":"prompt table cell 3","d":"prompt table cell 3","e":"prompt table cell 3","f":"prompt table cell 3"}
+        ocr_result = {"prefix": "data_prefix","sufix":"data_sufix","table": data_trx}
+
+        data_fp = {"a":"fp table cell 1","b":"fp table cell 1","c":"fp table cell 1","d":"fp table cell 1","e":"fp table cell 1","f":"fp table cell 1"},{"a":"fp table cell 2","b":"fp table cell 2","c":"fp table cell 2","d":"fp table cell 2","e":"fp table cell 2","f":"fp table cell 2"},{"a":"fp table cell 3","b":"fp table cell 3","c":"fp table cell 3","d":"fp table cell 3","e":"fp table cell 3","f":"fp table cell 3"}
+        free_prompt = {"table": data_fp, "prefix_ocr":"data prefix ocr", "prompt_dataframe": "prompt data frame"}
+        
+        data_er = {"a":"er table cell 1","b":"er table cell 1","c":"er table cell 1","d":"er table cell 1","e":"er table cell 1","f":"er table cell 1"},{"a":"er table cell 2","b":"er table cell 2","c":"er table cell 2","d":"er table cell 2","e":"er table cell 2","f":"er table cell 2"},{"a":"er table cell 3","b":"er table cell 3","c":"er table cell 3","d":"er table cell 3","e":"er table cell 3","f":"er table cell 3"}
+        extraction_result = {"bank_name": "bank name", "account_number": "account number", "account_holder": "account holder", "table": data_er}
+
+        data_response = json.dumps({"status":1, "message": "bs_action_newdoc berhasil","data":data, "ocr_result": ocr_result, "free_prompt": free_prompt, "extraction_result": extraction_result})
+
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def bs_action_docdel(request):
+    if request.method == "GET":
+        idx = request.GET['post_id']
+        data_response = json.dumps({"data_delete":"id "+idx+""})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def bs_action_processfp(request):
+    if request.method == "POST":
+        data = request.POST
+        data_response = json.dumps({"result_dataframe_search":"prefixocr - ("+str(data.get("prefix_ocr"))+") : promptdataframe - ("+str(data.get("prompt_dataframe"))+")"})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+# [end] bank statement
+
+# [start] ktp extraction
+@login_required(login_url="/login")
+def ke_action_newdoc(request):
+    if request.method == "POST":
+        data = request.POST
+
+        newdoc_str = data.get("new_doc")
+        # start - upload file
+        format, imgstr = newdoc_str.split(';base64,') 
+        ext = format.split('/')[-1] 
+        filename = ""+str(datetime.now().strftime("%Y%m%d%H%M%S"))+"_ktp-extraction."+ext
+        file_content=base64.b64decode(imgstr)
+        with open("genaiapp/static/assets/"+filename, 'wb') as f:
+            f.write(file_content)
+        # end - upload file
+
+        data_response = json.dumps({"status":1, "message": "ke_action_newdoc berhasil","processing_time":"processing time","ocr_conf":"ocr conf","preview_ocr_result":"preview ocr result"})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def ke_action_docname(request):
+    if request.method == "GET":
+        data = request.GET['post_id']
+        data_response = json.dumps({"status":1, "message": "ke_action_docname berhasil","processing_time":"processing time "+str(data)+"","ocr_conf":"ocr conf "+str(data)+"","preview_ocr_result":"preview ocr result "+str(data)+""})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def ke_action_docdel(request):
+    if request.method == "GET":
+        idx = request.GET['post_id']
+        data_response = json.dumps({"data_delete":"id "+idx+""})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def ke_action_showconf(request):
+    if request.method == "POST":
+        data = request.POST
+        result_conf = "<span> 4 akan dilakukan dengan transfer ke rekening bank pemilik sebagaimana diuraikan di bawah ini : nomor rekening<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(255, 170, 170); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> :</span> 5806-01-016798-53-5 nama pemegang rekening : sunardi bank bank rakyat indonesia pemilik dengan ini menyatakan dan menjamin bahwa rekening bank diatas adalah rekening bank yang benar dan sah dari</span>"
+        data_response = json.dumps({"status":1,"result_conf": result_conf, "data": data})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def ke_action_extract(request):
+    if request.method == "POST":
+        data = request.POST
+        data_er = {"a":"er table cell 1","b":"er table cell 1","c":"er table cell 1","d":"er table cell 1","e":"er table cell 1","f":"er table cell 1"},{"a":"er table cell 2","b":"er table cell 2","c":"er table cell 2","d":"er table cell 2","e":"er table cell 2","f":"er table cell 2"},{"a":"er table cell 3","b":"er table cell 3","c":"er table cell 3","d":"er table cell 3","e":"er table cell 3","f":"er table cell 3"}
+        data_response = json.dumps({"status":1, "message": "ke_action_extract berhasil","data":data, "table": data_er})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+# [end] ktp extraction
+
+# [start] image extraction
+@login_required(login_url="/login")
+def ie_action_newdoc(request):
+    if request.method == "POST":
+        data = request.POST
+
+        newdoc_str = data.get("new_doc")
+        # start - upload file
+        format, imgstr = newdoc_str.split(';base64,') 
+        ext = format.split('/')[-1] 
+        filename = ""+str(datetime.now().strftime("%Y%m%d%H%M%S"))+"_image-extraction."+ext
+        file_content=base64.b64decode(imgstr)
+        with open("genaiapp/static/assets/"+filename, 'wb') as f:
+            f.write(file_content)
+        # end - upload file
+
+        data_response = json.dumps({"status":1, "message": "ie_action_newdoc berhasil","processing_time":"processing time","ocr_conf":"ocr conf","preview_ocr_result":"preview ocr result"})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def ie_action_docname(request):
+    if request.method == "GET":
+        data = request.GET['post_id']
+        data_response = json.dumps({"status":1, "message": "ie_action_docname berhasil","processing_time":"processing time "+str(data)+"","ocr_conf":"ocr conf "+str(data)+"","preview_ocr_result":"preview ocr result "+str(data)+""})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def ie_action_docdel(request):
+    if request.method == "GET":
+        idx = request.GET['post_id']
+        data_response = json.dumps({"data_delete":"id "+idx+""})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def ie_action_showconf(request):
+    if request.method == "POST":
+        data = request.POST
+        result_conf = "<span> 4 akan dilakukan dengan transfer ke rekening bank pemilik sebagaimana diuraikan di bawah ini : nomor rekening<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(255, 170, 170); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> :</span> 5806-01-016798-53-5 nama pemegang rekening : sunardi bank bank rakyat indonesia pemilik dengan ini menyatakan dan menjamin bahwa rekening bank diatas adalah rekening bank yang benar dan sah dari</span>"
+        data_response = json.dumps({"status":1,"result_conf": result_conf, "data": data})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+        return HttpResponse(data_response)
+
+@login_required(login_url="/login")
+def ie_action_search(request):
+    if request.method == "POST":
+        data = request.POST
+        data_response = json.dumps({"preview_prompt_result":"kvalue - ("+data.get("k_value")+") : promptinput - ("+data.get("prompt_input")+")"})
+        return HttpResponse(data_response)
+    else:
+        data_response = json.dumps({"status":0, "message": "unauthorized"})
+# [end] image extraction
+# [END] - PROCESS
 
 @login_required(login_url="/login")
 def dashboard_default(request):
-    context={"breadcrumb":{"parent":"Dashboard","child":"Default"}}
-    return render(request,'general/dashboard/default/index.html',context)
+    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Upload Document"}}
+    return render(request,'theme_genai/document_extraction/index-1.html',context)
+    # context={"breadcrumb":{"parent":"Dashboard","child":"Default"}}
+    # return render(request,'general/dashboard/default/index.html',context)
 # .......
+
+
+
+
 
 @login_required(login_url="/login")
 def dashboard_ecommerce(request):
@@ -382,14 +838,6 @@ def updateTask(request, pk):
         task.save()
 
     return HttpResponseRedirect("/to_do_database")
-
-# search website views
-
-
-@login_required(login_url="/login")
-def search_website(request):
-    context={"breadcrumb":{"parent":"Search Pages","child":"Search Website"}}
-    return render(request,'search_website/search.html',context)
 
 # forms views
 
@@ -1579,3 +2027,8 @@ def documentation_django_tree(request):
 def documentation_django_app(request):
     return render(request,'documentation/django-app.html')
 
+
+@login_required(login_url="/login")
+def bonus_ui_sweet_alert2(request):
+    context={"breadcrumb":{"parent":"Bonus Ui","child":"Sweet Alert 2"}}
+    return render(request,'bonus_ui/sweet-alert2/sweet-alert2.html',context)

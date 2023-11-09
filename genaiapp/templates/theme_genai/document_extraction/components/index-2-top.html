@@ -36,21 +36,13 @@
                       </tr>
                     </thead>
                     <tbody>
+                      {% for doc_history in data_doc %}
                       <tr>
-                        <th scope="row">1</th>
-                        <td>Table cell</td>
-                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ doc_history.document_name }}</td>
+                        <td><a href="#" onclick="ps_btn_view(this)" data-docname="{{ doc_history.document_name }}" class="btn-pill btn-sm"><i data-feather="eye" style="color:#ff386c"></i></td>
                       </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Table cell</td>
-                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>Table cell</td>
-                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
-                      </tr>
+                      {% endfor %}
                     </tbody>
                   </table>
                 </div>
@@ -67,26 +59,18 @@
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Document Name</th>
+                        <th scope="col">Parser Name</th>
                         <th scope="col">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Table cell</td>
-                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      {% for parser_history in data_parser %}
+                      <tr id="row-{{ parser_history.id }}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><a href="#" class="btn btn-link" onclick="ps_btn_parser(this)" data-parser="{{ parser_history.parser_name }}">{{ parser_history.parser_name }}</a></td>
+                        <td><a href="#" class="btn-pill btn-sm" onclick="ps_btn_del(this)" data-del="{{ parser_history.id }}"><i data-feather="trash-2" style="color:#ff386c"></i></td>
                       </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Table cell</td>
-                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>Table cell</td>
-                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
-                      </tr>
+                      {% endfor %}
                     </tbody>
                   </table>
                 </div>
@@ -117,81 +101,109 @@
     </div>
     <div class="card-body">
       <p class="m-0">
-        <form class="needs-validation" novalidate>
+        <form class="needs-validation" id="form_step3" method="post" novalidate>
+          {% csrf_token %}
           <div class="mb-3">
             <label class="form-label">Document Test</label>
+            <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="the name of the uploaded document"><i class="fa fa-info"></i></p>
             <input class="form-control" name="document_test" id="document_test" type="text" placeholder="" readonly>
           </div>
           <div class="mb-3">
             <label class="form-label">Choose your model</label>
+            <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="the difficulty of the document processing"><i class="fa fa-info"></i></p>
             <div class="form-check radio radio-primary">
-              <input class="form-check-input" id="radio11" type="radio" name="radio1" value="model1">
+              <input class="form-check-input" id="radio11" type="radio" name="your_model" value="1">
               <label class="form-check-label" style="font-weight: 400;" for="radio11">Model 1 : Both are used for very complex paragraph arrangements and have different formats</label>
             </div>
             <div class="form-check radio radio-primary">
-              <input class="form-check-input" id="radio22" type="radio" name="radio1" value="model2">
+              <input class="form-check-input" id="radio22" type="radio" name="your_model" value="2">
               <label class="form-check-label" style="font-weight: 400;" for="radio22">Model 2 : Best used for paragraphs that have medium complexity</label>
             </div>
             <div class="form-check radio radio-primary">
-              <input class="form-check-input" id="radio33" type="radio" name="radio1" value="model3">
+              <input class="form-check-input" id="radio33" type="radio" name="your_model" value="3">
               <label class="form-check-label" style="font-weight: 400;" for="radio33">Model 3 : Best used for paragraphs that have low complexity</label>
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-4">
               <label class="form-label">Model Number</label>
+              <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="Filled automatically when the document processing model is selected"><i class="fa fa-info"></i></p>
               <input class="form-control" name="model_number" id="model_number" type="text" placeholder="" readonly>
             </div>
             <div class="col-md-8">
               <label class="form-label">Model Name</label>
+              <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="Model used (1,2,3)"><i class="fa fa-info"></i></p>
               <input class="form-control" name="model_name" id="model_name" type="text" placeholder="">
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label" for="validationCustom01">Prompt used</label>
+            <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="promt or question to be asked"><i class="fa fa-info"></i></p>
             <textarea class="form-control" id="prompt_used" name="prompt_used" placeholder="" required="" rows="3"></textarea>
             <div class="invalid-feedback">Need to enter Prompt used</div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="form-label">First Regex Spliter</label>
+              <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="Regex Schema to do preliminary data extraction that is considered to accommodate answers from Promt"><i class="fa fa-info"></i></p>
               <input class="form-control" name="first_regex_spillter" id="first_regex_spillter" type="text" placeholder="">
             </div>
             <div class="col-md-6">
               <label class="form-label">Query Used (Optional)</label>
+              <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="The last promt to summarize the results"><i class="fa fa-info"></i></p>
               <input class="form-control" name="query_used" id="query_used" type="text" placeholder="">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="form-label">Second Regex Spliter</label>
+              <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="Regex Schema Alternative If the first regex schema does not go well"><i class="fa fa-info"></i></p>
               <input class="form-control" name="second_regex_spillter" id="second_regex_spillter" type="text" placeholder="">
             </div>
             <div class="col-md-6">
               <label class="form-label">Last Regex Filter Used (Optional)</label>
+              <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="Last regex schema to clean output"><i class="fa fa-info"></i></p>
               <input class="form-control" name="last_regex_filter_used" id="last_regex_filter_used" type="text" placeholder="">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="form-label">Third Spliter</label>
+              <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="String Value which can be used for spliting documents into several partitions"><i class="fa fa-info"></i></p>
               <input class="form-control" name="third_spliter" id="third_spliter" type="text" placeholder="">
             </div>
             <div class="col-md-6">
               <label class="form-label">Insert Duplication</label>
+              <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="Parameters to duplicate the results of the first or second regex regex"><i class="fa fa-info"></i></p>
               <input class="touchspin" name="insert_duplication" id="insert_duplication" type="text" value="0" data-bts-min="0" data-bts-max="100">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="form-label">Insert K Value</label>
-              <input class="touchspin" name="third_spliter" id="third_spliter" type="text" value="0" data-bts-min="0" data-bts-max="100">
+              <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="the number of documents that have the largest similarity with promt"><i class="fa fa-info"></i></p>
+              <input class="touchspin" name="insert_k_value" id="insert_k_value" type="text" value="0" data-bts-min="0" data-bts-max="100">
               <!-- <input class="form-control" name="third_spliter" id="third_spliter" type="text" placeholder=""> -->
             </div>
           </div>
-          <button class="btn btn-primary" id="save_model" type="submit">Save Model</button>
-          <button class="btn btn-light" id="test_model" type="submit">Test Model</button>
-          <button class="btn btn-light" id="update_model" type="submit">Update Model</button>
+          <div class="btn-group col-md-12" role="group" aria-label="Basic example">
+            <button class="btn btn-primary" id="save_model" type="button" title="Button for save model parser">Save Model</button>
+            <button class="btn btn-info" id="test_model" type="button" title="Button for test model parser">Test Model</button>
+            <button class="btn btn-warning" id="update_model" type="button" title="Button for update model parser">Update Model</button>
+            <button class="btn btn-light" id="reset_form_step3" type="button" title="Button for reset form step 3">Reset Form</button>
+          </div>
         </form>
       </p>
     </div>
@@ -215,27 +227,50 @@
     </div>
     <div class="card-body">
       <p class="m-0">
-        <form class="needs-validation" novalidate>
+        <form class="needs-validation" id="form_step4" method="post" novalidate>
+          {% csrf_token %}
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="form-label">Processing Time</label>
+              <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="Displays Processing Time from Parser"><i class="fa fa-info"></i></p>
               <input class="form-control" name="processing_time" id="processing_time" type="text" placeholder="" readonly>
             </div>
             <div class="col-md-6">
               <label class="form-label">OCR Quality</label>
+              <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="Displays the average value of the Document Confidence Score used to generate results"><i class="fa fa-info"></i></p>
               <input class="form-control" name="ocr_quality" id="ocr_quality" type="text" placeholder="" readonly>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label" for="validationCustom01">Result Test</label>
+            <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="Showing parser results"><i class="fa fa-info"></i></p>
             <textarea class="form-control" id="result_test" name="result_test" placeholder="" required="" rows="3"></textarea>
             <div class="invalid-feedback">Need to enter Result Test</div>
           </div>
           <div class="mb-3">
             <label class="form-label">OCR Confidence Score Model Test</label>
+            <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="Displays the quality of OCR documents used as source answers time from parser"><i class="fa fa-info"></i></p>
               <input class="form-control" name="ocr_conf_score_model_test" id="ocr_conf_score_model_test" type="text" placeholder="" readonly>
           </div>
-          <button class="btn btn-primary" type="submit">Show The Confidence</button>
+          <button class="btn btn-primary" id="ps_btn_showconf" type="button" title="Button to display confidence score">Show The Confidence</button>
+
+          <div class="mt-3" id="display_conf" style="display: none;">
+            <div class="default-according" id="accordion">
+              <div class="card">
+                <div class="card-header" id="headingOne">
+                  <button class="btn btn-link btn-block" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                      aria-expanded="true" aria-controls="collapseOne">OCR Confidence Score Model Test Tab</button>
+                </div>
+                <div class="collapse show" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordion">
+                  <div id="ocr_conf_score" class="card-body" style="overflow-y: auto; height:200px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </form>
       </p>
     </div>

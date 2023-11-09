@@ -1,5 +1,5 @@
 """
-WSGI config for wingo project.
+WSGI config for devogenai project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

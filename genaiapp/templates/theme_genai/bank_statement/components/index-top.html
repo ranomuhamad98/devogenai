@@ -1,9 +1,12 @@
 {% load static %}
 {% load sass_tags %}
 <div class="col-sm-12 col-md-6">
-  <div class="card">
+  <div class="card b-r-0">
     <div class="card-header pb-0">
-      <h5>Upload New Document</h5>
+      <ul class="nav nav-tabs" id="icon-tab" role="tablist">
+        <li class="nav-item"><a class="nav-link active" id="step-1-tab" data-bs-toggle="tab" href="#step-1" role="tab" aria-controls="step-1" aria-selected="false">Step 1</a></li>
+        <li class="nav-item"><a class="nav-link" id="step-2-tab" data-bs-toggle="tab" href="#step-2" role="tab" aria-controls="step-2" aria-selected="true">Step 2 (optional)</a></li>
+      </ul>
       <div class="card-header-right">
         <ul class="setting-option">
           <li>
@@ -18,24 +21,61 @@
       </div>
     </div>
     <div class="card-body">
-      <form class="needs-validation" novalidate>
-        <div class="mb-3">
-          <label class="form-label" for="validationCustom01">Document Bank Statement</label>
-          <input class="form-control" type="file" aria-label="file example" required="">
-          <div class="invalid-feedback">Need to enter document bank statement</div>
+      <div class="tab-content" id="icon-tabContent">
+        <div class="tab-pane fade active show" id="step-1" role="tabpanel" aria-labelledby="step-1-tab">
+          <p class="m-0">
+            <h5>Upload New Document</h5>
+            <form class="needs-validation" id="form_step1" method="post" enctype="multipart/form-data" novalidate>
+              {% csrf_token %}
+              <div class="mb-3">
+                <label class="form-label" for="validationCustom01">Document Bank Statement</label>
+                <input class="form-control" name="new_doc" id="new_doc" type="file" aria-label="file example" required="">
+                <div class="invalid-feedback new_doc">Need to enter document bank statement</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="validationCustom02">Bank Name</label>
+                <select class="form-select" required="" name="bank_name" id="bank_name" aria-label="select example">
+                  <option value="">Select Bank Name...</option>
+                  <option value="BCA">BCA</option>
+                  <option value="CIMB">CIMB</option>
+                  <option value="BRI">BRI</option>
+                </select>
+                <div class="invalid-feedback bank_name">Need to enter bank name</div>
+              </div>
+              <button class="btn btn-primary" id="btn_form_step1" type="button">Process</button>
+            </form>
+          </p>
         </div>
-        <div class="mb-3">
-          <label class="form-label" for="validationCustom02">Bank Name</label>
-          <select class="form-select" required="" aria-label="select example">
-            <option value="">Select Bank Name...</option>
-            <option value="BCA">BCA</option>
-            <option value="CIMB">CIMB</option>
-            <option value="BRI">BRI</option>
-          </select>
-          <div class="invalid-feedback">Need to enter bank name</div>
+        <div class="tab-pane fade" id="step-2" role="tabpanel" aria-labelledby="step-2-tab">
+          <p class="m-0">
+            <div class="row">
+              <div class="col-sm-12 col-lg-12 col-xl-12">
+                <label class="form-label">Document History</label>
+                <div class="table-responsive table-bordered">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Document Name</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for doc_history in data_doc %}
+                      <tr id="row-{{ doc_history.id }}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><a href="#" class="btn btn-link" onclick="btn_docname(this)" data-docname="{{ doc_history.document_name }}">{{ doc_history.document_name }}</a></td>
+                        <td><a href="#" onclick="btn_del(this)" data-del="{{ doc_history.id }}" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </p>
         </div>
-        <button class="btn btn-primary" type="submit">Process</button>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -77,7 +117,7 @@
               <div class="col-sm-12 col-lg-12 col-xl-12">
                 <div class="table-responsive table-bordered">
                   <label class="form-label">Transaction Detail</label>
-                  <table class="table">
+                  <table class="table" id="table-transaction-detail">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -89,35 +129,7 @@
                         <th scope="col">F</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                      </tr>
-                    </tbody>
+                    <tbody></tbody>
                   </table>
                 </div>
               </div>
@@ -129,7 +141,7 @@
             <div class="row">
               <div class="col-sm-12 col-lg-12 col-xl-12">
                 <div class="table-responsive table-bordered">
-                  <table class="table">
+                  <table class="table" id="table-free-prompt">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -141,56 +153,31 @@
                         <th scope="col">F</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                      </tr>
-                    </tbody>
+                    <tbody></tbody>
                   </table>
                 </div>
               </div>
             </div>
-            <form class="needs-validation" novalidate>
+            <form class="needs-validation" id="form_step3" method="post" novalidate>
+              {% csrf_token %}
               <div class="mb-3 mt-3">
                 <label class="form-label" for="validationCustom01">Prefix OCR</label>
-                <textarea class="form-control" id="prefix_ocr" placeholder="" required=""></textarea>
+                <textarea class="form-control" name="prefix_ocr" id="prefix_ocr" placeholder="" required=""></textarea>
                 <div class="invalid-feedback">Need to enter prefix OCR</div>
               </div>
               <div class="mb-3">
                 <label class="form-label" for="validationCustom02">Prompt Dataframe</label>
-                <input class="form-control" name="prompt_df" id="prompt_df" type="text" placeholder="" required="">
+                <input class="form-control" name="prompt_dataframe" id="prompt_dataframe" type="text" placeholder="" required="">
                 <div class="invalid-feedback">Need to enter prompt dataframe</div>
               </div>
-              <button class="btn btn-primary" type="submit">Process</button>
+              <button class="btn btn-primary" id="btn_process_freeprompt" type="button">Process</button>
             </form>
-            <div class="mt-3">
-              <label class="form-label" for="">Result Dataframe Search</label>
-              <textarea class="form-control" id="" placeholder="" required=""></textarea>
-              <div class="invalid-feedback">Need to enter prefix OCR</div>
+
+            <div class="mt-3" id="display_step3" style="display: none;">
+              <div class="mb-3">
+                <label class="form-label" for="validationCustom01">Result Dataframe Search</label>
+                <textarea class="form-control" id="result_dataframe_search" name="result_dataframe_search" placeholder="" rows="3" readonly></textarea>
+              </div>
             </div>
           </p>
         </div>
@@ -221,7 +208,7 @@
         <form class="needs-validation" novalidate>
           <div class="mb-3">
             <label class="form-label">Bank Name</label>
-            <input class="form-control" name="bank_name" id="bank_name" type="text" placeholder="" readonly>
+            <input class="form-control" name="er_bank_name" id="er_bank_name" type="text" placeholder="" readonly>
           </div>
           <div class="mb-3">
             <label class="form-label">Account Number</label>
@@ -235,7 +222,7 @@
         <div class="row">
           <div class="col-sm-12 col-lg-12 col-xl-12">
             <div class="table-responsive table-bordered">
-              <table class="table">
+              <table class="table" id="table-extraction-result">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -247,35 +234,7 @@
                     <th scope="col">F</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
-                  </tr>
-                </tbody>
+                <tbody></tbody>
               </table>
             </div>
           </div>

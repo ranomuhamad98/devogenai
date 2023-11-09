@@ -2,7 +2,9 @@
 {% load sass_tags %}
 {% block css %}
 <!-- Plugins css start-->
-<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/prism.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/animate.scss' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/prism.scss' %}"> -->
+<link rel="stylesheet" type="text/css" href="{% static 'assets/scss/vendors/sweetalert2.scss' %}">
 <!-- Plugins css Ends-->
 {% endblock css %}
 {% block content %}
@@ -20,6 +22,253 @@
 </div>
 {% endblock content %}
 {% block scriptcontent %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="{% static 'assets/js/sweet-alert/sweetalert.min.js' %}"></script>
+<script type="text/javascript">
+  $('#btn_form_step1').click(function(){
+    $(".new_doc").hide(); 
+    if ($('#new_doc').get(0).files.length === 0 || !$('#bank_name').val()) {
+      if($('#new_doc').get(0).files.length === 0) $(".new_doc").show(); 
+      if(!$('#bank_name').val()) $(".bank_name").show(); 
+      
+      console.log("No files selected.");
+    }else{
+      $("#btn_form_step1").prop('disabled', true)
+      const formData = new FormData();
+      
+      const fileInput = document.getElementById('new_doc');
+      const file = fileInput.files[0];
+      var file_result = ""
+      
+      const reader = new FileReader();
+      reader.onloadend = () => { 
+      
+        formData.append('new_doc', reader.result);
+        formData.append('bank_name', $('#bank_name').val());
+        formData.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val())
+
+        fetch('bank_statement/action_newdoc', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data_json => {
+          console.log(data_json);
+          if(data_json.status){
+            swal("Poof! Your document flawlessly uploaded", {
+              icon: "success"
+            }).then((value) => {
+              
+              // tab ocr result
+              $('#prefix').val(data_json.ocr_result.prefix)
+              $('#sufix').val(data_json.ocr_result.sufix)
+              var tbl_trx_detail = data_json.ocr_result.table
+              
+              // tab free prompt
+              var tbl_free_prompt = data_json.free_prompt.table
+              $('#prefix_ocr').val(data_json.free_prompt.prefix_ocr)   
+              $('#prompt_dataframe').val(data_json.free_prompt.prompt_dataframe)   
+
+              // card extraction result
+              $('#er_bank_name').val(data_json.extraction_result.bank_name)   
+              $('#account_number').val(data_json.extraction_result.account_number)   
+              $('#account_holder').val(data_json.extraction_result.account_holder)
+              var tbl_extraction_result = data_json.extraction_result.table
+
+              // tbl 1
+              var row;
+              for (let index = 0; index < tbl_trx_detail.length; index++) {
+                row += "<tr>"+
+                        "<th scope=\"row\">"+(index+1)+"</th>"+
+                        "<td>"+tbl_trx_detail[index].a+"</td>"+
+                        "<td>"+tbl_trx_detail[index].b+"</td>"+
+                        "<td>"+tbl_trx_detail[index].c+"</td>"+
+                        "<td>"+tbl_trx_detail[index].d+"</td>"+
+                        "<td>"+tbl_trx_detail[index].e+"</td>"+
+                        "<td>"+tbl_trx_detail[index].f+"</td>"+
+                      "</tr>";
+              }
+              $('table[id="table-transaction-detail"] tbody').html(row);
+              
+              // tbl 2
+              row = "";
+              for (let index = 0; index < tbl_free_prompt.length; index++) {
+                row += "<tr>"+
+                        "<th scope=\"row\">"+(index+1)+"</th>"+
+                        "<td>"+tbl_free_prompt[index].a+"</td>"+
+                        "<td>"+tbl_free_prompt[index].b+"</td>"+
+                        "<td>"+tbl_free_prompt[index].c+"</td>"+
+                        "<td>"+tbl_free_prompt[index].d+"</td>"+
+                        "<td>"+tbl_free_prompt[index].e+"</td>"+
+                        "<td>"+tbl_free_prompt[index].f+"</td>"+
+                      "</tr>";
+              }
+              $('table[id="table-free-prompt"] tbody').html(row);
+
+              // tbl 3
+              row = "";
+              for (let index = 0; index < tbl_extraction_result.length; index++) {
+                row += "<tr>"+
+                        "<th scope=\"row\">"+(index+1)+"</th>"+
+                        "<td>"+tbl_extraction_result[index].a+"</td>"+
+                        "<td>"+tbl_extraction_result[index].b+"</td>"+
+                        "<td>"+tbl_extraction_result[index].c+"</td>"+
+                        "<td>"+tbl_extraction_result[index].d+"</td>"+
+                        "<td>"+tbl_extraction_result[index].e+"</td>"+
+                        "<td>"+tbl_extraction_result[index].f+"</td>"+
+                      "</tr>";
+              }
+              $('table[id="table-extraction-result"] tbody').html(row);
+
+              $('#form_step1')[0].reset();
+            });
+          }else{
+            swal("Failed!", "The document test you sent failed to be processed!", "error");
+          }
+          $("#btn_form_step1").prop('disabled', false)
+        });
+
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  function btn_docname(data){
+    var docname = $(data).data('docname');
+    $.ajax(
+    {
+        type:"GET",
+        url: "bank_statement/action_docname",
+        data:{post_id: docname},
+        success: function( response ) 
+        {
+          console.log(response);
+          data_json = JSON.parse(response);
+          if(data_json.status){
+            swal("Poof! Your document flawlessly loaded", {
+              icon: "success"
+            }).then((value) => {
+              // tab ocr result
+            $('#prefix').val(data_json.ocr_result.prefix)
+            $('#sufix').val(data_json.ocr_result.sufix)
+            var tbl_trx_detail = data_json.ocr_result.table
+            
+            // tab free prompt
+            var tbl_free_prompt = data_json.free_prompt.table
+            $('#prefix_ocr').val(data_json.free_prompt.prefix_ocr)   
+            $('#prompt_dataframe').val(data_json.free_prompt.prompt_dataframe)   
+
+            // card extraction result
+            $('#er_bank_name').val(data_json.extraction_result.bank_name)   
+            $('#account_number').val(data_json.extraction_result.account_number)   
+            $('#account_holder').val(data_json.extraction_result.account_holder)
+            var tbl_extraction_result = data_json.extraction_result.table
+
+            // tbl 1
+            var row;
+            for (let index = 0; index < tbl_trx_detail.length; index++) {
+              row += "<tr>"+
+                      "<th scope=\"row\">"+(index+1)+"</th>"+
+                      "<td>"+tbl_trx_detail[index].a+"</td>"+
+                      "<td>"+tbl_trx_detail[index].b+"</td>"+
+                      "<td>"+tbl_trx_detail[index].c+"</td>"+
+                      "<td>"+tbl_trx_detail[index].d+"</td>"+
+                      "<td>"+tbl_trx_detail[index].e+"</td>"+
+                      "<td>"+tbl_trx_detail[index].f+"</td>"+
+                    "</tr>";
+            }
+            $('table[id="table-transaction-detail"] tbody').html(row);
+            
+            // tbl 2
+            row = "";
+            for (let index = 0; index < tbl_free_prompt.length; index++) {
+              row += "<tr>"+
+                      "<th scope=\"row\">"+(index+1)+"</th>"+
+                      "<td>"+tbl_free_prompt[index].a+"</td>"+
+                      "<td>"+tbl_free_prompt[index].b+"</td>"+
+                      "<td>"+tbl_free_prompt[index].c+"</td>"+
+                      "<td>"+tbl_free_prompt[index].d+"</td>"+
+                      "<td>"+tbl_free_prompt[index].e+"</td>"+
+                      "<td>"+tbl_free_prompt[index].f+"</td>"+
+                    "</tr>";
+            }
+            $('table[id="table-free-prompt"] tbody').html(row);
+
+            // tbl 3
+            row = "";
+            for (let index = 0; index < tbl_extraction_result.length; index++) {
+              row += "<tr>"+
+                      "<th scope=\"row\">"+(index+1)+"</th>"+
+                      "<td>"+tbl_extraction_result[index].a+"</td>"+
+                      "<td>"+tbl_extraction_result[index].b+"</td>"+
+                      "<td>"+tbl_extraction_result[index].c+"</td>"+
+                      "<td>"+tbl_extraction_result[index].d+"</td>"+
+                      "<td>"+tbl_extraction_result[index].e+"</td>"+
+                      "<td>"+tbl_extraction_result[index].f+"</td>"+
+                    "</tr>";
+            }
+            $('table[id="table-extraction-result"] tbody').html(row);
+            });
+          }else{
+            swal("Failed!", "The document test you sent failed to be processed!", "error");
+          }
+        }
+    })
+  };
+
+  function btn_del(request){
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this file!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            var datadel = $(request).data('del');
+            $.ajax(
+            {
+                type:"GET",
+                url: "bank_statement/action_docdel",
+                data:{post_id: datadel},
+                success: function( response ) 
+                {
+                  console.log(response);
+                  data_json = JSON.parse(response);
+                  $("#row-"+datadel).remove();
+                  swal("Poof! Your file has been deleted!", {
+                    icon: "success",
+                  });
+                }
+            })
+        } else {
+            swal("Your file is safe!");
+        }
+    }) 
+  };
+
+  $('#btn_process_freeprompt').click(function(){
+    $("#display_step3").hide();
+    $.ajax(
+    {
+        type:"POST",
+        url: "bank_statement/action_process",
+        data: $('#form_step3').serialize(),
+        success: function( response )
+        {
+          console.log(response);
+          data_json = JSON.parse(response);
+          console.log(data_json.preview_ocr_result);
+          $("#display_step3").show();
+          $("#result_dataframe_search").val(String(data_json.result_dataframe_search))
+          
+        }
+    })
+  });
+
+</script>
 <!-- Plugins JS start-->
 <script src="{% static 'assets/js/form-validation-custom.js' %}"></script>
 <script src="{% static 'assets/js/prism/prism.min.js' %}"></script>

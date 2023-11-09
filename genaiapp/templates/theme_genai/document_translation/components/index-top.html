@@ -24,13 +24,14 @@
       <div class="tab-content" id="icon-tabContent">
         <div class="tab-pane fade active show" id="step-1" role="tabpanel" aria-labelledby="step-1-tab">
           <p class="m-0">
-            <form class="needs-validation" novalidate>
+            <form class="needs-validation" id="form_step1" method="post" enctype="multipart/form-data" novalidate>
+              {% csrf_token %}
               <div class="mb-3">
                 <label class="form-label" for="validationCustom01">Upload new document</label>
-                <input class="form-control" type="file" aria-label="file example" required="">
+                <input class="form-control" type="file" name="new_doc" id="new_doc" aria-label="file example" required="">
                 <div class="invalid-feedback">Need to enter Upload new document</div>
               </div>
-              <button class="btn btn-primary" type="submit">Upload</button>
+              <button class="btn btn-primary" id="btn_form_step1" type="button">Upload</button>
             </form>
           </p>
         </div>
@@ -49,21 +50,13 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Table cell</td>
-                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      {% for doc_history in data %}
+                      <tr id="row-{{ doc_history.id }}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><a href="#" class="btn btn-link" onclick="btn_docname(this)" data-docname="{{ doc_history.document_name }}">{{ doc_history.document_name }}</a></td>
+                        <td><a href="#" onclick="btn_del(this)" data-del="{{ doc_history.id }}" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
                       </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Table cell</td>
-                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>Table cell</td>
-                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
-                      </tr>
+                      {% endfor %}
                     </tbody>
                   </table>
                 </div>
@@ -93,7 +86,8 @@
       </div>
     </div>
     <div class="card-body">
-      <form class="needs-validation" novalidate>
+      <form class="needs-validation" id="form_step3" method="post" novalidate>
+        {% csrf_token %}
         <div class="mb-3">
           <label class="form-label">Processing Time</label>
           <input class="form-control" name="processing_time" id="processing_time" type="text" placeholder="" readonly>
@@ -112,8 +106,32 @@
           <textarea class="form-control" id="preview_translate_result" placeholder="" required=""></textarea>
           <div class="invalid-feedback">Need to enter </div>
         </div>
-        <button class="btn btn-primary" type="submit">Show the confidence</button>
+        <!-- <div class="mb-3">
+          <label class="form-label" for="validationCustom02">Bank Name</label>
+          <select class="form-select" required="" aria-label="select example">
+            <option value="">Select Bank Name...</option>
+            <option value="BCA">BCA</option>
+            <option value="CIMB">CIMB</option>
+            <option value="BRI">BRI</option>
+          </select>
+          <div class="invalid-feedback">Need to enter bank name</div>
+        </div> -->
+        <button class="btn btn-primary" id="btn_showconf" type="button">Show the confidence</button>
       </form>
+
+      <div class="mt-3" id="display_conf" style="display: none;">
+        <div class="default-according" id="accordion">
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <button class="btn btn-link btn-block" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                  aria-expanded="true" aria-controls="collapseOne">OCR Confidence Score Model Test Tab</button>
+            </div>
+            <div class="collapse show" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordion">
+              <div id="ocr_conf_score" class="card-body" style="overflow-y: auto; height:200px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -19,9 +19,9 @@
     </div>
     <div class="card-body">
       <div class="btn-group col-md-12" role="group" aria-label="Basic example">
-        <a class="btn btn-light btn-lg">Extract All Document &nbsp;<i class="fa fa-files-o"></i></a>
-        <a class="btn btn-light btn-lg">Download JSON &nbsp;<i class="fa fa-file-code-o"></i></a>
-        <a class="btn btn-light btn-lg">Download CSV &nbsp;<i class="fa fa-file-excel-o"></i></a>
+        <a href="ep_action_downjson/1" target="_blank" class="btn btn-light btn-lg">Extract All Document &nbsp;<i class="fa fa-files-o"></i></a>
+        <a href="ep_action_downcsv/2" target="_blank" class="btn btn-light btn-lg">Download JSON &nbsp;<i class="fa fa-file-code-o"></i></a>
+        <a href="ep_action_alldoc/3" target="_blank" class="btn btn-light btn-lg">Download CSV &nbsp;<i class="fa fa-file-excel-o"></i></a>
       </div>
       <div class="table-responsive mt-3">
         <table class="table table-bordered table-sm">
@@ -38,36 +38,18 @@
             </tr>
           </thead>
           <tbody>
+            {% for doc_extract in data_extraction %}
             <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>Mark</td>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ doc_extract.document }}</td>
+              <td>{{ doc_extract.bank_name }}</td>
+              <td>{{ doc_extract.rekening_number }}</td>
+              <td>{{ doc_extract.luas_lahan }}</td>
+              <td>{{ doc_extract.telp }}</td>
+              <td>{{ doc_extract.waktu_sewa }}</td>
+              <td>{{ doc_extract.rekening_number }}</td>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>Mark</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>@twitter</td>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>Mark</td>
-            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>

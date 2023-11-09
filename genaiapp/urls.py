@@ -7,11 +7,57 @@ urlpatterns = [
     path('document_extraction/upload_document', views.upload_document,name='document_extraction_upload_document'),
     path('document_extraction/parser_setup', views.parser_setup,name='document_extraction_parser_setup'),
     path('document_extraction/extraction_process', views.extraction_process,name='document_extraction_extraction_process'),
+    
+    # DOCUMENT EXTRACTION - UPLOAD DOCUMENT
+    path('document_extraction/ud_action_newdoc', views.de_ud_action_newdoc,name='document_extraction'),
+    path('document_extraction/ud_action_docname', views.de_ud_action_docname,name='document_extraction'),
+    path('document_extraction/ud_action_docdel', views.de_ud_action_docdel,name='document_extraction'),
+    path('document_extraction/ud_action_showconf', views.de_ud_action_showconf,name='document_extraction'),
+    path('document_extraction/ud_action_search', views.de_ud_action_search,name='document_extraction'),
+
+    # DOCUMENT EXTRACTION - PARSER SETUP
+    path('document_extraction/ps_action_view', views.de_ps_action_view,name='document_extraction'),
+    path('document_extraction/ps_action_parser', views.de_ps_action_parser,name='document_extraction'),
+    path('document_extraction/ps_action_del', views.de_ps_action_del,name='document_extraction'),
+    path('document_extraction/ps_action_save', views.de_ps_action_save,name='document_extraction'),
+    path('document_extraction/ps_action_test', views.de_ps_action_test,name='document_extraction'),
+    path('document_extraction/ps_action_update', views.de_ps_action_update,name='document_extraction'),
+    path('document_extraction/ps_action_showconf', views.de_ps_action_showconf,name='document_extraction'),
+
+    # DOCUMENT EXTRACTION - EXTRACTION PROCESS
+    path('document_extraction/ep_action_downjson/<id>', views.de_ep_action_downjson,name='document_extraction'),
+    path('document_extraction/ep_action_downcsv/<id>', views.de_ep_action_downcsv,name='document_extraction'),
+    path('document_extraction/ep_action_alldoc/<id>', views.de_ep_action_alldoc,name='document_extraction'),
+
+
 
     path('document_translation', views.document_translation,name='document_translation'),
-    path('image_extraction', views.image_extraction,name='image_extraction'),
-    path('ktp_extraction', views.ktp_extraction,name='ktp_extraction'),
+
+    # DOCUMENT TRANSLATION
+    path('document_translation/action_newdoc', views.dt_action_newdoc,name='aksi-upload-new-doc'),
+    path('document_translation/action_docname', views.dt_action_docname,name='aksi-klik-doc-name'),
+    path('document_translation/action_docdel', views.dt_action_docdel,name='aksi=klik-del-step2'),
+    path('document_translation/action_showconf', views.dt_action_showconf,name='document_translation'),
+
     path('bank_statement', views.bank_statement,name='bank_statement'),
+    path('bank_statement/action_newdoc', views.bs_action_newdoc,name='aksi-upload-new-doc'),
+    path('bank_statement/action_docname', views.bs_action_docname,name='aksi-klik-doc-name'),
+    path('bank_statement/action_docdel', views.bs_action_docdel,name='aksi-klik-del-step2'),
+    path('bank_statement/action_process', views.bs_action_processfp,name='aksi-klik-process-free-prompt'),
+
+    path('ktp_extraction', views.ktp_extraction,name='ktp_extraction'), 
+    path('ktp_extraction/action_newdoc', views.ke_action_newdoc,name='aksi-upload-newdoc'),
+    path('ktp_extraction/action_docname', views.ke_action_docname,name='aksi-klik-docname-listdoc'),
+    path('ktp_extraction/action_docdel', views.ke_action_docdel,name='aksi-klik-del-listdoc'),
+    path('ktp_extraction/action_showconf', views.ke_action_showconf,name='aksi-show-the-confidence'),
+    path('ktp_extraction/action_extract', views.ke_action_extract,name='aksi-extract-entity'),
+
+    path('image_extraction', views.image_extraction,name='image_extraction'),
+    path('image_extraction/action_newdoc', views.ie_action_newdoc,name='aksi-upload-newdoc'),
+    path('image_extraction/action_docname', views.ie_action_docname,name='aksi-klik-docname-listdoc'),
+    path('image_extraction/action_docdel', views.ie_action_docdel,name='aksi-klik-del-listdoc'),
+    path('image_extraction/action_showconf', views.ie_action_showconf,name='aksi-show-the-confidence'),
+    path('image_extraction/action_search', views.ie_action_search,name='aksi-search'),
 
     # dashboard paths
 
@@ -21,10 +67,8 @@ urlpatterns = [
     path('dashboard_project', views.dashboard_project,name='dashboard_project'),
 
 
-    # widgets paths 
 
-    path('widgets_general', views.widgets_general,name='widgets_general'),
-    path('widgets_chart', views.widgets_chart,name='widgets_chart'),
+    # [start] TEMPLATE PATHS
 
     # page layout paths
 
@@ -34,38 +78,6 @@ urlpatterns = [
     path('page_layout_footer_light',views.page_layout_footer_light,name='page_layout_footer_light'),
     path('page_layout_footer_dark',views.page_layout_footer_dark,name='page_layout_footer_dark'),
     path('page_layout_footer_fixed',views.page_layout_footer_fixed,name='page_layout_footer_fixed'),
-
-    # project paths
-
-    path('project_project_list',views.project_project_list,name='project_project_list'),
-    path('project_create_new',views.project_create_new,name='project_create_new'),
-
-    # file manager path
-
-    path('file_manager',views.file_manager,name='file_manager'),
-
-    # kanban board path
-
-    path('kanban_board',views.kanban_board,name='kanban_board'),
-
-    # Ecommerce paths
-
-    path('ecommerce_product_default',views.ecommerce_product_default,name='ecommerce_product_default'),
-    path('ecommerce_product_page',views.ecommerce_product_page,name='ecommerce_product_page'),
-    path('ecommerce_product_list',views.ecommerce_product_list,name='ecommerce_product_list'),
-    path('ecommerce_payment_details',views.ecommerce_payment_details,name='ecommerce_payment_details'),
-    path('ecommerce_order_history',views.ecommerce_order_history,name='ecommerce_order_history'),
-    path('ecommerce_invoice',views.ecommerce_invoice,name='ecommerce_invoice'),
-    path('ecommerce_cart',views.ecommerce_cart,name='ecommerce_cart'),
-    path('ecommerce_wishlist',views.ecommerce_wishlist,name='ecommerce_wishlist'),
-    path('ecommerce_checkout',views.ecommerce_checkout,name='ecommerce_checkout'),
-    path('ecommerce_pricing',views.ecommerce_pricing,name='ecommerce_pricing'),
-
-    # email paths
-
-    path('email_email_app',views.email_email_app,name='email_email_app'),
-    path('email_read_mail',views.email_read_mail,name='email_read_mail'),
-    path('email_email_compose',views.email_email_compose,name='email_email_compose'),
     
     # chat paths
 
@@ -78,26 +90,6 @@ urlpatterns = [
     path('users_users_edit',views.users_users_edit,name='users_users_edit'),
     path('users_users_card',views.users_users_card,name='users_users_card'),
 
-    # bookmarks path
-
-    path('bookmarks',views.bookmarks,name='bookmarks'),
-
-    # contacts path
-
-    path('contacts',views.contacts,name='contacts'),
-
-    # tasks paths
-
-    path('tasks',views.tasks,name='tasks'),
-
-    # calendar path
-
-    path('calendar',views.calendar,name='calendar'),
-
-    # social app path
-
-    path('social_app',views.social_app,name='social_app'),
-
     # to do path
 
     path('to_do_design',views.to_do_design,name='to_do_design'),
@@ -107,186 +99,10 @@ urlpatterns = [
     path('markAllComplete/', views.markAllComplete, name='markAllComplete'),
     path('markAllIncomplete/', views.markAllIncomplete, name='markAllIncomplete'),
     
-    # search website path
-
-    path('search_website',views.search_website,name='search_website'),
-
-    # form paths
-
-    path('form_form_validation',views.form_form_validation,name='form_form_validation'),
-    path('form_base_inputs',views.form_base_inputs,name='form_base_inputs'),
-    path('checkbox_and_radio',views.checkbox_and_radio,name='checkbox_and_radio'),
-    path('input_groups',views.input_groups,name='input_groups'),
-    path('mega_options',views.mega_options,name='mega_options'),
-    path('datepicker',views.datepicker,name='datepicker'),
-    path('timepicker',views.timepicker,name='timepicker'),
-    path('datetimepicker',views.datetimepicker,name='datetimepicker'),
-    path('daterangepicker',views.daterangepicker,name='daterangepicker'),
-    path('touchspin',views.touchspin,name='touchspin'),
-    path('select2',views.select2,name='select2'),
-    path('switch',views.switch,name='switch'),
-    path('typeahead',views.typeahead,name='typeahead'),
-    path('clipboard',views.clipboard,name='clipboard'),
-    path('default_form',views.default_form,name='default_form'),
-    path('form_wizard_1',views.form_wizard_1,name='form_wizard_1'),
-    path('form_wizard_2',views.form_wizard_2,name='form_wizard_2'),
-    path('form_wizard_3',views.form_wizard_3,name='form_wizard_3'),
-
-
-    # tables paths
-
-    # bootstrap tables
-
-    path('bootstrap_basic_tables',views.bootstrap_basic_tables,name='bootstrap_basic_tables'),
-    path('bootstrap_border_tables',views.bootstrap_border_tables,name='bootstrap_border_tables'),
-    path('bootstrap_sizing_tables',views.bootstrap_sizing_tables,name='bootstrap_sizing_tables'),
-    path('bootstrap_styling_tables',views.bootstrap_styling_tables,name='bootstrap_styling_tables'),
-    path('bootstrap_table_components',views.bootstrap_table_components,name='bootstrap_table_components'),
-
-    # data tables
-
-    path('data_tables_advance_init',views.data_tables_advance_init,name='data_tables_advance_init'),
-    path('data_tables_AJAX',views.data_tables_AJAX,name='data_tables_AJAX'),
-    path('data_tables_API',views.data_tables_API,name='data_tables_API'),
-    path('data_tables_basic_init',views.data_tables_basic_init,name='data_tables_basic_init'),
-    path('data_tables_data_source',views.data_tables_data_source,name='data_tables_data_source'),
-    path('data_tables_plug_in',views.data_tables_plug_in,name='data_tables_plug_in'),
-    path('data_tables_server_side',views.data_tables_server_side,name='data_tables_server_side'),
-    path('data_tables_styling',views.data_tables_styling,name='data_tables_styling'),
-
-    # ex data tables
-
-    path('ex_data_tables_auto_fill',views.ex_data_tables_auto_fill,name='ex_data_tables_auto_fill'),
-    path('ex_data_tables_basic_button',views.ex_data_tables_basic_button,name='ex_data_tables_basic_button'),
-    path('ex_data_tables_column_reorder',views.ex_data_tables_column_reorder,name='ex_data_tables_column_reorder'),
-    path('ex_data_tables_fixed_header',views.ex_data_tables_fixed_header,name='ex_data_tables_fixed_header'),
-    path('ex_data_tables_html_5_export',views.ex_data_tables_html_5_export,name='ex_data_tables_html_5_export'),
-    path('ex_data_tables_key_table',views.ex_data_tables_key_table,name='ex_data_tables_key_table'),
-    path('ex_data_tables_responsive',views.ex_data_tables_responsive,name='ex_data_tables_responsive'),
-    path('ex_data_tables_row_reorder',views.ex_data_tables_row_reorder,name='ex_data_tables_row_reorder'),
-    path('ex_data_tables_scroller',views.ex_data_tables_scroller,name='ex_data_tables_scroller'),
-
-    # js grid table
-
-    path('js_grid_table',views.js_grid_table,name='js_grid_table'),
-
-
-    # ui kits paths
-
-    path('ui_kits_accordion',views.ui_kits_accordion,name='ui_kits_accordion'),
-    path('ui_kits_alert',views.ui_kits_alert,name='ui_kits_alert'),
-    path('ui_kits_avatars',views.ui_kits_avatars,name='ui_kits_avatars'),
-    path('ui_kits_dropdown',views.ui_kits_dropdown,name='ui_kits_dropdown'),
-    path('ui_kits_grid',views.ui_kits_grid,name='ui_kits_grid'),
-    path('ui_kits_helper_classes',views.ui_kits_helper_classes,name='ui_kits_helper_classes'),
-    path('ui_kits_list',views.ui_kits_list,name='ui_kits_list'),
-    path('ui_kits_loader',views.ui_kits_loader,name='ui_kits_loader'),
-    path('ui_kits_modal',views.ui_kits_modal,name='ui_kits_modal'),
-    path('ui_kits_popover',views.ui_kits_popover,name='ui_kits_popover'),
-    path('ui_kits_progress_bar',views.ui_kits_progress_bar,name='ui_kits_progress_bar'),
-    path('ui_kits_state_color',views.ui_kits_state_color,name='ui_kits_state_color'),
-    path('ui_kits_tag_pills',views.ui_kits_tag_pills,name='ui_kits_tag_pills'),
-    path('ui_kits_box_shadow',views.ui_kits_box_shadow,name='ui_kits_box_shadow'),
-    path('ui_kits_tooltip',views.ui_kits_tooltip,name='ui_kits_tooltip'),
-    path('ui_kits_typography',views.ui_kits_typography,name='ui_kits_typography'),
-
-    # ui kits tabs paths
-
-    path('ui_kits_tabs_bootstrap',views.ui_kits_tabs_bootstrap,name='ui_kits_tabs_bootstrap'),
-    path('ui_kits_tabs_line',views.ui_kits_tabs_line,name='ui_kits_tabs_line'),
-
-    # bonue ui paths
-
-    path('bonus_ui_basic_card',views.bonus_ui_basic_card,name='bonus_ui_basic_card'),
-    path('bonus_ui_bootstrap_notify',views.bonus_ui_bootstrap_notify,name='bonus_ui_bootstrap_notify'),
-    path('bonus_ui_breadcrumb',views.bonus_ui_breadcrumb,name='bonus_ui_breadcrumb'),
-    path('bonus_ui_creative_card',views.bonus_ui_creative_card,name='bonus_ui_creative_card'),
-    path('bonus_ui_dragable_card',views.bonus_ui_dragable_card,name='bonus_ui_dragable_card'),
-    path('bonus_ui_dropzone',views.bonus_ui_dropzone,name='bonus_ui_dropzone'),
-    path('bonus_ui_image_cropper',views.bonus_ui_image_cropper,name='bonus_ui_image_cropper'),
-    path('bonus_ui_modal_animated',views.bonus_ui_modal_animated,name='bonus_ui_modal_animated'),
-    path('bonus_ui_owl_carousel',views.bonus_ui_owl_carousel,name='bonus_ui_owl_carousel'),
-    path('bonus_ui_pagination',views.bonus_ui_pagination,name='bonus_ui_pagination'),
-    path('bonus_ui_range_slider',views.bonus_ui_range_slider,name='bonus_ui_range_slider'),
-    path('bonus_ui_rating',views.bonus_ui_rating,name='bonus_ui_rating'),
-    path('bonus_ui_ribbons',views.bonus_ui_ribbons,name='bonus_ui_ribbons'),
-    path('bonus_ui_scrollable',views.bonus_ui_scrollable,name='bonus_ui_scrollable'),
-    path('bonus_ui_steps',views.bonus_ui_steps,name='bonus_ui_steps'),
-    path('bonus_ui_sticky',views.bonus_ui_sticky,name='bonus_ui_sticky'),
-    path('bonus_ui_sweet_alert2',views.bonus_ui_sweet_alert2,name='bonus_ui_sweet_alert2'),
-    path('bonus_ui_tabbed_card',views.bonus_ui_tabbed_card,name='bonus_ui_tabbed_card'),
-    path('bonus_ui_tour',views.bonus_ui_tour,name='bonus_ui_tour'),
-    path('bonus_ui_tree',views.bonus_ui_tree,name='bonus_ui_tree'),
-
-    # bonus ui timeline paths
-
-    path('bonus_ui_timeline_1',views.bonus_ui_timeline_1,name='bonus_ui_timeline_1'),
-    path('bonus_ui_timeline_2',views.bonus_ui_timeline_2,name='bonus_ui_timeline_2'),
-
-    # builders paths
-
-    path('button_builder',views.button_builder,name='button_builder'),
-    path('form_builder_1',views.form_builder_1,name='form_builder_1'),
-    path('form_builder_2',views.form_builder_2,name='form_builder_2'),
-    path('page_builder',views.page_builder,name='page_builder'),
-
-    # animation paths
-
-    path('animate',views.animate,name='animate'),
-    path('scroll_reveal',views.scroll_reveal,name='scroll_reveal'),
-    path('AOS_animation',views.AOS_animation,name='AOS_animation'),
-    path('tilt_animation',views.tilt_animation,name='tilt_animation'),
-    path('wow_animation',views.wow_animation,name='wow_animation'),
-
-    # icons paths
-
-    path('flag_icon',views.flag_icon,name='flag_icon'),
-    path('fontawesome_icon',views.fontawesome_icon,name='fontawesome_icon'),
-    path('ico_icon',views.ico_icon,name='ico_icon'),
-    path('thimify_icon',views.thimify_icon,name='thimify_icon'),
-    path('feather_icon',views.feather_icon,name='feather_icon'),
-    path('whether_icon',views.whether_icon,name='whether_icon'),
-
-    # buttons path
-
-    path('buttons',views.buttons,name='buttons'),
-    path('buttons_flat',views.buttons_flat,name='buttons_flat'),
-    path('buttons_edge',views.buttons_edge,name='buttons_edge'),
-    path('raised_button',views.raised_button,name='raised_button'),
-    path('button_group',views.button_group,name='button_group'),
-
-    # charts paths
-
-    path('apex_chart',views.apex_chart,name='apex_chart'),
-    path('google_chart',views.google_chart,name='google_chart'),
-    path('sparkline_chart',views.sparkline_chart,name='sparkline_chart'),
-    path('flot_chart',views.flot_chart,name='flot_chart'),
-    path('knob_chart',views.knob_chart,name='knob_chart'),
-    path('morris_chart',views.morris_chart,name='morris_chart'),
-    path('chartjs',views.chartjs,name='chartjs'),
-    path('chartist',views.chartist,name='chartist'),
-    path('peity_chart',views.peity_chart,name='peity_chart'),
-
-    # landing page path
-
 
     # sample page path
 
     path('sample_page',views.sample_page,name='sample_page'),
-
-    # internationalization path
-
-    path('internationalization',views.internationalization,name='internationalization'),
-
-    # starter kit path
-
-    path('starter_kit',views.starter_kit,name='starter_kit'),
-    path('starter_layout_dark',views.starter_layout_dark,name='starter_layout_dark'),
-    path('starter_box_layout',views.starter_box_layout,name='starter_box_layout'),
-    path('starter_RTL',views.starter_RTL,name='starter_RTL'),
-    path('starter_footer_light',views.starter_footer_light,name='starter_footer_light'),
-    path('starter_footer_dark',views.starter_footer_dark,name='starter_footer_dark'),
-    path('starter_footer_fixed',views.starter_footer_fixed,name='starter_footer_fixed'),
 
     # others path
     # error pages
@@ -321,63 +137,11 @@ urlpatterns = [
     path('coming_with_bg_image',views.coming_with_bg_image,name='coming_with_bg_image'),
     path('coming_with_bg_video',views.coming_with_bg_video,name='coming_with_bg_video'),
 
-    # email templates paths
-    
-    path('basic_email',views.basic_email,name='basic_email'),
-    path('basic_with_header',views.basic_with_header,name='basic_with_header'),
-    path('email_template',views.email_template,name='email_template'),
-    path('email_template_2',views.email_template_2,name='email_template_2'),
-    path('ecommerce_email',views.ecommerce_email,name='ecommerce_email'),
-    path('order_success',views.order_success,name='order_success'),
-
-
-    # gallery paths
-
-    path('gallery_grid',views.gallery_grid,name='gallery_grid'),
-    path('gallery_grid_desc',views.gallery_grid_desc,name='gallery_grid_desc'),
-    path('masonry_gallery',views.masonry_gallery,name='masonry_gallery'),
-    path('masonry_with_desc',views.masonry_with_desc,name='masonry_with_desc'),
-    path('hover_effect',views.hover_effect,name='hover_effect'),
-
-    # blog paths
-
-    path('blog_details',views.blog_details,name='blog_details'),
-    path('blog_single',views.blog_single,name='blog_single'),
-    path('add_post',views.add_post,name='add_post'),
 
     # faq path
 
     path('faq',views.faq,name='faq'),
 
-    # job search paths
-
-    path('cards_view',views.cards_view,name='cards_view'),
-    path('list_view',views.list_view,name='list_view'),
-    path('job_details',views.job_details,name='job_details'),
-    path('apply',views.apply,name='apply'),
-
-    # learning paths
-
-    path('learning_list',views.learning_list,name='learning_list'),
-    path('detailed_course',views.detailed_course,name='detailed_course'),
-
-    # maps paths
-
-    path('maps_js',views.maps_js,name='maps_js'),
-    path('vector_maps',views.vector_maps,name='vector_maps'),
-
-    # editor paths
-
-    path('summer_note',views.summer_note,name='summer_note'),
-    path('ck_editor',views.ck_editor,name='ck_editor'),
-    path('mde_editor',views.mde_editor,name='mde_editor'),
-    path('ace_code_editor',views.ace_code_editor,name='ace_code_editor'),
-
-    # knowledgebase paths
-
-    path('knowledgebase',views.knowledgebase,name='knowledgebase'),
-    path('knowledge_category',views.knowledge_category,name='knowledge_category'),
-    path('knowledge_detail',views.knowledge_detail,name='knowledge_detail'),
 
     # support ticket path
 
@@ -407,12 +171,8 @@ urlpatterns = [
     path('documentation_django_getting_started',views.documentation_django_getting_started,name='documentation_django_getting_started'),
     path('documentation_django_tree',views.documentation_django_tree,name='documentation_django_tree'),
     path('documentation_django_app',views.documentation_django_app,name='documentation_django_app'),
+    
+    # [end] TEMPLATE PATHS
 
-
-
-
-
-
-
-
+    path('bonus_ui_sweet_alert2',views.bonus_ui_sweet_alert2,name='bonus_ui_sweet_alert2'),
 ]

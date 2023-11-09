@@ -2,7 +2,9 @@
 {% load sass_tags %}
 {% block css %}
 <!-- Plugins css start-->
-<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/prism.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/animate.scss' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/prism.scss' %}"> -->
+<link rel="stylesheet" type="text/css" href="{% static 'assets/scss/vendors/sweetalert2.scss' %}">
 <!-- Plugins css Ends-->
 {% endblock css %}
 {% block content %}
@@ -20,6 +22,170 @@
 </div>
 {% endblock content %}
 {% block scriptcontent %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="{% static 'assets/js/sweet-alert/sweetalert.min.js' %}"></script>
+<script type="text/javascript">
+  $("#btn_showconf").prop('disabled', true)
+  $("#btn_search").prop('disabled', true)
+
+  $('#btn_form_step1').click(function(){
+    $(".new_doc").hide(); 
+    if ($('#new_doc').get(0).files.length === 0) {
+      $(".new_doc").show(); 
+      console.log("No files selected.");
+    }else{
+      $("#btn_form_step1").prop('disabled', true)
+      const formData = new FormData();
+      
+      const fileInput = document.getElementById('new_doc');
+      const file = fileInput.files[0];
+      var file_result = ""
+      
+      const reader = new FileReader();
+      reader.onloadend = () => { 
+      
+        formData.append('new_doc', reader.result);
+        formData.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val())
+
+        fetch('image_extraction/action_newdoc', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data_json => {
+          console.log(data_json);
+          if(data_json.status){
+            swal("Poof! Your document flawlessly uploaded", {
+              icon: "success"
+            }).then((value) => {
+              $('#processing_time').val(data_json.processing_time)
+              $('#ocr_conf').val(data_json.ocr_conf)
+              $('#preview_ocr_result').val(data_json.preview_ocr_result)
+
+              $("#btn_showconf").prop('disabled', false)
+              $("#btn_search").prop('disabled', false)
+
+              $('#form_step1')[0].reset();
+            });
+          }else{
+            swal("Failed!", "The document test you sent failed to be processed!", "error");
+          }
+          $("#btn_form_step1").prop('disabled', false)
+        });
+
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  function btn_docname(data){
+    var docname = $(data).data('docname');
+    $.ajax(
+    {
+        type:"GET",
+        url: "image_extraction/action_docname",
+        data:{post_id: docname},
+        success: function( response ) 
+        {
+          console.log(response);
+          data_json = JSON.parse(response);
+          if(data_json.status){
+            swal("Poof! Your document flawlessly loaded", {
+              icon: "success"
+            }).then((value) => {
+              $('#processing_time').val(data_json.processing_time)
+              $('#ocr_conf').val(data_json.ocr_conf)
+              $('#preview_ocr_result').val(data_json.preview_ocr_result)
+
+              $("#btn_showconf").prop('disabled', false)
+              $("#btn_search").prop('disabled', false)
+            });
+          }else{
+            swal("Failed!", "The document test you sent failed to be processed!", "error");
+          }
+        }
+    })
+  };
+
+  function btn_del(request){
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this file!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            var datadel = $(request).data('del');
+            $.ajax(
+            {
+                type:"GET",
+                url: "image_extraction/action_docdel",
+                data:{post_id: datadel},
+                success: function( response ) 
+                {
+                  console.log(response);
+                  data_json = JSON.parse(response);
+                  $("#row-"+datadel).remove();
+                  swal("Poof! Your file has been deleted!", {
+                    icon: "success",
+                  });
+                }
+            })
+        } else {
+            swal("Your file is safe!");
+        }
+    }) 
+  };
+
+  $('#btn_showconf').click(function(){
+    $("#display_conf").hide();
+    $.ajax(
+    {
+        type:"POST",
+        url: "image_extraction/action_showconf",
+        data: $('#form_step3').serialize(),
+        success: function( response ) 
+        {
+          data_json = JSON.parse(response);
+          console.log(data_json)
+          
+          if(data_json.status){
+            swal("Poof! Your data test has been successfully processed!", {
+              icon: "success"
+            }).then((value) => {
+              $("#display_conf").show();
+              $("#ocr_conf_score").html(data_json.result_conf)
+            });
+          }else{
+            swal("Failed!", "The data test you sent failed to be processed!", "error");
+          }
+        }
+    })
+  });
+
+  $('#btn_search').click(function(){
+    $("#display_step4").hide();
+    $.ajax(
+    {
+        type:"POST",
+        url: "image_extraction/action_search",
+        data: $('#form_step4').serialize(),
+        success: function( response )
+        {
+          console.log(response);
+          data_json = JSON.parse(response);
+          console.log(data_json.preview_ocr_result);
+          $("#display_step4").show();
+          $("#preview_prompt_result").val(String(data_json.preview_prompt_result))
+          
+        }
+    })
+  });
+</script>
+
 <!-- Plugins JS start-->
 <script src="{% static 'assets/js/form-validation-custom.js' %}"></script>
 <script src="{% static 'assets/js/prism/prism.min.js' %}"></script>

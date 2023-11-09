@@ -23,14 +23,15 @@
     <div class="card-body">
       <div class="tab-content" id="icon-tabContent">
         <div class="tab-pane fade active show" id="step-1" role="tabpanel" aria-labelledby="step-1-tab">
-          <p class="m-0">
-            <form class="needs-validation" novalidate>
+          <p class="m-0"> 
+            <form class="needs-validation" method="post" id="form_step1" enctype="multipart/form-data" novalidate>
+              {% csrf_token %}
               <div class="mb-3">
                 <label class="form-label" for="validationCustom01">Upload new document</label>
-                <input class="form-control" type="file" aria-label="file example" required="">
-                <div class="invalid-feedback">Need to enter Upload new document</div>
+                <input class="form-control" type="file" name="new_doc" id="new_doc" aria-label="file example" required="">
+                <div class="invalid-feedback new_doc">Need to enter Upload new document</div>
               </div>
-              <button class="btn btn-primary" type="submit">Upload</button>
+              <button class="btn btn-primary" id="btn_form_step1" type="button">Upload</button>
             </form>
           </p>
         </div>
@@ -49,21 +50,13 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Table cell</td>
-                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
+                      {% for doc_history in data %}
+                      <tr id="row-{{ doc_history.id }}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><a href="#" class="btn btn-link" onclick="ud_btn_docname(this)" data-docname="{{ doc_history.document_name }}">{{ doc_history.document_name }}</a></td>
+                        <td><a href="#" onclick="ud_btn_del(this)" data-del="{{ doc_history.id }}" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
                       </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Table cell</td>
-                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>Table cell</td>
-                        <td><a href="" class="btn-pill btn-sm"><i data-feather="trash-2" style="color:#ff386c"></i></td>
-                      </tr>
+                      {% endfor %}
                     </tbody>
                   </table>
                 </div>
@@ -94,22 +87,42 @@
     </div>
     <div class="card-body">
       <p class="m-0">
-        <form class="needs-validation" novalidate>
+        <form class="needs-validation" id="form_step3" method="post" novalidate>
+          {% csrf_token %}
           <div class="mb-3">
             <label class="form-label">Processing Time</label>
+            <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="is the output of the OCR process, the OCR process will produce 2 outputs namely the OCR and OCR Result time process"><i class="fa fa-info"></i></p>
             <input class="form-control" name="processing_time" id="processing_time" type="text" placeholder="" readonly>
           </div>
           <div class="mb-3">
             <label class="form-label">Ocr_conf</label>
+            <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="OCR results that come out are 'Text_CONFIDENCE TEZT_CONFIDENCE' so that functions are made to be able to bring up average confidence from OCR output and the output is OCR_CONF"><i class="fa fa-info"></i></p>
             <input class="form-control" name="ocr_conf" id="ocr_conf" type="text" placeholder="" readonly>
           </div>
           <div class="mb-3">
             <label class="form-label" for="validationCustom01">Preview OCR Result</label>
+            <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="Gave rise to OCR results but not accompanied by confidence"><i class="fa fa-info"></i></p>
             <textarea class="form-control" id="preview_ocr_result" name="preview_ocr_result" placeholder="" required="" rows="3"></textarea>
             <div class="invalid-feedback">Need to enter Preview OCR Result</div>
           </div>
-          <button class="btn btn-primary" type="submit">Show The Confidence</button>
+          <button class="btn btn-primary" id="ud_btn_showconf" type="button" title="Useful to top up the confidence value of the OCR itself which if the word under the tress hold will be color">Show The Confidence</button>
         </form>
+        <div class="mt-3" id="display_conf" style="display: none;">
+          <div class="default-according" id="accordion">
+            <div class="card">
+              <div class="card-header" id="headingOne">
+                <button class="btn btn-link btn-block" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">OCR Confidence Score</button>
+              </div>
+              <div class="collapse show" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordion">
+                <div id="ocr_conf_score" class="card-body" style="overflow-y: auto; height:200px"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </p>
     </div>
   </div>
@@ -132,17 +145,31 @@
     </div>
     <div class="card-body">
       <p class="m-0">
-        <form class="needs-validation" novalidate>
+        <form class="needs-validation" id="form_step4" method="post" novalidate>
+          {% csrf_token %}
           <div class="mb-3">
             <label class="form-label">K Value</label>
-            <input class="form-control" name="k_value" id="k_value" type="text" placeholder="">
+            <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="K Value is useful for AI AI API granting, K Value itself is a lot of documents with the closest closeness to the prom that will be a source of knowledge. The current number range is 1-20"><i class="fa fa-info"></i></p>
+            <input class="form-control" name="k_value" id="k_value" type="text" placeholder="" required>
+            <div class="invalid-feedback">Need to enter K Value</div>
           </div>
           <div class="mb-3">
             <label class="form-label">Prompt Input</label>
-            <input class="form-control" name="prompt_input" id="prompt_input" type="text" placeholder="">
+            <p class="example-popover pull-right btn btn-xs btn-outline-primary btn-pill" data-bs-toggle="popover" title="Description"
+            data-bs-content="contains promt or questions"><i class="fa fa-info"></i></p>
+            <input class="form-control" name="prompt_input" id="prompt_input" type="text" placeholder="" required>
+            <div class="invalid-feedback">Need to enter Prompt Input</div>
           </div>
-          <button class="btn btn-primary" type="submit">Search</button>
+          <button class="btn btn-primary" id="ud_btn_search" type="button">Search</button>
         </form>
+
+        <div class="mt-3" id="display_step4" style="display: none;">
+          <div class="mb-3">
+            <label class="form-label" for="validationCustom01">Preview Promt Result</label>
+            <textarea class="form-control" id="preview_prompt_result" name="preview_prompt_result" placeholder="" rows="3" readonly></textarea>
+          </div>
+        </div>
       </p>
     </div>
   </div>

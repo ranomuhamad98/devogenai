@@ -3,8 +3,7 @@
 {% block css %}
 <!-- Plugins css start-->
 <link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/animate.scss' %}">
-<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/chartist.scss' %}">
-<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/prism.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/scss/vendors/sweetalert2.scss' %}">
 <!-- Plugins css Ends-->
 {% endblock css %}
 {% block content %}
@@ -20,11 +19,205 @@
 </div>
 {% endblock content %}
 {% block scriptcontent %}
-<!-- Plugins JS start-->
-<script src="{% static 'assets/js/touchspin/vendors.min.js' %}"></script>
-<script src="{% static 'assets/js/touchspin/touchspin.js' %}"></script>
-<script src="{% static 'assets/js/touchspin/input-groups.min.js' %}"></script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="{% static 'assets/js/sweet-alert/sweetalert.min.js' %}"></script>
+<script type="text/javascript">
+  $("#ps_btn_showconf").prop('disabled', true)
+  
+  
+  function ps_btn_view(data){
+    $("#display_conf").hide();
+    var docname = $(data).data('docname');
+    console.log(docname)
+    $.ajax(
+    {
+        type:"GET",
+        url: "ps_action_view",
+        data:{post_id: docname},
+        success: function( response ) 
+        {
+          console.log(response);
+          data_json = JSON.parse(response);
+          $('#document_test').val(data_json.document_test)
+        }
+    })
+  }
+  function ps_btn_parser(data){
+    $("#display_conf").hide();
+    var parser = $(data).data('parser');
+    console.log(parser)
+    $.ajax(
+    {
+        type:"GET",
+        url: "ps_action_parser",
+        data:{post_id: parser},
+        success: function( response ) 
+        {
+          console.log(response);
+          data_json = JSON.parse(response);
+          $('#model_name').val(data_json.model_name)
+          $('#prompt_used').val(data_json.prompt_used)
+          $('#first_regex_spillter').val(data_json.first_regex_spillter)
+          $('#query_used').val(data_json.query_used)
+          $('#second_regex_spillter').val(data_json.second_regex_spillter)
+          $('#last_regex_filter_used').val(data_json.last_regex_filter_used)
+          $('#third_spliter').val(data_json.third_spliter)
+          $('#insert_duplication').val(data_json.insert_duplication)
+          $('#insert_k_value').val(data_json.insert_k_value)
+        }
+    })
+  }
+  function ps_btn_del(request){
+    $("#display_conf").hide();
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this file!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            var datadel = $(request).data('del');
+            $.ajax(
+            {
+                type:"GET",
+                url: "ps_action_del",
+                data:{post_id: datadel},
+                success: function( response ) 
+                {
+                  console.log(response);
+                  data_json = JSON.parse(response);
+                  
+                  if(data_json.status){
+                    swal("Poof! Your file has been deleted!", {
+                      icon: "success",
+                    }).then((value) => {
+                      $("#row-"+datadel).remove();
+                    });
+                  }else{
+                    swal("Failed!", "The document test you sent failed to be processed!", "error");
+                  }
+                }
+            })
+        } else {
+            swal("Your file is safe!");
+        }
+    }) 
+  };
+
+  $('input[type="radio"]').click(function(){
+    $('#model_number').val($('input[name="your_model"]:checked').val());
+  });
+
+  $('#save_model').click(function(){
+    $("#display_conf").hide();
+    $.ajax(
+    {
+        type:"POST",
+        url: "ps_action_save",
+        data: $('#form_step3').serialize(),
+        success: function( response ) 
+        {
+          data_json = JSON.parse(response);
+          console.log(data_json)
+          if(data_json.status){
+            swal("Poof! Your document test has been successfully saved!", {
+              icon: "success"
+            }).then((value) => {
+              $('#form_step3')[0].reset();
+            });
+          }else{
+            swal("Failed!", "The document test you sent failed to be processed!", "error");
+          }
+        }
+    })
+  });
+  $('#test_model').click(function(){
+    $("#display_conf").hide();
+    $.ajax(
+    {
+        type:"POST",
+        url: "ps_action_test",
+        data: $('#form_step3').serialize(),
+        success: function( response ) 
+        {
+          console.log(response);
+          data_json = JSON.parse(response);
+          if(data_json.status){
+            swal("Poof! Your document test has been successfully saved!", {
+              icon: "success"
+            }).then((value) => {
+              $('#processing_time').val(data_json.processing_time)
+              $('#ocr_quality').val(data_json.ocr_quality)
+              $('#result_test').val(data_json.result_test)
+              $('#ocr_conf_score_model_test').val(data_json.ocr_conf_score_model_test)
+              
+              $("#ps_btn_showconf").prop('disabled', false)
+            });
+          }else{
+            swal("Failed!", "The document test you sent failed to be processed!", "error");
+          }
+        }
+    })
+  });
+  $('#update_model').click(function(){
+    $("#display_conf").hide();
+    $.ajax(
+    {
+        type:"POST",
+        url: "ps_action_update",
+        data: $('#form_step3').serialize(),
+        success: function( response ) 
+        {
+          data_json = JSON.parse(response);
+          console.log(data_json)
+
+          if(data_json.status){
+            swal("Poof! Your document test has been flawlessly updated!", {
+              icon: "success"
+            })
+          }else{
+            swal("Failed!", "The document test you sent failed to be processed!", "error");
+          }
+        }
+    })
+  });
+  $('#reset_form_step3').click(function(){
+    $("#display_conf").hide();
+    $('#form_step3')[0].reset();
+  });
+
+  $('#ps_btn_showconf').click(function(){
+    $("#display_conf").hide();
+    $.ajax(
+    {
+        type:"POST",
+        url: "ps_action_showconf",
+        data: $('#form_step4').serialize(),
+        success: function( response ) 
+        {
+          data_json = JSON.parse(response);
+          console.log(data_json)
+          
+          if(data_json.status){
+            swal("Poof! Your data test has been successfully processed!", {
+              icon: "success"
+            }).then((value) => {
+              $("#display_conf").show();
+              $("#ocr_conf_score").html(data_json.result_conf)
+            });
+          }else{
+            swal("Failed!", "The data test you sent failed to be processed!", "error");
+          }
+        }
+    })
+  });
+</script>
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/popover-custom.js' %}"></script>
+<script src="{% static 'assets/js/form-validation-custom.js' %}"></script>
 <script src="{% static 'assets/js/prism/prism.min.js' %}"></script>
 <script src="{% static 'assets/js/clipboard/clipboard.min.js' %}"></script>
 <script src="{% static 'assets/js/counter/jquery.waypoints.min.js' %}"></script>
@@ -32,8 +225,12 @@
 <script src="{% static 'assets/js/counter/counter-custom.js' %}"></script>
 <script src="{% static 'assets/js/custom-card/custom-card.js' %}"></script>
 <script src="{% static 'assets/js/notify/bootstrap-notify.min.js' %}"></script>
-<script src="{% static 'assets/js/dashboard/default.js' %}"></script>
+<!-- <script src="{% static 'assets/js/dashboard/default.js' %}"></script> -->
 <script src="{% static 'assets/js/notify/index.js' %}"></script>
 <script src="{% static 'assets/js/greeting.js' %}"></script>
+
+<script src="{% static 'assets/js/touchspin/vendors.min.js' %}"></script>
+<script src="{% static 'assets/js/touchspin/touchspin.js' %}"></script>
+<script src="{% static 'assets/js/touchspin/input-groups.min.js' %}"></script>
 <!-- Plugins JS Ends-->
 {% endblock scriptcontent %}
