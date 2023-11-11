@@ -1,0 +1,46 @@
+{% load static %}
+{% load sass_tags %}
+<!-- page sidebar starts -->
+<header class="main-nav">
+  <div class="logo-wrapper"><a href="/"><img class="img-fluid" src="https://avatars.githubusercontent.com/u/18357950?s=200&v=4" width="35"
+        alt=""></a>
+  </div>
+  <div class="logo-icon-wrapper"><a href="/"><img class="img-fluid"
+        src="https://avatars.githubusercontent.com/u/18357950?s=200&v=4" width="50" alt=""></a></div>
+  <div class="morden-logo"><a href="/"><img class="img-fluid" width="50" src="https://avatars.githubusercontent.com/u/18357950?s=200&v=4"
+        alt=""></a></div>
+  <nav>
+    <div class="main-navbar">
+      <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
+      <div id="mainnav">
+        <ul class="nav-menu custom-scrollbar">
+          <li class="back-btn">
+            <div class="mobile-back text-end"><span>Back</span><i class="fa fa-angle-right ps-2" aria-hidden="true"></i>
+            </div>
+          </li>
+
+          <li class="dropdown"><a class="nav-link menu-title link-nav" href="/dashboard_default"><i data-feather="home"></i><span>Dashboard</span></a></li>
+
+          <li class="dropdown"><a class="nav-link menu-title" href="javascript:void(0)"><i
+            data-feather="file-text"></i><span>Document Extraction</span></a>
+            <ul class="nav-submenu menu-content">
+              <li><a href="/document_extraction/upload_document">Upload Document</a></li>
+              <li><a href="/document_extraction/parser_setup">Parser Setup</a></li>
+              <li><a href="/document_extraction/extraction_process">Extraction Process</a></li>
+            </ul>
+          </li>
+ 
+          <li class="dropdown"><a class="nav-link menu-title link-nav" href="/document_translation"><i data-feather="file"></i><span>Document Translation</span></a></li>
+          
+          <li class="dropdown"><a class="nav-link menu-title link-nav" href="/bank_statement"><i data-feather="credit-card"></i><span>Bank Statement</span></a></li>
+
+          <li class="dropdown"><a class="nav-link menu-title link-nav" href="/ktp_extraction"><i data-feather="users"></i><span>KTP Extraction</span></a></li>
+
+          <li class="dropdown"><a class="nav-link menu-title link-nav" href="/image_extraction"><i data-feather="image"></i><span>Image Extraction</span></a></li>
+        </ul>
+      </div>
+      <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>
+    </div>
+  </nav>
+</header>
+<!-- page Sidebar Ends-->

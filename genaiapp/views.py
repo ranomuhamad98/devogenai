@@ -1,15 +1,37 @@
 from datetime import datetime
 from django.shortcuts import render,redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.http.response import HttpResponseRedirect
+from django.urls import reverse
 from .models import *
 from .forms import *
 from django.http import HttpResponse
 import json
 import random
 import base64
+
+# from genaiapp.bankstatement import BankStatement
+
+def check_user_permission(user, perm):
+    x = user.user.user_permissions.all().values_list('codename', flat=True).values()
+    check = len([d for d in x if d["codename"] in str(perm)])
+    perms = {}
+    for idx, data in enumerate(x):
+        perms['%s' % str(data['codename'])] = idx+1
+    
+    if(check!=True): 
+
+        halaman = str(user.get_full_path()).split('/')
+        if(len(halaman) == 2):
+            HttpResponseRedirect("/logout")
+        else:        
+            # return HttpResponseRedirect("/"+str(halaman[1]))
+            return False, HttpResponseRedirect(reverse(str(halaman[1])))
+            # raise HttpResponse('Unauthorized', status=401)
+    
+    return perms
 
 # dashboard pages
 
@@ -18,55 +40,61 @@ def indexPage(request):
     return redirect('/dashboard_default')
 
 # .......
-@login_required(login_url="/login")
+@login_required(login_url="/login") 
 def upload_document(request):
     data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
-    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Upload Document"}, "data": data_doc}
+    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Upload Document"}, "data": data_doc, "perms": check_user_permission(request,'document_extraction')}
     return render(request,'theme_genai/document_extraction/index-1.html',context)
 @login_required(login_url="/login")
 def parser_setup(request):
-    data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
-    data_parser = {"parser_name":"table cell 1","id":"1"},{"parser_name":"table cell 2","id":"2"},{"parser_name":"table cell 3","id":"3"}
-    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Parser Set UP"}, "data_doc": data_doc, "data_parser": data_parser}
-    return render(request,'theme_genai/document_extraction/index-2.html',context)
+        data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
+        data_parser = {"parser_name":"table cell 1","id":"1"},{"parser_name":"table cell 2","id":"2"},{"parser_name":"table cell 3","id":"3"}
+        context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Parser Set UP"}, "data_doc": data_doc, "data_parser": data_parser, "perms": check_user_permission(request,'document_extraction')}
+        return render(request,'theme_genai/document_extraction/index-2.html',context)
 @login_required(login_url="/login")
 def extraction_process(request):
     data_extraction = {"document":"a","bank_name":"b","rekening_number": "c", "luas_lahan": "d", "telp": "e", "waktu_sewa": "f", "rekening_number": "g"},{"document":"a","bank_name":"b","rekening_number": "c", "luas_lahan": "d", "telp": "e", "waktu_sewa": "f", "rekening_number": "g"},{"document":"a","bank_name":"b","rekening_number": "c", "luas_lahan": "d", "telp": "e", "waktu_sewa": "f", "rekening_number": "g"}
-    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Extraction Process"}, "data_extraction": data_extraction}
+    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Extraction Process"}, "data_extraction": data_extraction, "perms": check_user_permission(request,'document_extraction')}
     return render(request,'theme_genai/document_extraction/index-3.html',context)
 
 @login_required(login_url="/login")
 def document_translation(request):
     data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
-    context={"breadcrumb":{"parent":"Dashboard","child":"Document Translation"},"data": data_doc}
+    context={"breadcrumb":{"parent":"Dashboard","child":"Document Translation"},"data": data_doc, "perms": check_user_permission(request,'document_translation')}
     return render(request,'theme_genai/document_translation/index.html',context)
 
 @login_required(login_url="/login")
 def bank_statement(request):
+    # data_employee = BankStatement.get_employee()
     data_prompt = {"a":"prompt table cell 1","b":"prompt table cell 1","c":"prompt table cell 1","d":"prompt table cell 1","e":"prompt table cell 1","f":"prompt table cell 1"},{"a":"prompt table cell 2","b":"prompt table cell 2","c":"prompt table cell 2","d":"prompt table cell 2","e":"prompt table cell 2","f":"prompt table cell 2"},{"a":"prompt table cell 3","b":"prompt table cell 3","c":"prompt table cell 3","d":"prompt table cell 3","e":"prompt table cell 3","f":"prompt table cell 3"}
     data_ocr = {"a":"ocr table cell 1","b":"ocr table cell 1","c":"ocr table cell 1","d":"ocr table cell 1","e":"ocr table cell 1","f":"ocr table cell 1"},{"a":"ocr table cell 2","b":"ocr table cell 2","c":"ocr table cell 2","d":"ocr table cell 2","e":"ocr table cell 2","f":"ocr table cell 2"},{"a":"ocr table cell 3","b":"ocr table cell 3","c":"ocr table cell 3","d":"ocr table cell 3","e":"ocr table cell 3","f":"ocr table cell 3"}
     data_extraction = {"a":"extraction table cell 1","b":"extraction table cell 1","c":"extraction table cell 1","d":"extraction table cell 1","e":"extraction table cell 1","f":"extraction table cell 1"},{"a":"extraction table cell 2","b":"extraction table cell 2","c":"extraction table cell 2","d":"extraction table cell 2","e":"extraction table cell 2","f":"extraction table cell 2"},{"a":"extraction table cell 3","b":"extraction table cell 3","c":"extraction table cell 3","d":"extraction table cell 3","e":"extraction table cell 3","f":"extraction table cell 3"}
     data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
     
-    context={"breadcrumb":{"parent":"Dashboard","child":"Bank Statement"}, "data_doc": data_doc, "data_prompt": data_prompt, "data_ocr": data_ocr, "data_extraction": data_extraction}
+    context={"breadcrumb":{"parent":"Dashboard","child":"Bank Statement"}, "data_doc": data_doc, "data_prompt": data_prompt, "data_ocr": data_ocr, "data_extraction": data_extraction, "perms": check_user_permission(request,'document_extraction')}
+    # , "data_employee": data_employee
     return render(request,'theme_genai/bank_statement/index.html',context)
-
+    
 @login_required(login_url="/login")
-def ktp_extraction(request):
+def ktp_extraction(request):    
     data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
-    context={"breadcrumb":{"parent":"Dashboard","child":"KTP Extraction"},"data_doc": data_doc}
+    context={"breadcrumb":{"parent":"Dashboard","child":"KTP Extraction"},"data_doc": data_doc, "perms": check_user_permission(request,'ktp_extraction')}
     return render(request,'theme_genai/ktp_extraction/index.html',context)
 
 @login_required(login_url="/login")
 def image_extraction(request):
     data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
-    context={"breadcrumb":{"parent":"Dashboard","child":"Image Extraction"},"data_doc": data_doc}
+    context={"breadcrumb":{"parent":"Dashboard","child":"Image Extraction"},"data_doc": data_doc, "perms": check_user_permission(request,'image_extraction')}
     return render(request,'theme_genai/image_extraction/index.html',context)
 
 # [START] PROCESS
+
 # [start] document extraction - upload document
 @login_required(login_url="/login")
 def de_ud_action_newdoc(request):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
+
     if request.method == "POST":
         data = request.POST
 
@@ -90,6 +118,9 @@ def de_ud_action_newdoc(request):
 
 @login_required(login_url="/login")
 def de_ud_action_docname(request):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
+
     if request.method == "GET":
         idx = request.GET['post_id']
         data_response = json.dumps({"processing_time":"test processing time ("+idx+")","ocr_conf":"ocr conf ("+idx+")","preview_ocr_result": "lorem ipsum ("+idx+")"})
@@ -100,6 +131,8 @@ def de_ud_action_docname(request):
 
 @login_required(login_url="/login")
 def de_ud_action_docdel(request):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "GET":
         idx = request.GET['post_id']
         data_response = json.dumps({"data_delete":"id "+idx+""})
@@ -110,6 +143,8 @@ def de_ud_action_docdel(request):
 
 @login_required(login_url="/login")
 def de_ud_action_showconf(request):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "POST":
         data = request.POST
         dt_processing_time = data.get("processing_time")
@@ -124,6 +159,8 @@ def de_ud_action_showconf(request):
 
 @login_required(login_url="/login")
 def de_ud_action_search(request):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "POST":
         data = request.POST
         data_response = json.dumps({"preview_prompt_result":"kvalue - ("+data.get("k_value")+") : promptinput - ("+data.get("prompt_input")+")"})
@@ -136,6 +173,8 @@ def de_ud_action_search(request):
 # [start] document extraction - parser setup
 @login_required(login_url="/login")
 def de_ps_action_view(request):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "GET":
         data = request.GET['post_id']
         data_response = json.dumps({"document_test":data})
@@ -146,6 +185,8 @@ def de_ps_action_view(request):
 
 @login_required(login_url="/login")
 def de_ps_action_parser(request):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "GET":
         data = request.GET['post_id'];
         data_response = json.dumps({"model_name" : "model_name "+data+"", "prompt_used" : "prompt_used "+data+"", "first_regex_spillter" : "first_regex_spillter "+data+"", "query_used" : "query_used "+data+"", "second_regex_spillter" : "second_regex_spillter "+data+"", "last_regex_filter_used" : "last_regex_filter_used "+data+"", "third_spliter" : "third_spliter "+data+"", "insert_duplication" : ""+str(random.randint(0, 30))+"", "insert_k_value": ""+str(random.randint(0, 30))+""})
@@ -156,6 +197,8 @@ def de_ps_action_parser(request):
 
 @login_required(login_url="/login")
 def de_ps_action_del(request):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "GET":
         idx = request.GET['post_id']
         data_response = json.dumps({"status": 1,"data_delete":"id "+idx+""})
@@ -166,6 +209,8 @@ def de_ps_action_del(request):
 
 @login_required(login_url="/login")
 def de_ps_action_save(request):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "POST":
         # status 1 = success, status 0 = failed
         data_response = json.dumps({"status": 1,"ps_action_save":"success","random":""+str(random.randint(0, 30))+""})
@@ -176,6 +221,8 @@ def de_ps_action_save(request):
 
 @login_required(login_url="/login")
 def de_ps_action_test(request):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "POST":
         # status 1 = success, status 0 = failed
         data = request.POST
@@ -188,6 +235,8 @@ def de_ps_action_test(request):
 
 @login_required(login_url="/login")
 def de_ps_action_update(request):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "POST":
         # status 1 = success, status 0 = failed
         data = request.POST
@@ -200,6 +249,8 @@ def de_ps_action_update(request):
 
 @login_required(login_url="/login")
 def de_ps_action_showconf(request):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "POST":
         data = request.POST
         result_conf = "<span> 4 akan dilakukan dengan transfer ke rekening bank pemilik sebagaimana diuraikan di bawah ini : nomor rekening<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(255, 170, 170); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> :</span> 5806-01-016798-53-5 nama pemegang rekening : sunardi bank bank rakyat indonesia pemilik dengan ini menyatakan dan menjamin bahwa rekening bank diatas adalah rekening bank yang benar dan sah dari</span>"
@@ -213,6 +264,8 @@ def de_ps_action_showconf(request):
 # [start] document extraction - extraction process
 @login_required(login_url="/login")
 def de_ep_action_downjson(request,id):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "GET":
         return HttpResponse("download file json ("+id+")")
     else:
@@ -221,6 +274,8 @@ def de_ep_action_downjson(request,id):
 
 @login_required(login_url="/login")
 def de_ep_action_downcsv(request,id):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "GET":
         return HttpResponse("download file csv ("+id+")")
     else:
@@ -229,6 +284,8 @@ def de_ep_action_downcsv(request,id):
 
 @login_required(login_url="/login")
 def de_ep_action_alldoc(request,id):
+    val,rtn = check_user_permission(request,'document_extraction')
+    if val==False: return rtn
     if request.method == "GET":
         return HttpResponse("download all file ("+id+")")
     else:
@@ -239,6 +296,8 @@ def de_ep_action_alldoc(request,id):
 # [start] document translation
 @login_required(login_url="/login")
 def dt_action_newdoc(request):
+    val,rtn = check_user_permission(request,'document_translation')
+    if val==False: return rtn
     if request.method == "POST":
         data = request.POST
 
@@ -260,6 +319,8 @@ def dt_action_newdoc(request):
 
 @login_required(login_url="/login")
 def dt_action_docname(request):
+    val,rtn = check_user_permission(request,'document_translation')
+    if val==False: return rtn
     if request.method == "GET":
         data = request.GET['post_id']
         data_response = json.dumps({"status":1, "message": "dt_action_docname berhasil","processing_time":"processing time "+str(data)+"","ocr_conf":"ocr conf "+str(data)+"","preview_ocr_result":"preview ocr result "+str(data)+"","preview_translate_result":"preview translate result "+str(data)+""})
@@ -270,6 +331,8 @@ def dt_action_docname(request):
 
 @login_required(login_url="/login")
 def dt_action_docdel(request):
+    val,rtn = check_user_permission(request,'document_translation')
+    if val==False: return rtn
     if request.method == "GET":
         idx = request.GET['post_id']
         data_response = json.dumps({"data_delete":"id "+idx+""})
@@ -280,6 +343,8 @@ def dt_action_docdel(request):
 
 @login_required(login_url="/login")
 def dt_action_showconf(request):
+    val,rtn = check_user_permission(request,'document_translation')
+    if val==False: return rtn
     if request.method == "POST":
         data = request.POST
         result_conf = "<span> 4 akan dilakukan dengan transfer ke rekening bank pemilik sebagaimana diuraikan di bawah ini : nomor rekening<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(255, 170, 170); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> :</span> 5806-01-016798-53-5 nama pemegang rekening : sunardi bank bank rakyat indonesia pemilik dengan ini menyatakan dan menjamin bahwa rekening bank diatas adalah rekening bank yang benar dan sah dari</span>"
@@ -293,6 +358,9 @@ def dt_action_showconf(request):
 # [start] bank statement
 @login_required(login_url="/login")
 def bs_action_newdoc(request):
+    val,rtn = check_user_permission(request,'bank_statement')
+    if val==False: return rtn
+
     if request.method == "POST":
         data = request.POST
  
@@ -327,6 +395,9 @@ def bs_action_newdoc(request):
 
 @login_required(login_url="/login")
 def bs_action_docname(request):
+    val,rtn = check_user_permission(request,'bank_statement')
+    if val==False: return rtn
+
     if request.method == "GET":
         data = request.GET['post_id']
  
@@ -349,6 +420,9 @@ def bs_action_docname(request):
 
 @login_required(login_url="/login")
 def bs_action_docdel(request):
+    val,rtn = check_user_permission(request,'bank_statement')
+    if val==False: return rtn
+
     if request.method == "GET":
         idx = request.GET['post_id']
         data_response = json.dumps({"data_delete":"id "+idx+""})
@@ -359,6 +433,9 @@ def bs_action_docdel(request):
 
 @login_required(login_url="/login")
 def bs_action_processfp(request):
+    val,rtn = check_user_permission(request,'bank_statement')
+    if val==False: return rtn
+
     if request.method == "POST":
         data = request.POST
         data_response = json.dumps({"result_dataframe_search":"prefixocr - ("+str(data.get("prefix_ocr"))+") : promptdataframe - ("+str(data.get("prompt_dataframe"))+")"})
@@ -371,6 +448,9 @@ def bs_action_processfp(request):
 # [start] ktp extraction
 @login_required(login_url="/login")
 def ke_action_newdoc(request):
+    val,rtn = check_user_permission(request,'ktp_extraction')
+    if val==False: return rtn
+    
     if request.method == "POST":
         data = request.POST
 
@@ -392,6 +472,9 @@ def ke_action_newdoc(request):
 
 @login_required(login_url="/login")
 def ke_action_docname(request):
+    val,rtn = check_user_permission(request,'ktp_extraction')
+    if val==False: return rtn
+    
     if request.method == "GET":
         data = request.GET['post_id']
         data_response = json.dumps({"status":1, "message": "ke_action_docname berhasil","processing_time":"processing time "+str(data)+"","ocr_conf":"ocr conf "+str(data)+"","preview_ocr_result":"preview ocr result "+str(data)+""})
@@ -402,6 +485,9 @@ def ke_action_docname(request):
 
 @login_required(login_url="/login")
 def ke_action_docdel(request):
+    val,rtn = check_user_permission(request,'ktp_extraction')
+    if val==False: return rtn
+    
     if request.method == "GET":
         idx = request.GET['post_id']
         data_response = json.dumps({"data_delete":"id "+idx+""})
@@ -412,6 +498,9 @@ def ke_action_docdel(request):
 
 @login_required(login_url="/login")
 def ke_action_showconf(request):
+    val,rtn = check_user_permission(request,'ktp_extraction')
+    if val==False: return rtn
+    
     if request.method == "POST":
         data = request.POST
         result_conf = "<span> 4 akan dilakukan dengan transfer ke rekening bank pemilik sebagaimana diuraikan di bawah ini : nomor rekening<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(255, 170, 170); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> :</span> 5806-01-016798-53-5 nama pemegang rekening : sunardi bank bank rakyat indonesia pemilik dengan ini menyatakan dan menjamin bahwa rekening bank diatas adalah rekening bank yang benar dan sah dari</span>"
@@ -423,6 +512,9 @@ def ke_action_showconf(request):
 
 @login_required(login_url="/login")
 def ke_action_extract(request):
+    val,rtn = check_user_permission(request,'ktp_extraction')
+    if val==False: return rtn
+    
     if request.method == "POST":
         data = request.POST
         data_er = {"a":"er table cell 1","b":"er table cell 1","c":"er table cell 1","d":"er table cell 1","e":"er table cell 1","f":"er table cell 1"},{"a":"er table cell 2","b":"er table cell 2","c":"er table cell 2","d":"er table cell 2","e":"er table cell 2","f":"er table cell 2"},{"a":"er table cell 3","b":"er table cell 3","c":"er table cell 3","d":"er table cell 3","e":"er table cell 3","f":"er table cell 3"}
@@ -436,6 +528,9 @@ def ke_action_extract(request):
 # [start] image extraction
 @login_required(login_url="/login")
 def ie_action_newdoc(request):
+    val,rtn = check_user_permission(request,'image_extraction')
+    if val==False: return rtn
+    
     if request.method == "POST":
         data = request.POST
 
@@ -457,6 +552,9 @@ def ie_action_newdoc(request):
 
 @login_required(login_url="/login")
 def ie_action_docname(request):
+    val,rtn = check_user_permission(request,'image_extraction')
+    if val==False: return rtn
+    
     if request.method == "GET":
         data = request.GET['post_id']
         data_response = json.dumps({"status":1, "message": "ie_action_docname berhasil","processing_time":"processing time "+str(data)+"","ocr_conf":"ocr conf "+str(data)+"","preview_ocr_result":"preview ocr result "+str(data)+""})
@@ -467,6 +565,9 @@ def ie_action_docname(request):
 
 @login_required(login_url="/login")
 def ie_action_docdel(request):
+    val,rtn = check_user_permission(request,'image_extraction')
+    if val==False: return rtn
+    
     if request.method == "GET":
         idx = request.GET['post_id']
         data_response = json.dumps({"data_delete":"id "+idx+""})
@@ -477,6 +578,9 @@ def ie_action_docdel(request):
 
 @login_required(login_url="/login")
 def ie_action_showconf(request):
+    val,rtn = check_user_permission(request,'image_extraction')
+    if val==False: return rtn
+    
     if request.method == "POST":
         data = request.POST
         result_conf = "<span> 4 akan dilakukan dengan transfer ke rekening bank pemilik sebagaimana diuraikan di bawah ini : nomor rekening<span style='display: inline-flex; flex-direction: row; align-items: center; background: rgb(255, 170, 170); border-radius: 0.5rem; padding: 0.25rem 0.5rem; overflow: hidden; line-height: 1;'> :</span> 5806-01-016798-53-5 nama pemegang rekening : sunardi bank bank rakyat indonesia pemilik dengan ini menyatakan dan menjamin bahwa rekening bank diatas adalah rekening bank yang benar dan sah dari</span>"
@@ -488,6 +592,9 @@ def ie_action_showconf(request):
 
 @login_required(login_url="/login")
 def ie_action_search(request):
+    val,rtn = check_user_permission(request,'image_extraction')
+    if val==False: return rtn
+    
     if request.method == "POST":
         data = request.POST
         data_response = json.dumps({"preview_prompt_result":"kvalue - ("+data.get("k_value")+") : promptinput - ("+data.get("prompt_input")+")"})
@@ -499,10 +606,11 @@ def ie_action_search(request):
 
 @login_required(login_url="/login")
 def dashboard_default(request):
-    context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Upload Document"}}
-    return render(request,'theme_genai/document_extraction/index-1.html',context)
-    # context={"breadcrumb":{"parent":"Dashboard","child":"Default"}}
-    # return render(request,'general/dashboard/default/index.html',context)
+    check_user_permission(request,'dashboard')
+    # context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Upload Document"}}
+    # return render(request,'theme_genai/document_extraction/index-1.html',context)
+    context={"breadcrumb":{"parent":"Dashboard","child":"Default"}, "perms": check_user_permission(request,'document_extraction')}
+    return render(request,'general/dashboard/default/index.html',context)
 # .......
 
 
@@ -1643,7 +1751,7 @@ def login_simple(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('login?next=/')
 
 def login_with_bg_image(request):
     context={"breadcrumb":{"parent":"parent","child":"child"}}

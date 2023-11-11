@@ -18,8 +18,17 @@
             <div class="mobile-back text-end"><span>Back</span><i class="fa fa-angle-right ps-2" aria-hidden="true"></i>
             </div>
           </li>
-          <li class="dropdown"><a class="nav-link menu-title link-nav" href="/dashboard_default"><i data-feather="home"></i><span>Dashboard</span></a></li>
+          <li class="bg-primary">
+            <p class="text-center">
+              <h5 class="text-white pt-3 pb-3">{{request.user.get_full_name}}</h5>
+            </p>
+          </li>
 
+          {% if perms.dashboard %}
+          <li class="dropdown"><a class="nav-link menu-title link-nav" href="/dashboard_default"><i data-feather="home"></i><span>Dashboard</span></a></li>
+          {% endif %}
+
+          {% if perms.document_extraction %}
           <li class="dropdown"><a class="nav-link menu-title" href="javascript:void(0)"><i
             data-feather="file-text"></i><span>Document Extraction</span></a>
             <ul class="nav-submenu menu-content">
@@ -28,11 +37,23 @@
               <li><a href="/document_extraction/extraction_process">Extraction Process</a></li>
             </ul>
           </li>
+          {% endif %}
 
+          {% if perms.document_translation %}
           <li class="dropdown"><a class="nav-link menu-title link-nav" href="/document_translation"><i data-feather="file"></i><span>Document Translation</span></a></li>
+          {% endif %}
+          
+          {% if perms.bank_statement %}
           <li class="dropdown"><a class="nav-link menu-title link-nav" href="/bank_statement"><i data-feather="credit-card"></i><span>Bank Statement</span></a></li>
+          {% endif %}
+
+          {% if perms.ktp_extraction %}
           <li class="dropdown"><a class="nav-link menu-title link-nav" href="/ktp_extraction"><i data-feather="users"></i><span>KTP Extraction</span></a></li>
+          {% endif %}
+
+          {% if perms.image_extraction %}
           <li class="dropdown"><a class="nav-link menu-title link-nav" href="/image_extraction"><i data-feather="image"></i><span>Image Extraction</span></a></li>
+          {% endif %}
         </ul>
       </div>
       <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>

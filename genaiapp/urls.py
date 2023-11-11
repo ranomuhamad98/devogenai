@@ -9,55 +9,55 @@ urlpatterns = [
     path('document_extraction/extraction_process', views.extraction_process,name='document_extraction_extraction_process'),
     
     # DOCUMENT EXTRACTION - UPLOAD DOCUMENT
-    path('document_extraction/ud_action_newdoc', views.de_ud_action_newdoc,name='document_extraction'),
-    path('document_extraction/ud_action_docname', views.de_ud_action_docname,name='document_extraction'),
-    path('document_extraction/ud_action_docdel', views.de_ud_action_docdel,name='document_extraction'),
-    path('document_extraction/ud_action_showconf', views.de_ud_action_showconf,name='document_extraction'),
-    path('document_extraction/ud_action_search', views.de_ud_action_search,name='document_extraction'),
+    path('document_extraction/ud_action_newdoc', views.de_ud_action_newdoc,name='document_extraction_ud_action_newdoc'),
+    path('document_extraction/ud_action_docname', views.de_ud_action_docname,name='document_extraction_ud_action_docname'),
+    path('document_extraction/ud_action_docdel', views.de_ud_action_docdel,name='document_extraction_ud_action_docdel'),
+    path('document_extraction/ud_action_showconf', views.de_ud_action_showconf,name='document_extraction_ud_action_showconf'),
+    path('document_extraction/ud_action_search', views.de_ud_action_search,name='document_extraction_ud_action_search'),
 
     # DOCUMENT EXTRACTION - PARSER SETUP
-    path('document_extraction/ps_action_view', views.de_ps_action_view,name='document_extraction'),
-    path('document_extraction/ps_action_parser', views.de_ps_action_parser,name='document_extraction'),
-    path('document_extraction/ps_action_del', views.de_ps_action_del,name='document_extraction'),
-    path('document_extraction/ps_action_save', views.de_ps_action_save,name='document_extraction'),
-    path('document_extraction/ps_action_test', views.de_ps_action_test,name='document_extraction'),
-    path('document_extraction/ps_action_update', views.de_ps_action_update,name='document_extraction'),
-    path('document_extraction/ps_action_showconf', views.de_ps_action_showconf,name='document_extraction'),
+    path('document_extraction/ps_action_view', views.de_ps_action_view,name='document_extraction_ps_action_view'),
+    path('document_extraction/ps_action_parser', views.de_ps_action_parser,name='document_extraction_ps_action_parser'),
+    path('document_extraction/ps_action_del', views.de_ps_action_del,name='document_extraction_ps_action_del'),
+    path('document_extraction/ps_action_save', views.de_ps_action_save,name='document_extraction_ps_action_save'),
+    path('document_extraction/ps_action_test', views.de_ps_action_test,name='document_extraction_ps_action_test'),
+    path('document_extraction/ps_action_update', views.de_ps_action_update,name='document_extraction_ps_action_update'),
+    path('document_extraction/ps_action_showconf', views.de_ps_action_showconf,name='document_extraction_ps_action_showconf'),
 
     # DOCUMENT EXTRACTION - EXTRACTION PROCESS
-    path('document_extraction/ep_action_downjson/<id>', views.de_ep_action_downjson,name='document_extraction'),
-    path('document_extraction/ep_action_downcsv/<id>', views.de_ep_action_downcsv,name='document_extraction'),
-    path('document_extraction/ep_action_alldoc/<id>', views.de_ep_action_alldoc,name='document_extraction'),
+    path('document_extraction/ep_action_downjson/<id>', views.de_ep_action_downjson,name='document_extraction_ep_action_downjson'),
+    path('document_extraction/ep_action_downcsv/<id>', views.de_ep_action_downcsv,name='document_extraction_ep_action_downcsv'),
+    path('document_extraction/ep_action_alldoc/<id>', views.de_ep_action_alldoc,name='document_extraction_ep_action_alldoc'),
 
 
 
     path('document_translation', views.document_translation,name='document_translation'),
 
     # DOCUMENT TRANSLATION
-    path('document_translation/action_newdoc', views.dt_action_newdoc,name='aksi-upload-new-doc'),
-    path('document_translation/action_docname', views.dt_action_docname,name='aksi-klik-doc-name'),
-    path('document_translation/action_docdel', views.dt_action_docdel,name='aksi=klik-del-step2'),
-    path('document_translation/action_showconf', views.dt_action_showconf,name='document_translation'),
+    path('document_translation/action_newdoc', views.dt_action_newdoc,name='document_translation_action_newdoc'),
+    path('document_translation/action_docname', views.dt_action_docname,name='document_translation_action_docname'),
+    path('document_translation/action_docdel', views.dt_action_docdel,name='document_translation_action_docdel'),
+    path('document_translation/action_showconf', views.dt_action_showconf,name='document_translation_action_showconf'),
 
     path('bank_statement', views.bank_statement,name='bank_statement'),
-    path('bank_statement/action_newdoc', views.bs_action_newdoc,name='aksi-upload-new-doc'),
-    path('bank_statement/action_docname', views.bs_action_docname,name='aksi-klik-doc-name'),
-    path('bank_statement/action_docdel', views.bs_action_docdel,name='aksi-klik-del-step2'),
-    path('bank_statement/action_process', views.bs_action_processfp,name='aksi-klik-process-free-prompt'),
+    path('bank_statement/action_newdoc', views.bs_action_newdoc,name='bank_statement_action_newdoc'),
+    path('bank_statement/action_docname', views.bs_action_docname,name='bank_statement_action_docname'),
+    path('bank_statement/action_docdel', views.bs_action_docdel,name='bank_statement_action_docdel'),
+    path('bank_statement/action_process', views.bs_action_processfp,name='bank_statement_action_process'),
 
     path('ktp_extraction', views.ktp_extraction,name='ktp_extraction'), 
-    path('ktp_extraction/action_newdoc', views.ke_action_newdoc,name='aksi-upload-newdoc'),
-    path('ktp_extraction/action_docname', views.ke_action_docname,name='aksi-klik-docname-listdoc'),
-    path('ktp_extraction/action_docdel', views.ke_action_docdel,name='aksi-klik-del-listdoc'),
-    path('ktp_extraction/action_showconf', views.ke_action_showconf,name='aksi-show-the-confidence'),
-    path('ktp_extraction/action_extract', views.ke_action_extract,name='aksi-extract-entity'),
+    path('ktp_extraction/action_newdoc', views.ke_action_newdoc,name='ktp_extraction_action_newdoc'),
+    path('ktp_extraction/action_docname', views.ke_action_docname,name='ktp_extraction_action_docname'),
+    path('ktp_extraction/action_docdel', views.ke_action_docdel,name='ktp_extraction_action_docdel'),
+    path('ktp_extraction/action_showconf', views.ke_action_showconf,name='ktp_extraction_action_showconf'),
+    path('ktp_extraction/action_extract', views.ke_action_extract,name='ktp_extraction_action_extract'),
 
     path('image_extraction', views.image_extraction,name='image_extraction'),
-    path('image_extraction/action_newdoc', views.ie_action_newdoc,name='aksi-upload-newdoc'),
-    path('image_extraction/action_docname', views.ie_action_docname,name='aksi-klik-docname-listdoc'),
-    path('image_extraction/action_docdel', views.ie_action_docdel,name='aksi-klik-del-listdoc'),
-    path('image_extraction/action_showconf', views.ie_action_showconf,name='aksi-show-the-confidence'),
-    path('image_extraction/action_search', views.ie_action_search,name='aksi-search'),
+    path('image_extraction/action_newdoc', views.ie_action_newdoc,name='image_extraction_action_newdoc'),
+    path('image_extraction/action_docname', views.ie_action_docname,name='image_extraction_action_docname'),
+    path('image_extraction/action_docdel', views.ie_action_docdel,name='image_extraction_action_docdel'),
+    path('image_extraction/action_showconf', views.ie_action_showconf,name='image_extraction_action_showconf'),
+    path('image_extraction/action_search', views.ie_action_search,name='image_extraction_action_search'),
 
     # dashboard paths
 

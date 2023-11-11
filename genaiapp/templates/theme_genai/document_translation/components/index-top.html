@@ -24,6 +24,7 @@
       <div class="tab-content" id="icon-tabContent">
         <div class="tab-pane fade active show" id="step-1" role="tabpanel" aria-labelledby="step-1-tab">
           <p class="m-0">
+            {{ perms }}
             <form class="needs-validation" id="form_step1" method="post" enctype="multipart/form-data" novalidate>
               {% csrf_token %}
               <div class="mb-3">
