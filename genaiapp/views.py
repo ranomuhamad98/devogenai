@@ -11,8 +11,12 @@ from django.http import HttpResponse
 import json
 import random
 import base64
+import numpy as np
+import pandas as pd
 
-# from genaiapp.bankstatement import BankStatement
+#bank statement
+from genaiapp.modules.bank_statement import BankStatementProcessor
+from genaiapp.modules.utils.bank_statement_helper import DataFrameExtraction
 
 def check_user_permission(user, perm):
     x = user.user.user_permissions.all().values_list('codename', flat=True).values()
@@ -65,14 +69,18 @@ def document_translation(request):
 
 @login_required(login_url="/login")
 def bank_statement(request):
-    # data_employee = BankStatement.get_employee()
     data_prompt = {"a":"prompt table cell 1","b":"prompt table cell 1","c":"prompt table cell 1","d":"prompt table cell 1","e":"prompt table cell 1","f":"prompt table cell 1"},{"a":"prompt table cell 2","b":"prompt table cell 2","c":"prompt table cell 2","d":"prompt table cell 2","e":"prompt table cell 2","f":"prompt table cell 2"},{"a":"prompt table cell 3","b":"prompt table cell 3","c":"prompt table cell 3","d":"prompt table cell 3","e":"prompt table cell 3","f":"prompt table cell 3"}
     data_ocr = {"a":"ocr table cell 1","b":"ocr table cell 1","c":"ocr table cell 1","d":"ocr table cell 1","e":"ocr table cell 1","f":"ocr table cell 1"},{"a":"ocr table cell 2","b":"ocr table cell 2","c":"ocr table cell 2","d":"ocr table cell 2","e":"ocr table cell 2","f":"ocr table cell 2"},{"a":"ocr table cell 3","b":"ocr table cell 3","c":"ocr table cell 3","d":"ocr table cell 3","e":"ocr table cell 3","f":"ocr table cell 3"}
     data_extraction = {"a":"extraction table cell 1","b":"extraction table cell 1","c":"extraction table cell 1","d":"extraction table cell 1","e":"extraction table cell 1","f":"extraction table cell 1"},{"a":"extraction table cell 2","b":"extraction table cell 2","c":"extraction table cell 2","d":"extraction table cell 2","e":"extraction table cell 2","f":"extraction table cell 2"},{"a":"extraction table cell 3","b":"extraction table cell 3","c":"extraction table cell 3","d":"extraction table cell 3","e":"extraction table cell 3","f":"extraction table cell 3"}
-    data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
-    
-    context={"breadcrumb":{"parent":"Dashboard","child":"Bank Statement"}, "data_doc": data_doc, "data_prompt": data_prompt, "data_ocr": data_ocr, "data_extraction": data_extraction, "perms": check_user_permission(request,'document_extraction')}
-    # , "data_employee": data_employee
+
+    df_bank = pd.read_csv('Dataset/df_bank_statement_result.csv')[['Bank_Name','Account_Number']].drop_duplicates().astype('str').reset_index(drop=True)
+    data_doc = ()
+    if df_bank is not None and not df_bank.empty:
+        for row in range(len(df_bank)):
+            row_dict = {"document_name": df_bank['Account_Number'][row]+' - '+df_bank['Bank_Name'][row], "id":str(row+1)}
+            data_doc += (row_dict,)
+
+    context={"breadcrumb":{"parent":"Dashboard","child":"Bank Statement"}, "data_doc": data_doc, "data_prompt": data_prompt, "data_ocr": data_ocr, "data_extraction": data_extraction, "perms": check_user_permission(request,'bank_statement')}
     return render(request,'theme_genai/bank_statement/index.html',context)
     
 @login_required(login_url="/login")
@@ -367,6 +375,8 @@ def bs_action_newdoc(request):
         newdoc_str = data.get("new_doc")
         bankname_str = data.get("bank_name")
 
+        processor = BankStatementProcessor(bankname_str)
+
         # start - upload file
         format, imgstr = newdoc_str.split(';base64,') 
         ext = format.split('/')[-1] 
@@ -376,15 +386,37 @@ def bs_action_newdoc(request):
             f.write(file_content)
         # end - upload file
 
-        # tab ocr result
-        data_trx = {"a":"prompt table cell 1","b":"prompt table cell 1","c":"prompt table cell 1","d":"prompt table cell 1","e":"prompt table cell 1","f":"prompt table cell 1"},{"a":"prompt table cell 2","b":"prompt table cell 2","c":"prompt table cell 2","d":"prompt table cell 2","e":"prompt table cell 2","f":"prompt table cell 2"},{"a":"prompt table cell 3","b":"prompt table cell 3","c":"prompt table cell 3","d":"prompt table cell 3","e":"prompt table cell 3","f":"prompt table cell 3"}
-        ocr_result = {"prefix": "data_prefix","sufix":"data_sufix","table": data_trx}
+        uploaded_files = processor.upload_files("genaiapp/static/assets/"+filename)
+        data_result, prefix, TransactionDetail, TransactionDetail2, sufix, ocr_result, extraction_result = processor.process_files(uploaded_files)
 
-        data_fp = {"a":"fp table cell 1","b":"fp table cell 1","c":"fp table cell 1","d":"fp table cell 1","e":"fp table cell 1","f":"fp table cell 1"},{"a":"fp table cell 2","b":"fp table cell 2","c":"fp table cell 2","d":"fp table cell 2","e":"fp table cell 2","f":"fp table cell 2"},{"a":"fp table cell 3","b":"fp table cell 3","c":"fp table cell 3","d":"fp table cell 3","e":"fp table cell 3","f":"fp table cell 3"}
-        free_prompt = {"table": data_fp, "prefix_ocr":"data prefix ocr", "prompt_dataframe": "prompt data frame"}
+        if bankname_str == 'BCA':
+            TransactionDetail2['prefixData']     = np.array([prefix] * len(TransactionDetail2))
+            TransactionDetail2['sufixData']      = np.array([sufix] * len(TransactionDetail2))
+            TransactionDetail2['Bank_Name']      = [data_result['Bank_Name']] * len(TransactionDetail2)
+            TransactionDetail2['Account_Holder'] = [data_result['Account_Holder']] * len(TransactionDetail2)
+            TransactionDetail2['Account_Number'] = [data_result['Account_Number']] * len(TransactionDetail2)
+
+            TransactionDetail2 = pd.concat([TransactionDetail2,pd.read_csv('Dataset/df_bank_statement_raw_BCA.csv')])
+            TransactionDetail2.to_csv('Dataset/df_bank_statement_raw_BCA.csv',index=False)
+
+        TransactionDetail['prefixData']     = np.array([prefix] * len(TransactionDetail))
+        TransactionDetail['sufixData']      = np.array([sufix] * len(TransactionDetail))
+        TransactionDetail['Bank_Name']      = [data_result['Bank_Name']] * len(TransactionDetail)
+        TransactionDetail['Account_Holder'] = [data_result['Account_Holder']] * len(TransactionDetail)
+        TransactionDetail['Account_Number'] = [data_result['Account_Number']] * len(TransactionDetail)
+
+        TransactionDetail = pd.concat([TransactionDetail,pd.read_csv('Dataset/df_bank_statement_raw.csv')])
+        TransactionDetail.to_csv('Dataset/df_bank_statement_raw.csv',index=False)
+
+        data_result2                         = data_result['Transaction_Analysis']
+        data_result2['Bank_Name']            = [data_result['Bank_Name']] * len(data_result2)
+        data_result2['Account_Number']       = [data_result['Account_Number']] * len(data_result2)
+        data_result2['Account_Holder']       = [data_result['Account_Holder']] * len(data_result2)
+
+        data_result2 = pd.concat([data_result2,pd.read_csv('Dataset/df_bank_statement_result.csv')])
+        data_result2.to_csv('Dataset/df_bank_statement_result.csv',index=False)
         
-        data_er = {"a":"er table cell 1","b":"er table cell 1","c":"er table cell 1","d":"er table cell 1","e":"er table cell 1","f":"er table cell 1"},{"a":"er table cell 2","b":"er table cell 2","c":"er table cell 2","d":"er table cell 2","e":"er table cell 2","f":"er table cell 2"},{"a":"er table cell 3","b":"er table cell 3","c":"er table cell 3","d":"er table cell 3","e":"er table cell 3","f":"er table cell 3"}
-        extraction_result = {"bank_name": ""+bankname_str+"", "account_number": "account number", "account_holder": "account holder", "table": data_er}
+        free_prompt = {"table": ocr_result["table"], "prefix_ocr":ocr_result["prefix"], "prompt_dataframe": "prompt data frame"}
 
         data_response = json.dumps({"status":1, "message": "bs_action_newdoc berhasil","data":data, "ocr_result": ocr_result, "free_prompt": free_prompt, "extraction_result": extraction_result})
 
@@ -399,17 +431,45 @@ def bs_action_docname(request):
     if val==False: return rtn
 
     if request.method == "GET":
-        data = request.GET['post_id']
- 
-        # tab ocr result
-        data_trx = {"a":"prompt table cell 1","b":"prompt table cell 1","c":"prompt table cell 1","d":"prompt table cell 1","e":"prompt table cell 1","f":"prompt table cell 1"},{"a":"prompt table cell 2","b":"prompt table cell 2","c":"prompt table cell 2","d":"prompt table cell 2","e":"prompt table cell 2","f":"prompt table cell 2"},{"a":"prompt table cell 3","b":"prompt table cell 3","c":"prompt table cell 3","d":"prompt table cell 3","e":"prompt table cell 3","f":"prompt table cell 3"}
-        ocr_result = {"prefix": "data_prefix","sufix":"data_sufix","table": data_trx}
+        docname = request.GET['post_id']
 
-        data_fp = {"a":"fp table cell 1","b":"fp table cell 1","c":"fp table cell 1","d":"fp table cell 1","e":"fp table cell 1","f":"fp table cell 1"},{"a":"fp table cell 2","b":"fp table cell 2","c":"fp table cell 2","d":"fp table cell 2","e":"fp table cell 2","f":"fp table cell 2"},{"a":"fp table cell 3","b":"fp table cell 3","c":"fp table cell 3","d":"fp table cell 3","e":"fp table cell 3","f":"fp table cell 3"}
-        free_prompt = {"table": data_fp, "prefix_ocr":"data prefix ocr", "prompt_dataframe": "prompt data frame"}
-        
-        data_er = {"a":"er table cell 1","b":"er table cell 1","c":"er table cell 1","d":"er table cell 1","e":"er table cell 1","f":"er table cell 1"},{"a":"er table cell 2","b":"er table cell 2","c":"er table cell 2","d":"er table cell 2","e":"er table cell 2","f":"er table cell 2"},{"a":"er table cell 3","b":"er table cell 3","c":"er table cell 3","d":"er table cell 3","e":"er table cell 3","f":"er table cell 3"}
-        extraction_result = {"bank_name": "bank name", "account_number": "account number", "account_holder": "account holder", "table": data_er}
+        #find the selected index
+        df_bank = pd.read_csv('Dataset/df_bank_statement_result.csv')[['Bank_Name','Account_Number']].drop_duplicates().astype('str').reset_index(drop=True)
+        for row in df_bank.index:
+            if df_bank['Account_Number'][row] + ' - ' + df_bank['Bank_Name'][row] == docname:
+                data=row
+                break
+
+        TransactionDetail = pd.read_csv('Dataset/df_bank_statement_raw.csv').astype('str')
+        TransactionDetail = TransactionDetail.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
+
+        TransactionDetail_drop = TransactionDetail.drop(columns=['prefixData','sufixData','Bank_Name','Account_Number','Account_Holder'])
+
+        transaction_detail = ()
+        if TransactionDetail_drop is not None and not TransactionDetail_drop.empty:
+            for _, row in TransactionDetail_drop.iterrows():
+                row_dict = {col: row[col] for col in TransactionDetail_drop.columns}
+                transaction_detail += (row_dict,)
+
+        data_result = pd.read_csv('Dataset/df_bank_statement_result.csv').astype('str')
+        data_result = data_result.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
+        data_result_drop = data_result.drop(columns=['Bank_Name','Account_Number','Account_Holder'])
+
+        transaction_analysis = ()
+        if data_result_drop is not None and not data_result_drop.empty:
+            for _, row in data_result_drop.iterrows():
+                row_dict = {col: row[col] for col in data_result_drop.columns}
+                transaction_analysis += (row_dict,)
+
+        if 'BCA' in df_bank['Bank_Name'][data]:
+            TransactionDetail2 = pd.read_csv('Dataset/df_bank_statement_raw_BCA.csv').astype('str')
+            TransactionDetail2 = TransactionDetail2.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
+            TransactionDetail2 = TransactionDetail2.drop(columns=['prefixData','sufixData','Bank_Name','Account_Number','Account_Holder'])
+
+        # tab ocr result
+        ocr_result = {"prefix": TransactionDetail['prefixData'].values[0],"sufix":TransactionDetail['sufixData'].values[0],"table": transaction_detail}
+        free_prompt = {"table": transaction_detail, "prefix_ocr":TransactionDetail['prefixData'].values[0], "prompt_dataframe": "prompt data frame"}
+        extraction_result = {"bank_name": data_result['Bank_Name'].values[0], "account_number": data_result['Account_Number'].values[0], "account_holder": data_result['Account_Holder'].values[0], "table": transaction_analysis}
 
         data_response = json.dumps({"status":1, "message": "bs_action_newdoc berhasil","data":data, "ocr_result": ocr_result, "free_prompt": free_prompt, "extraction_result": extraction_result})
 
@@ -424,8 +484,27 @@ def bs_action_docdel(request):
     if val==False: return rtn
 
     if request.method == "GET":
-        idx = request.GET['post_id']
-        data_response = json.dumps({"data_delete":"id "+idx+""})
+        data = int(request.GET['post_id'])
+        data =data-1
+        df_bank = pd.read_csv('Dataset/df_bank_statement_result.csv')[['Bank_Name','Account_Number']].drop_duplicates().astype('str').reset_index(drop=True)
+        TransactionDetail = pd.read_csv('Dataset/df_bank_statement_raw.csv').astype('str')
+
+        indexing = TransactionDetail.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
+        TransactionDetail = TransactionDetail.drop(indexing.index)
+        TransactionDetail.to_csv('Dataset/df_bank_statement_raw.csv',index=False)
+
+        data_result = pd.read_csv('Dataset/df_bank_statement_result.csv').astype('str')
+        indexing    = data_result.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
+        data_result = data_result.drop(indexing.index)
+        data_result.to_csv('Dataset/df_bank_statement_result.csv',index=False)
+
+        if 'BCA' in df_bank['Bank_Name'][data]:
+            TransactionDetail2 = pd.read_csv('Dataset/df_bank_statement_raw_BCA.csv').astype('str')
+            indexing           = TransactionDetail2.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
+            TransactionDetail2 = TransactionDetail2.drop(indexing.index)
+            print(TransactionDetail2)
+            TransactionDetail2.to_csv('Dataset/df_bank_statement_raw.csv',index=False)
+        data_response = json.dumps({"data_delete":"id "+str(data)+""})
         return HttpResponse(data_response)
     else:
         data_response = json.dumps({"status":0, "message": "unauthorized"})
@@ -438,7 +517,9 @@ def bs_action_processfp(request):
 
     if request.method == "POST":
         data = request.POST
-        data_response = json.dumps({"result_dataframe_search":"prefixocr - ("+str(data.get("prefix_ocr"))+") : promptdataframe - ("+str(data.get("prompt_dataframe"))+")"})
+        TransactionDetail = pd.read_csv('Dataset/df_bank_statement_raw.csv').astype('str')
+        result = DataFrameExtraction(TransactionDetail,str(data.get("prompt_dataframe")),str(data.get("prefix_ocr")))
+        data_response = json.dumps({"result_dataframe_search":result})
         return HttpResponse(data_response)
     else:
         data_response = json.dumps({"status":0, "message": "unauthorized"})

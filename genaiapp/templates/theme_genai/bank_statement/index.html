@@ -47,7 +47,7 @@
         formData.append('new_doc', reader.result);
         formData.append('bank_name', $('#bank_name').val());
         formData.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val())
-
+ 
         fetch('bank_statement/action_newdoc', {
           method: 'POST',
           body: formData
@@ -81,12 +81,11 @@
               for (let index = 0; index < tbl_trx_detail.length; index++) {
                 row += "<tr>"+
                         "<th scope=\"row\">"+(index+1)+"</th>"+
-                        "<td>"+tbl_trx_detail[index].a+"</td>"+
-                        "<td>"+tbl_trx_detail[index].b+"</td>"+
-                        "<td>"+tbl_trx_detail[index].c+"</td>"+
-                        "<td>"+tbl_trx_detail[index].d+"</td>"+
-                        "<td>"+tbl_trx_detail[index].e+"</td>"+
-                        "<td>"+tbl_trx_detail[index].f+"</td>"+
+                        "<td>"+tbl_trx_detail[index].DATE+"</td>"+
+                        "<td>"+tbl_trx_detail[index].KETERANGAN+"</td>"+
+                        "<td>"+tbl_trx_detail[index].STATUS+"</td>"+
+                        "<td>"+tbl_trx_detail[index].AMMOUNT+"</td>"+
+                        "<td>"+tbl_trx_detail[index].SALDO+"</td>"+
                       "</tr>";
               }
               $('table[id="table-transaction-detail"] tbody').html(row);
@@ -95,13 +94,12 @@
               row = "";
               for (let index = 0; index < tbl_free_prompt.length; index++) {
                 row += "<tr>"+
-                        "<th scope=\"row\">"+(index+1)+"</th>"+
-                        "<td>"+tbl_free_prompt[index].a+"</td>"+
-                        "<td>"+tbl_free_prompt[index].b+"</td>"+
-                        "<td>"+tbl_free_prompt[index].c+"</td>"+
-                        "<td>"+tbl_free_prompt[index].d+"</td>"+
-                        "<td>"+tbl_free_prompt[index].e+"</td>"+
-                        "<td>"+tbl_free_prompt[index].f+"</td>"+
+                  "<th scope=\"row\">"+(index+1)+"</th>"+
+                        "<td>"+tbl_trx_detail[index].TANGGAL+"</td>"+
+                        "<td>"+tbl_trx_detail[index].KETERANGAN+"</td>"+
+                        "<td>"+tbl_trx_detail[index].STATUS+"</td>"+
+                        "<td>"+tbl_trx_detail[index].AMMOUNT+"</td>"+
+                        "<td>"+tbl_trx_detail[index].SALDO+"</td>"+
                       "</tr>";
               }
               $('table[id="table-free-prompt"] tbody').html(row);
@@ -110,13 +108,15 @@
               row = "";
               for (let index = 0; index < tbl_extraction_result.length; index++) {
                 row += "<tr>"+
-                        "<th scope=\"row\">"+(index+1)+"</th>"+
-                        "<td>"+tbl_extraction_result[index].a+"</td>"+
-                        "<td>"+tbl_extraction_result[index].b+"</td>"+
-                        "<td>"+tbl_extraction_result[index].c+"</td>"+
-                        "<td>"+tbl_extraction_result[index].d+"</td>"+
-                        "<td>"+tbl_extraction_result[index].e+"</td>"+
-                        "<td>"+tbl_extraction_result[index].f+"</td>"+
+                  "<th scope=\"row\">"+(index+1)+"</th>"+
+                      "<td>"+tbl_extraction_result[index].Mounth_Year+"</td>"+
+                      "<td>"+tbl_extraction_result[index].DEBIT_SUM+"</td>"+
+                      "<td>"+tbl_extraction_result[index].DEBIT_COUNT+"</td>"+
+                      "<td>"+tbl_extraction_result[index].CREDIT_SUM+"</td>"+
+                      "<td>"+tbl_extraction_result[index].CREDIT_COUNT+"</td>"+
+                      "<td>"+tbl_extraction_result[index].MIN_SALDO+"</td>"+
+                      "<td>"+tbl_extraction_result[index].MAX_SALDO+"</td>"+
+                      "<td>"+tbl_extraction_result[index].AVG_SALDO+"</td>"+
                       "</tr>";
               }
               $('table[id="table-extraction-result"] tbody').html(row);
@@ -169,13 +169,12 @@
             var row;
             for (let index = 0; index < tbl_trx_detail.length; index++) {
               row += "<tr>"+
-                      "<th scope=\"row\">"+(index+1)+"</th>"+
-                      "<td>"+tbl_trx_detail[index].a+"</td>"+
-                      "<td>"+tbl_trx_detail[index].b+"</td>"+
-                      "<td>"+tbl_trx_detail[index].c+"</td>"+
-                      "<td>"+tbl_trx_detail[index].d+"</td>"+
-                      "<td>"+tbl_trx_detail[index].e+"</td>"+
-                      "<td>"+tbl_trx_detail[index].f+"</td>"+
+                        "<th scope=\"row\">"+(index+1)+"</th>"+
+                        "<td>"+tbl_trx_detail[index].TANGGAL+"</td>"+
+                        "<td>"+tbl_trx_detail[index].KETERANGAN+"</td>"+
+                        "<td>"+tbl_trx_detail[index].STATUS+"</td>"+
+                        "<td>"+tbl_trx_detail[index].AMMOUNT+"</td>"+
+                        "<td>"+tbl_trx_detail[index].SALDO+"</td>"+
                     "</tr>";
             }
             $('table[id="table-transaction-detail"] tbody').html(row);
@@ -184,13 +183,12 @@
             row = "";
             for (let index = 0; index < tbl_free_prompt.length; index++) {
               row += "<tr>"+
-                      "<th scope=\"row\">"+(index+1)+"</th>"+
-                      "<td>"+tbl_free_prompt[index].a+"</td>"+
-                      "<td>"+tbl_free_prompt[index].b+"</td>"+
-                      "<td>"+tbl_free_prompt[index].c+"</td>"+
-                      "<td>"+tbl_free_prompt[index].d+"</td>"+
-                      "<td>"+tbl_free_prompt[index].e+"</td>"+
-                      "<td>"+tbl_free_prompt[index].f+"</td>"+
+                        "<th scope=\"row\">"+(index+1)+"</th>"+
+                        "<td>"+tbl_trx_detail[index].TANGGAL+"</td>"+
+                        "<td>"+tbl_trx_detail[index].KETERANGAN+"</td>"+
+                        "<td>"+tbl_trx_detail[index].STATUS+"</td>"+
+                        "<td>"+tbl_trx_detail[index].AMMOUNT+"</td>"+
+                        "<td>"+tbl_trx_detail[index].SALDO+"</td>"+
                     "</tr>";
             }
             $('table[id="table-free-prompt"] tbody').html(row);
@@ -200,12 +198,14 @@
             for (let index = 0; index < tbl_extraction_result.length; index++) {
               row += "<tr>"+
                       "<th scope=\"row\">"+(index+1)+"</th>"+
-                      "<td>"+tbl_extraction_result[index].a+"</td>"+
-                      "<td>"+tbl_extraction_result[index].b+"</td>"+
-                      "<td>"+tbl_extraction_result[index].c+"</td>"+
-                      "<td>"+tbl_extraction_result[index].d+"</td>"+
-                      "<td>"+tbl_extraction_result[index].e+"</td>"+
-                      "<td>"+tbl_extraction_result[index].f+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Mounth_Year+"</td>"+
+                      "<td>"+tbl_extraction_result[index].DEBIT_SUM+"</td>"+
+                      "<td>"+tbl_extraction_result[index].DEBIT_COUNT+"</td>"+
+                      "<td>"+tbl_extraction_result[index].CREDIT_SUM+"</td>"+
+                      "<td>"+tbl_extraction_result[index].CREDIT_COUNT+"</td>"+
+                      "<td>"+tbl_extraction_result[index].MIN_SALDO+"</td>"+
+                      "<td>"+tbl_extraction_result[index].MAX_SALDO+"</td>"+
+                      "<td>"+tbl_extraction_result[index].AVG_SALDO+"</td>"+
                     "</tr>";
             }
             $('table[id="table-extraction-result"] tbody').html(row);
