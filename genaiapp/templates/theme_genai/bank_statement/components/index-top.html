@@ -42,7 +42,16 @@
                 </select>
                 <div class="invalid-feedback bank_name">Need to enter bank name</div>
               </div>
-              <button class="btn btn-primary" id="btn_form_step1" type="button">Process</button>
+              <div class="row">
+                <div class="col-md-6">
+                  <button class="btn btn-primary pull-left" id="btn_form_step1" type="button">Process</button>
+                </div>
+                <div class="col-md-6">
+                  <span id="loader_newdoc" class="loader-box pull-right text-right" style="float:left;height: 30px;">
+                    <span class="loader-2" style="height: 30px;width:30px;border-left-color: #4d8aff;border-right-color: #4d8aff;"></span>
+                  </span>
+                </div>
+              </div>
             </form>
           </p>
         </div>
@@ -168,7 +177,16 @@
                 <input class="form-control" name="prompt_dataframe" id="prompt_dataframe" type="text" placeholder="" required="">
                 <div class="invalid-feedback">Need to enter prompt dataframe</div>
               </div>
-              <button class="btn btn-primary" id="btn_process_freeprompt" type="button">Process</button>
+              <div class="row">
+                <div class="col-md-6">
+                  <button class="btn btn-primary" id="btn_process_freeprompt" type="button">Process</button>
+                </div>
+                <div class="col-md-6">
+                  <span id="loader_freeprompt" class="loader-box pull-right text-right" style="float:left;height: 30px;">
+                    <span class="loader-2" style="height: 30px;width:30px;border-left-color: #4d8aff;border-right-color: #4d8aff;"></span>
+                  </span>
+                </div>
+              </div>
             </form>
 
             <div class="mt-3" id="display_step3" style="display: none;">

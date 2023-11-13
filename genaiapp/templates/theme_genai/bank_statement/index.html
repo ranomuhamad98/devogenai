@@ -26,6 +26,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="{% static 'assets/js/sweet-alert/sweetalert.min.js' %}"></script>
 <script type="text/javascript">
+  $( '#loader_newdoc').hide()
+  $('#loader_freeprompt').hide()
+
   $('#btn_form_step1').click(function(){
     $(".new_doc").hide(); 
     if ($('#new_doc').get(0).files.length === 0 || !$('#bank_name').val()) {
@@ -34,6 +37,7 @@
       
       console.log("No files selected.");
     }else{
+      $('#loader_newdoc'). show()
       $("#btn_form_step1").prop('disabled', true)
       const formData = new FormData();
       
@@ -126,6 +130,7 @@
           }else{
             swal("Failed!", "The document test you sent failed to be processed!", "error");
           }
+          $('#loader_newdoc').hide()
           $("#btn_form_step1").prop('disabled', false)
         });
 
@@ -250,6 +255,7 @@
   };
 
   $('#btn_process_freeprompt').click(function(){
+    $('#loader_freeprompt').show();
     $("#display_step3").hide();
     $.ajax(
     {
@@ -263,7 +269,7 @@
           console.log(data_json.preview_ocr_result);
           $("#display_step3").show();
           $("#result_dataframe_search").val(String(data_json.result_dataframe_search))
-          
+          $('#loader_freeprompt').hide() 
         }
     })
   });
