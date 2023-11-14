@@ -39,13 +39,28 @@ class BankStatementProcessor:
             data_result, prefix, TransactionDetail, sufix = BRI_extraction(foldername)
 
         shutil.rmtree(foldername)
+        nan_placeholder = "NaN"
         transaction_detail = ()
-        if TransactionDetail is not None and not TransactionDetail.empty:
-            for _, row in TransactionDetail.iterrows():
-                # Convert each row to a dictionary
-                row_dict = {col: row[col] for col in TransactionDetail.columns}
-                # Add this dictionary to the tuple
-                transaction_detail += (row_dict,)
+        if self.bank_name == "BCA":
+            if TransactionDetail2 is not None and not TransactionDetail2.empty:
+                if 'TANGGAL' in TransactionDetail2.columns:
+                    TransactionDetail2['TANGGAL'] = pd.to_datetime(TransactionDetail2['TANGGAL'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d')
+                # Replace NaN values with the placeholder string
+                TransactionDetail2.fillna(nan_placeholder, inplace=True)
+                for _, row in TransactionDetail2.iterrows():
+                    # Convert each row to a dictionary
+                    row_dict = {col: row[col] for col in TransactionDetail2.columns}
+                    # Add this dictionary to the tuple
+                    transaction_detail += (row_dict,)
+        else:
+            if TransactionDetail is not None and not TransactionDetail.empty:
+                # Replace NaN values with the placeholder string
+                TransactionDetail.fillna(nan_placeholder, inplace=True)
+                for _, row in TransactionDetail.iterrows():
+                    # Convert each row to a dictionary
+                    row_dict = {col: row[col] for col in TransactionDetail.columns}
+                    # Add this dictionary to the tuple
+                    transaction_detail += (row_dict,)
 
         transaction_analysis = ()
         if data_result.get("Transaction_Analysis") is not None and not data_result.get("Transaction_Analysis").empty:

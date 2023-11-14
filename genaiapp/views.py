@@ -416,10 +416,9 @@ def bs_action_newdoc(request):
         data_result2 = pd.concat([data_result2,pd.read_csv('Dataset/df_bank_statement_result.csv')])
         data_result2.to_csv('Dataset/df_bank_statement_result.csv',index=False)
         
-        free_prompt = {"table": ocr_result["table"], "prefix_ocr":ocr_result["prefix"], "prompt_dataframe": "prompt data frame"}
+        free_prompt = {"table": ocr_result["table"], "prefix_ocr":ocr_result["prefix"], "prompt_dataframe": ""}
 
-        data_response = json.dumps({"status":1, "message": "bs_action_newdoc berhasil","data":data, "ocr_result": ocr_result, "free_prompt": free_prompt, "extraction_result": extraction_result})
-
+        data_response = json.dumps({"status":1, "message": "bs_action_newdoc berhasil", "data": data, "ocr_result": ocr_result, "free_prompt": free_prompt, "extraction_result": extraction_result})
         return HttpResponse(data_response)
     else:
         data_response = json.dumps({"status":0, "message": "unauthorized"})
@@ -468,7 +467,7 @@ def bs_action_docname(request):
 
         # tab ocr result
         ocr_result = {"prefix": TransactionDetail['prefixData'].values[0],"sufix":TransactionDetail['sufixData'].values[0],"table": transaction_detail}
-        free_prompt = {"table": transaction_detail, "prefix_ocr":TransactionDetail['prefixData'].values[0], "prompt_dataframe": "prompt data frame"}
+        free_prompt = {"table": transaction_detail, "prefix_ocr":TransactionDetail['prefixData'].values[0], "prompt_dataframe": ""}
         extraction_result = {"bank_name": data_result['Bank_Name'].values[0], "account_number": data_result['Account_Number'].values[0], "account_holder": data_result['Account_Holder'].values[0], "table": transaction_analysis}
 
         data_response = json.dumps({"status":1, "message": "bs_action_newdoc berhasil","data":data, "ocr_result": ocr_result, "free_prompt": free_prompt, "extraction_result": extraction_result})
