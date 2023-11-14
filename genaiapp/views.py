@@ -77,7 +77,7 @@ def bank_statement(request):
     data_doc = ()
     if df_bank is not None and not df_bank.empty:
         for row in range(len(df_bank)):
-            row_dict = {"document_name": df_bank['Account_Number'][row]+' - '+df_bank['Bank_Name'][row], "id":str(row+1)}
+            row_dict = {"document_name": df_bank['Account_Number'][row]+'-'+df_bank['Bank_Name'][row], "id":str(row+1)}
             data_doc += (row_dict,)
 
     context={"breadcrumb":{"parent":"Dashboard","child":"Bank Statement"}, "data_doc": data_doc, "data_prompt": data_prompt, "data_ocr": data_ocr, "data_extraction": data_extraction, "perms": check_user_permission(request,'bank_statement')}
@@ -435,7 +435,7 @@ def bs_action_docname(request):
         #find the selected index
         df_bank = pd.read_csv('Dataset/df_bank_statement_result.csv')[['Bank_Name','Account_Number']].drop_duplicates().astype('str').reset_index(drop=True)
         for row in df_bank.index:
-            if df_bank['Account_Number'][row] + ' - ' + df_bank['Bank_Name'][row] == docname:
+            if df_bank['Account_Number'][row] + '-' + df_bank['Bank_Name'][row] == docname:
                 data=row
                 break
 
@@ -501,7 +501,6 @@ def bs_action_docdel(request):
             TransactionDetail2 = pd.read_csv('Dataset/df_bank_statement_raw_BCA.csv').astype('str')
             indexing           = TransactionDetail2.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
             TransactionDetail2 = TransactionDetail2.drop(indexing.index)
-            print(TransactionDetail2)
             TransactionDetail2.to_csv('Dataset/df_bank_statement_raw.csv',index=False)
         data_response = json.dumps({"data_delete":"id "+str(data)+""})
         return HttpResponse(data_response)
@@ -517,6 +516,9 @@ def bs_action_processfp(request):
     if request.method == "POST":
         data = request.POST
         TransactionDetail = pd.read_csv('Dataset/df_bank_statement_raw.csv').astype('str')
+        filtered_df = TransactionDetail[(TransactionDetail['Bank_Name'] == 'BCA') & (TransactionDetail['prefixData'] == str(data.get("prefix_ocr")))]
+        if not filtered_df.empty:
+            TransactionDetail = pd.read_csv('Dataset/df_bank_statement_raw_BCA.csv').astype('str')
         result = DataFrameExtraction(TransactionDetail,str(data.get("prompt_dataframe")),str(data.get("prefix_ocr")))
         data_response = json.dumps({"result_dataframe_search":result})
         return HttpResponse(data_response)
