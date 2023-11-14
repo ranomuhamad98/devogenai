@@ -439,8 +439,12 @@ def bs_action_docname(request):
                 data=row
                 break
 
-        TransactionDetail = pd.read_csv('Dataset/df_bank_statement_raw.csv').astype('str')
-        TransactionDetail = TransactionDetail.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
+        if 'BCA' in df_bank['Bank_Name'][data]:
+            TransactionDetail = pd.read_csv('Dataset/df_bank_statement_raw_BCA.csv').astype('str')
+            TransactionDetail = TransactionDetail.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
+        else:
+            TransactionDetail = pd.read_csv('Dataset/df_bank_statement_raw.csv').astype('str')
+            TransactionDetail = TransactionDetail.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
 
         TransactionDetail_drop = TransactionDetail.drop(columns=['prefixData','sufixData','Bank_Name','Account_Number','Account_Holder'])
 
@@ -459,11 +463,6 @@ def bs_action_docname(request):
             for _, row in data_result_drop.iterrows():
                 row_dict = {col: row[col] for col in data_result_drop.columns}
                 transaction_analysis += (row_dict,)
-
-        if 'BCA' in df_bank['Bank_Name'][data]:
-            TransactionDetail2 = pd.read_csv('Dataset/df_bank_statement_raw_BCA.csv').astype('str')
-            TransactionDetail2 = TransactionDetail2.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
-            TransactionDetail2 = TransactionDetail2.drop(columns=['prefixData','sufixData','Bank_Name','Account_Number','Account_Holder'])
 
         # tab ocr result
         ocr_result = {"prefix": TransactionDetail['prefixData'].values[0],"sufix":TransactionDetail['sufixData'].values[0],"table": transaction_detail}
@@ -486,22 +485,23 @@ def bs_action_docdel(request):
         data = int(request.GET['post_id'])
         data =data-1
         df_bank = pd.read_csv('Dataset/df_bank_statement_result.csv')[['Bank_Name','Account_Number']].drop_duplicates().astype('str').reset_index(drop=True)
-        TransactionDetail = pd.read_csv('Dataset/df_bank_statement_raw.csv').astype('str')
 
+        TransactionDetail = pd.read_csv('Dataset/df_bank_statement_raw.csv').astype('str')
         indexing = TransactionDetail.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
         TransactionDetail = TransactionDetail.drop(indexing.index)
         TransactionDetail.to_csv('Dataset/df_bank_statement_raw.csv',index=False)
+
+        if 'BCA' in df_bank['Bank_Name'][data]:
+            TransactionDetail2 = pd.read_csv('Dataset/df_bank_statement_raw_BCA.csv').astype('str')
+            indexing           = TransactionDetail2.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
+            TransactionDetail2 = TransactionDetail2.drop(indexing.index)
+            TransactionDetail2.to_csv('Dataset/df_bank_statement_raw_BCA.csv',index=False)
 
         data_result = pd.read_csv('Dataset/df_bank_statement_result.csv').astype('str')
         indexing    = data_result.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
         data_result = data_result.drop(indexing.index)
         data_result.to_csv('Dataset/df_bank_statement_result.csv',index=False)
 
-        if 'BCA' in df_bank['Bank_Name'][data]:
-            TransactionDetail2 = pd.read_csv('Dataset/df_bank_statement_raw_BCA.csv').astype('str')
-            indexing           = TransactionDetail2.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
-            TransactionDetail2 = TransactionDetail2.drop(indexing.index)
-            TransactionDetail2.to_csv('Dataset/df_bank_statement_raw.csv',index=False)
         data_response = json.dumps({"data_delete":"id "+str(data)+""})
         return HttpResponse(data_response)
     else:
