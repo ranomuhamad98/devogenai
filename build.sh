@@ -1,0 +1,2 @@
+gcloud builds submit --tag gcr.io/lv-playground-genai/devogenai-bankstatement-webui  --project=lv-playground-genai
+gcloud run deploy --image gcr.io/lv-playground-genai/devogenai-bankstatement-webui --platform managed  --project=lv-playground-genai --allow-unauthenticated

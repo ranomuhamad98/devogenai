@@ -73,11 +73,11 @@ class BankStatementProcessor:
         # Assign the tuple of dictionaries to "table" in ocr_result
         ocr_result = {"prefix": prefix, "sufix": sufix, "table": transaction_detail}
         extraction_result = {"bank_name": ""+self.bank_name+"", "account_number": data_result.get('Account_Number'), "account_holder": data_result.get('Account_Holder'), "table": transaction_analysis}
-        free_prompt = {"table":transaction_detail, "prefix_ocr":prefix, "prompt_dataframe": "prompt data frame"}
+        free_prompt = {"table":transaction_detail, "prefix_ocr":data_result.get('Account_Number'), "prompt_dataframe": ""}
 
-        # You may return or handle ocr_result as needed
+        # You may return or handle ocr_result as neededd
         # return ocr_result
-        return data_result, prefix, TransactionDetail, TransactionDetail2, sufix, ocr_result, extraction_result
+        return data_result, prefix, TransactionDetail, TransactionDetail2, sufix, ocr_result, extraction_result, free_prompt
 
     @staticmethod
     def print_data(data):

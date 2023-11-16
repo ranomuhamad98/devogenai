@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-bi4swiag%a=p=fbgb!dwd#6c0c!h#c4ktrvks67fh2ex9c+@ns
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -43,9 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'genaiapp',
     'sass_processor',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,6 +57,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware', 
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CSRF_TRUSTED_ORIGINS = ['https://*.run.app'
+                        ,'https://*.127.0.0.1',
+                        ]
+
 
 ROOT_URLCONF = 'devogenai.urls'
 

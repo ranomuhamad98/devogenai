@@ -36,26 +36,51 @@ PREFIX = """
                 2. Format the final result as json
                 3. The result must fill this JSON Value
                 '
-                        "DEBIT_SUM":"",
-                        "DEBIT_COUNT":"",
-                        "CREDIT_SUM":"",
-                        "CREDIT_COUNT":"",
-                        "MIN_SALDO":"",
-                        "MAX_SALDO":"",
-                        "AVG_SALDO":""
+                        "Sum_Transaction":"",
+                        "Count_Transaction":"",
+        
+                        "Cash_Witdrawal_Count":"",
+                        "Cash_Witdrawal_Sum":"",
+                        
+                        "Pajak_Sum":"",
+                        "Pajak_Count":"",
+                        
+                        "Biaya_Admin_Sum":"",
+                        "Biaya_Admin_Count":"",
+                        
+                        "Sales_Sum":"",
+                        "Sales_Count":"",
+                        
+                        "Deposit_Sum":"",
+                        "Deposit_Count":"",
+                        
+                        "Debit_Sum":"",
+                        "Debit_Count":"",
+                        
+                        "Credit_Sum":"",
+                        "Credit_Count":""
                 '
             You should use the tools below to answer the question posed of you:
 """
 
 def prompt_template(date):
     return """
-        1. TOTAL AMMOUNT WHERE STATUS = "DEBIT" and TANGGAL = "{date}" as "DEBIT_SUM"
-        2. COUNT row WHERE STATUS = "DEBIT" and TANGGAL = "{date}" as "DEBIT_COUNT"
-        3. TOTAL AMMOUNT WHERE STATUS = "CREDIT" and TANGGAL = "{date}" as "CREDIT_SUM"
-        4. COUNT row WHERE STATUS = "CREDIT" and TANGGAL = "{date}" as "CREDIT_COUNT"
-        5. MIN SALDO WHERE TANGGAL = "{date}" AND SALDO != 0 as "MIN_SALDO"
-        6. MAX SALDO WHERE TANGGAL = "{date}" as "MAX_SALDO"
-        7. AVG SALDO WHERE TANGGAL = "{date}" as "AVG_SALDO"
+        1. TOTAL AMMOUNT WHERE BULAN_TAHUN = "{date}" as "Sum_Transaction"\n
+        2. COUNT row WHERE BULAN_TAHUN = "{date}" as "Count_Transaction"\n
+        3. TOTAL AMMOUNT WHERE BULAN_TAHUN = "{date}" and KETERANGAN contain "TARIKAN ATM" as "Cash_Witdrawal_Sum"\n
+        4. COUNT row WHERE BULAN_TAHUN = "{date}" and KETERANGAN contain "TARIKAN ATM" as "Cash_Witdrawal_Count"
+        5. TOTAL AMMOUNT WHERE BULAN_TAHUN = "{date}" and KETERANGAN contain "PAJAK BUNGA" as "Pajak_Sum"
+        6. COUNT row WHERE BULAN_TAHUN = "{date}" and KETERANGAN contain "PAJAK BUNGA" as "Pajak_Count"
+        7. TOTAL AMMOUNT WHERE BULAN_TAHUN = "{date}" and KETERANGAN contain "BIAYA ADM" as "Biaya_Admin_Sum"
+        8. COUNT row WHERE BULAN_TAHUN = "{date}" and KETERANGAN contain "BIAYA ADM" as "Biaya_Admin_Count"
+        9. TOTAL AMMOUNT WHERE BULAN_TAHUN = "{date}" and KETERANGAN contain "INV" as "Sales_Sum"
+        10. COUNT row WHERE BULAN_TAHUN = "{date}" and KETERANGAN contain "INV" as "Sales_Count"
+        11. TOTAL AMMOUNT WHERE BULAN_TAHUN = "{date}" and KETERANGAN contain "SETORAN TUNAI" as "Deposit_Sum"
+        12. COUNT row WHERE BULAN_TAHUN = "{date}" and KETERANGAN contain "SETORAN TUNAI" as "Deposit_Count"
+        13. TOTAL AMMOUNT WHERE BULAN_TAHUN = "{date}" AND STATUS = "DEBIT" as "Debit_Sum"
+        14. COUNT row WHERE BULAN_TAHUN = "{date}" AND STATUS = "DEBIT" as "Debit_Count"
+        15. TOTAL AMMOUNT WHERE BULAN_TAHUN = "{date}" AND STATUS = "CREDIT" as "Credit_Sum"
+        16. COUNT row WHERE BULAN_TAHUN = "{date}" AND STATUS = "CREDIT" as "Credit_Count"
     """.format(date = date)
 
 def jaccard_similarity(x,y):
@@ -210,24 +235,26 @@ def DataFrameExtraction(df,promt,prefix):
     return response['result']
 
 def Bank_Data_Ekstract(df):
-    tanggal = df[['TANGGAL']].copy()
-    tanggal['Year'] = tanggal['TANGGAL'].apply(lambda x:x.split(' ')[1])
-    tanggal['Month'] = tanggal['TANGGAL'].apply(lambda x:monthData.index(x.split(' ')[0]))
+    print(df)
+    tanggal = df[['BULAN_TAHUN']].copy()
+    tanggal['Year'] = tanggal['BULAN_TAHUN'].apply(lambda x:x.split(' ')[1])
+    tanggal['Month'] = tanggal['BULAN_TAHUN'].apply(lambda x:monthData.index(x.split(' ')[0]))
     tanggal = tanggal.sort_values(by=['Year', 'Month'])
     tanggal = tanggal.drop(columns=['Year', 'Month'])
 
     BankAnalysis = []
-
-    for my in tanggal.TANGGAL.unique():
-        data = DataFrameExtraction(df,prompt_template(my),PREFIX)
-        
-        data = json.loads(data.replace("'",'"'))
-        data['Mounth_Year'] = my
     
-        BankAnalysis.append(data)
+    for my in tanggal.BULAN_TAHUN.unique():
+        data = DataFrameExtraction(df,prompt_template(my),PREFIX)
+        try:
+            data = json.loads(data.replace("'",'"'))
+            data['Mounth_Year'] = my
+            BankAnalysis.append(data)
+        except:
+            pass
 
     df_data = pd.DataFrame(BankAnalysis)
-    return df_data[['Mounth_Year','DEBIT_SUM','DEBIT_COUNT','CREDIT_SUM','CREDIT_COUNT','MIN_SALDO','MAX_SALDO','AVG_SALDO']]
+    return df_data
 
 #BCA SECTION
 def BCA_Second_Check(text):
@@ -247,20 +274,25 @@ def BCA_table_spliting(df):
        
     df = df[1]
     dtlist = {
+        "INDEX":[],
+        "BULAN_TAHUN":[],
         "TANGGAL":[],
         "KETERANGAN":[],
-        "CBG":[],
         "MUTASI":[],
-        "SALDO":[]
+        "SALDO":[],
+        "CBG":[]
     }
+    
+    indexing = 0
     for er in df:
         try:
             stringnumdata = re.findall(r"(\d\d\/\d\d)\s+(.*)",er[0])[0]
+            dtlist['INDEX'].append(indexing)
+            indexing+=1
         except:
             continue
         
         data = BCA_Second_Check(er[1]).strip().split(' ')
-        print(data)
         if '' in data:
             data.remove('')
         if 'DB' in data:
@@ -271,15 +303,17 @@ def BCA_table_spliting(df):
             dtlist["CBG"].append("")
             dtlist["MUTASI"].append("")
             dtlist["SALDO"].append(data[0])
-            dtlist['TANGGAL'].append("{0} {1}".format(monthData[int(stringnumdata[0].split('/')[1])-1], year))
+            dtlist['BULAN_TAHUN'].append("{0} {1}".format(monthData[int(stringnumdata[0].split('/')[1])-1], year))
             dtlist['KETERANGAN'].append(stringnumdata[1])
+            dtlist['TANGGAL'].append(stringnumdata[0]+'/'+year)
             continue
         if len(data)==3:
             dtlist["CBG"].append(data[0])
             dtlist["MUTASI"].append(data[1])
             dtlist["SALDO"].append(data[2])
-            dtlist['TANGGAL'].append("{0} {1}".format(monthData[int(stringnumdata[0].split('/')[1])-1], year))
+            dtlist['BULAN_TAHUN'].append("{0} {1}".format(monthData[int(stringnumdata[0].split('/')[1])-1], year))
             dtlist['KETERANGAN'].append(stringnumdata[1])
+            dtlist['TANGGAL'].append(stringnumdata[0]+'/'+year)
         elif len(data)==2:
             if len(data[0])==4:
                 dtlist["CBG"].append(data[0])
@@ -289,27 +323,29 @@ def BCA_table_spliting(df):
                 dtlist["CBG"].append("")
                 dtlist["MUTASI"].append(data[0])
                 dtlist["SALDO"].append(data[1])
-            dtlist['TANGGAL'].append("{0} {1}".format(monthData[int(stringnumdata[0].split('/')[1])-1], year))
+            dtlist['BULAN_TAHUN'].append("{0} {1}".format(monthData[int(stringnumdata[0].split('/')[1])-1], year))
             dtlist['KETERANGAN'].append(stringnumdata[1])
+            dtlist['TANGGAL'].append(stringnumdata[0]+'/'+year)
         elif len(data)==1:
             dtlist["CBG"].append("")
             dtlist["MUTASI"].append(data[0])
             dtlist["SALDO"].append("")
-            dtlist['TANGGAL'].append("{0} {1}".format(monthData[int(stringnumdata[0].split('/')[1])-1], year))
+            dtlist['BULAN_TAHUN'].append("{0} {1}".format(monthData[int(stringnumdata[0].split('/')[1])-1], year))
             dtlist['KETERANGAN'].append(stringnumdata[1])
+            dtlist['TANGGAL'].append(stringnumdata[0]+'/'+year)
 
     # Table Cleanup
     # print(dtlist)
     df = pd.DataFrame.from_dict(dtlist)
     # df = df.drop(df[df['MUTASI'].str.contains('\d') == False].index[0])
     df['STATUS'] = ['DEBIT' if 'DB' in x else 'CREDIT' for x in df['MUTASI']]
-    df['AMMOUNT'] = df['MUTASI'].str.replace('DB', '').str.replace('D', '').str.replace(',', '').str.replace(' ', '').str.replace('.', '').replace('', np.nan).astype(float)
-    df['AMMOUNT'] = df['AMMOUNT'].apply(lambda x:x/100)
+    df['AMMOUNT'] = df['MUTASI'].str.replace('DB', '').str.replace('.00', '').str.replace('D', '').str.replace(',', '').str.replace(' ', '').str.replace('.', '').replace('', np.nan).astype(float)
+    df['AMMOUNT'] = df['AMMOUNT'].apply(lambda x:x)
     df['SALDO'] = df['SALDO'].apply(lambda x: x.strip()).str.replace('D', '').replace('', np.nan)
-    df['SALDO'] = df['SALDO'].str.replace(',', '').str.replace('.', '').str.replace(' ', '').astype(float)
+    df['SALDO'] = df['SALDO'].str.replace('.00', '').str.replace(',', '').str.replace('.', '').str.replace(' ', '').astype(float)
     df['SALDO'] = df['SALDO'].apply(lambda x:x/100)
-
-    return df[["TANGGAL", "KETERANGAN", "STATUS", "AMMOUNT", "SALDO"]]
+    
+    return df[["INDEX","TANGGAL","BULAN_TAHUN", "KETERANGAN", "STATUS", "AMMOUNT", "SALDO"]]
 
 def BCA_table_spliting_Demo(df):
     #retrieving first row to get the year
@@ -425,6 +461,8 @@ def BCA_extraction(folderBCA):
         print(response)
         response = json.loads(response.text)
         PrefixExtract.append(response['result'])
+
+    print(Transaction_data)
 
     outputResult={
         "Bank_Name":PrefixExtract[0],

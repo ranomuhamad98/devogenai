@@ -112,15 +112,25 @@
               row = "";
               for (let index = 0; index < tbl_extraction_result.length; index++) {
                 row += "<tr>"+
-                  "<th scope=\"row\">"+(index+1)+"</th>"+
-                      "<td>"+tbl_extraction_result[index].Mounth_Year+"</td>"+
-                      "<td>"+tbl_extraction_result[index].DEBIT_SUM+"</td>"+
-                      "<td>"+tbl_extraction_result[index].DEBIT_COUNT+"</td>"+
-                      "<td>"+tbl_extraction_result[index].CREDIT_SUM+"</td>"+
-                      "<td>"+tbl_extraction_result[index].CREDIT_COUNT+"</td>"+
-                      "<td>"+tbl_extraction_result[index].MIN_SALDO+"</td>"+
-                      "<td>"+tbl_extraction_result[index].MAX_SALDO+"</td>"+
-                      "<td>"+tbl_extraction_result[index].AVG_SALDO+"</td>"+
+                        "<th scope=\"row\">"+(index+1)+"</th>"+
+                        "<td>"+tbl_extraction_result[index].Mounth_Year+"</td>"+
+                        // "<td>"+tbl_extraction_result[index].Sum_Transaction+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Count_Transaction+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Cash_Witdrawal_Sum+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Cash_Witdrawal_Count+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Pajak_Sum+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Pajak_Count+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Biaya_Admin_Sum+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Biaya_Admin_Count+"</td>"+
+                        // "<td>"+tbl_extraction_result[index].Sales_Sum+"</td>"+
+                        // "<td>"+tbl_extraction_result[index].Sales_Count+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Deposit_Sum+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Deposit_Count+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Debit_Sum+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Debit_Count+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Credit_Sum+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Credit_Count+"</td>"+
+                        "<td>"+tbl_extraction_result[index].Spending_Category+"</td>"+
                       "</tr>";
               }
               $('table[id="table-extraction-result"] tbody').html(row);
@@ -156,7 +166,7 @@
             }).then((value) => {
               // tab ocr result
             $('#prefix').val(data_json.ocr_result.prefix)
-            $('#sufix').val(data_json.ocr_result.sufix)
+            // $('#sufix').val(data_json.ocr_result.sufix)
             var tbl_trx_detail = data_json.ocr_result.table
             
             // tab free prompt
@@ -204,13 +214,20 @@
               row += "<tr>"+
                       "<th scope=\"row\">"+(index+1)+"</th>"+
                       "<td>"+tbl_extraction_result[index].Mounth_Year+"</td>"+
-                      "<td>"+tbl_extraction_result[index].DEBIT_SUM+"</td>"+
-                      "<td>"+tbl_extraction_result[index].DEBIT_COUNT+"</td>"+
-                      "<td>"+tbl_extraction_result[index].CREDIT_SUM+"</td>"+
-                      "<td>"+tbl_extraction_result[index].CREDIT_COUNT+"</td>"+
-                      "<td>"+tbl_extraction_result[index].MIN_SALDO+"</td>"+
-                      "<td>"+tbl_extraction_result[index].MAX_SALDO+"</td>"+
-                      "<td>"+tbl_extraction_result[index].AVG_SALDO+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Count_Transaction+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Cash_Witdrawal_Sum+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Cash_Witdrawal_Count+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Pajak_Sum+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Pajak_Count+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Biaya_Admin_Sum+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Biaya_Admin_Count+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Deposit_Sum+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Deposit_Count+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Debit_Sum+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Debit_Count+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Credit_Sum+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Credit_Count+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Spending_Category+"</td>"+
                     "</tr>";
             }
             $('table[id="table-extraction-result"] tbody').html(row);

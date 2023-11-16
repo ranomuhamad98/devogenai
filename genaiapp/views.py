@@ -13,6 +13,10 @@ import random
 import base64
 import numpy as np
 import pandas as pd
+import joblib
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
 
 #bank statement
 from genaiapp.modules.bank_statement import BankStatementProcessor
@@ -387,7 +391,9 @@ def bs_action_newdoc(request):
         # end - upload file
 
         uploaded_files = processor.upload_files("genaiapp/static/assets/"+filename)
-        data_result, prefix, TransactionDetail, TransactionDetail2, sufix, ocr_result, extraction_result = processor.process_files(uploaded_files)
+        data_result, prefix, TransactionDetail, TransactionDetail2, sufix, ocr_result, extraction_result, free_prompt = processor.process_files(uploaded_files)
+        data_result.get("Transaction_Analysis")
+        
 
         if bankname_str == 'BCA':
             TransactionDetail2['prefixData']     = np.array([prefix] * len(TransactionDetail2))
@@ -413,10 +419,48 @@ def bs_action_newdoc(request):
         data_result2['Account_Number']       = [data_result['Account_Number']] * len(data_result2)
         data_result2['Account_Holder']       = [data_result['Account_Holder']] * len(data_result2)
 
+        # Run Clustering
+        def map_cluster_to_spending(cluster_label):
+            mapping = {
+                0: 'Low Spending',
+                1: 'Mid Spending',
+                2: 'High Spending'
+            }
+            return mapping.get(cluster_label, "Unknown")
+
+        scaler = joblib.load('scaler.pkl')
+        kmeans_model = joblib.load('kmeans_model.pkl')
+
+        # Save the columns you are going to drop
+        saved_columns = data_result2[['Account_Holder', 'Account_Number', 'Bank_Name', 'Mounth_Year']].copy()
+
+        # Drop the columns
+        data_result2 = data_result2.drop(columns=['Account_Holder', 'Account_Number', 'Bank_Name', 'Mounth_Year'])
+
+        # Scale the new data using the loaded scaler
+        scaled_data_result2 = scaler.transform(data_result2)
+
+        # Predicting the clusters for the new data using the loaded model
+        new_clusters = kmeans_model.predict(scaled_data_result2)
+
+        # Add the predicted clusters to your new data DataFrame
+        data_result2['Cluster'] = new_clusters
+        data_result2['Spending_Category'] = data_result2['Cluster'].map(map_cluster_to_spending)
+
+        # Add the saved columns back to the DataFrame
+        data_result2 = pd.concat([saved_columns, data_result2], axis=1)
+
+        transaction_analysis = ()
+        if data_result2 is not None and not data_result2.empty:
+            for _, row in data_result2.iterrows():
+                row_dict = {col: row[col] for col in data_result2.columns}
+                transaction_analysis += (row_dict,)
+
+        # tab result
+        extraction_result = {"bank_name": data_result2['Bank_Name'].values[0], "account_number": data_result2['Account_Number'].values[0], "account_holder": data_result2['Account_Holder'].values[0], "table": transaction_analysis}
+
         data_result2 = pd.concat([data_result2,pd.read_csv('Dataset/df_bank_statement_result.csv')])
         data_result2.to_csv('Dataset/df_bank_statement_result.csv',index=False)
-        
-        free_prompt = {"table": ocr_result["table"], "prefix_ocr":ocr_result["prefix"], "prompt_dataframe": ""}
 
         data_response = json.dumps({"status":1, "message": "bs_action_newdoc berhasil", "data": data, "ocr_result": ocr_result, "free_prompt": free_prompt, "extraction_result": extraction_result})
         return HttpResponse(data_response)
@@ -453,7 +497,6 @@ def bs_action_docname(request):
             for _, row in TransactionDetail_drop.iterrows():
                 row_dict = {col: row[col] for col in TransactionDetail_drop.columns}
                 transaction_detail += (row_dict,)
-
         data_result = pd.read_csv('Dataset/df_bank_statement_result.csv').astype('str')
         data_result = data_result.query("Account_Number == '"+df_bank['Account_Number'][data]+"' and Bank_Name == '"+ df_bank['Bank_Name'][data]+"'")
         data_result_drop = data_result.drop(columns=['Bank_Name','Account_Number','Account_Holder'])
@@ -466,7 +509,7 @@ def bs_action_docname(request):
 
         # tab ocr result
         ocr_result = {"prefix": TransactionDetail['prefixData'].values[0],"sufix":TransactionDetail['sufixData'].values[0],"table": transaction_detail}
-        free_prompt = {"table": transaction_detail, "prefix_ocr":TransactionDetail['prefixData'].values[0], "prompt_dataframe": ""}
+        free_prompt = {"table": transaction_detail, "prefix_ocr": TransactionDetail['Account_Number'].values[0], "prompt_dataframe": ""}
         extraction_result = {"bank_name": data_result['Bank_Name'].values[0], "account_number": data_result['Account_Number'].values[0], "account_holder": data_result['Account_Holder'].values[0], "table": transaction_analysis}
 
         data_response = json.dumps({"status":1, "message": "bs_action_newdoc berhasil","data":data, "ocr_result": ocr_result, "free_prompt": free_prompt, "extraction_result": extraction_result})
@@ -516,9 +559,10 @@ def bs_action_processfp(request):
     if request.method == "POST":
         data = request.POST
         TransactionDetail = pd.read_csv('Dataset/df_bank_statement_raw.csv').astype('str')
-        filtered_df = TransactionDetail[(TransactionDetail['Bank_Name'] == 'BCA') & (TransactionDetail['prefixData'] == str(data.get("prefix_ocr")))]
+        filtered_df = TransactionDetail[(TransactionDetail['Bank_Name'] == 'BCA')]
         if not filtered_df.empty:
             TransactionDetail = pd.read_csv('Dataset/df_bank_statement_raw_BCA.csv').astype('str')
+            TransactionDetail = TransactionDetail[(TransactionDetail['Account_Number'] == str(data.get("prefix_ocr")))]
         result = DataFrameExtraction(TransactionDetail,str(data.get("prompt_dataframe")),str(data.get("prefix_ocr")))
         data_response = json.dumps({"result_dataframe_search":result})
         return HttpResponse(data_response)

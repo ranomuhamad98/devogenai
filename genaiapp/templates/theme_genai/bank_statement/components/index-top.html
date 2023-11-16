@@ -114,17 +114,17 @@
           <p class="m-0">
             <form class="needs-validation" novalidate>
               <div class="mb-3">
-                <label class="form-label">Prefix</label>
+                <label class="form-label">Account Number</label>
                 <input class="form-control" name="prefix" id="prefix" type="text" placeholder="" readonly>
               </div>
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label class="form-label">Sufix</label>
                 <input class="form-control" name="sufix" id="sufix" type="text" placeholder="" readonly>
-              </div>
+              </div> -->
             </form>
             <div class="row">
               <div class="col-sm-12 col-lg-12 col-xl-12">
-                <div class="table-responsive table-bordered">
+                <div class="table-responsive table-bordered" style="max-height: 50vh; overflow-y: auto;">
                   <label class="form-label">Transaction Detail</label>
                   <table class="table" id="table-transaction-detail">
                     <thead>
@@ -148,7 +148,7 @@
           <p class="m-0">
             <div class="row">
               <div class="col-sm-12 col-lg-12 col-xl-12">
-                <div class="table-responsive table-bordered">
+                <div class="table-responsive table-bordered"  style="max-height: 50vh; overflow-y: auto;">
                   <table class="table" id="table-free-prompt">
                     <thead>
                       <tr>
@@ -168,7 +168,7 @@
             <form class="needs-validation" id="form_step3" method="post" novalidate>
               {% csrf_token %}
               <div class="mb-3 mt-3">
-                <label class="form-label" for="validationCustom01">Prefix OCR</label>
+                <label class="form-label" for="validationCustom01">Account Number</label>
                 <textarea class="form-control" name="prefix_ocr" id="prefix_ocr" placeholder="" required=""></textarea>
                 <div class="invalid-feedback">Need to enter prefix OCR</div>
               </div>
@@ -243,13 +243,20 @@
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">DATE</th>
+                    <th scope="col">COUNT TRANSACTION</th>
+                    <th scope="col">SUM CASH WITHDARWA</th>
+                    <th scope="col">COUNT CASH WITHDARWAL</th>
+                    <th scope="col">SUM PAJAK</th>
+                    <th scope="col">COUNT PAJAK</th>
+                    <th scope="col">SUM BIAYA ADMIN</th>
+                    <th scope="col">COUNT BIAYA ADMIN</th>
+                    <th scope="col">SUM DEPOSIT</th>
+                    <th scope="col">COUNT DEPOSIT</th>
                     <th scope="col">SUM DEBIT</th>
                     <th scope="col">COUNT DEBIT</th>
                     <th scope="col">SUM CREDIT</th>
                     <th scope="col">COUNT CREDIT</th>
-                    <th scope="col">MIN SALDO</th>
-                    <th scope="col">MAX SALDO</th>
-                    <th scope="col">AVERAGE SALDO</th>
+                    <th scope="col">SPENDING CLUSTER CATEGORY</th>
                   </tr>
                 </thead>
                 <tbody></tbody>

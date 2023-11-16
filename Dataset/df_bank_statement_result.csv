@@ -1,3 +1,2 @@
-Mounth_Year,DEBIT_SUM,DEBIT_COUNT,CREDIT_SUM,CREDIT_COUNT,MIN_SALDO,MAX_SALDO,AVG_SALDO,Bank_Name,Account_Number,Account_Holder
-Februari 2023,63129125.0,8,0.0,0,3791452945.22,3848543528.55,3819462705.63375,Amount Balance,Transaction Amount Balance,Amount Balance
-Februari 2023,63129125.0,8,0.0,0,3791452945.22,3848543528.55,3819462705.63375,Amount Balance,Transaction Amount Balance,Amount Balance
+Account_Holder,Account_Number,Bank_Name,Mounth_Year,Sum_Transaction,Count_Transaction,Cash_Witdrawal_Count,Cash_Witdrawal_Sum,Pajak_Sum,Pajak_Count,Biaya_Admin_Sum,Biaya_Admin_Count,Sales_Sum,Sales_Count,Deposit_Sum,Deposit_Count,Debit_Sum,Debit_Count,Credit_Sum,Credit_Count,Cluster,Spending_Category
+BCA REKENING GIRO GRUP BCA KCP RADEN SALEH WINDU AJI NUSANTARA PT,6340838899,BCA KCP RADEN SALEH WINDU AJI NUSANTARA,Agustus 2023,2665339500.0,23,0,0.0,0.0,0,30000.0,1,1837800000.0,7,586300000.0,1,1332357500.0,15,1332982000.0,8,1,Mid Spending
