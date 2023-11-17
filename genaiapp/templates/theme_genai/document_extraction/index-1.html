@@ -25,6 +25,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="{% static 'assets/js/sweet-alert/sweetalert.min.js' %}"></script>
 <script type="text/javascript">
+  
+$('[data-bs-target="#modalFile"').on('click', function() {
+  console.log('doc_link: ' + $('[data-bs-target="#modalFile"').attr('data-link'));
+  console.log('doc_file: ' + $('[data-bs-target="#modalFile"').attr('data-file'));
+  $('.modal-title').html($('[data-bs-target="#modalFile"').attr('data-file'));
+
+  $('#pdfFrame').attr("src", $('[data-bs-target="#modalFile"').attr('data-link') + "#view=VFit" + "&toolbar=0" + "&navpanes=0");
+});
 
 $('#btn_form_step1').click(function(){
     $(".new_doc").hide(); 

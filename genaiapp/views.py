@@ -51,7 +51,7 @@ def indexPage(request):
 @login_required(login_url="/login") 
 def upload_document(request):
     check, perms = check_user_permission(request,'document_extraction')
-    data_doc = {"document_name":"table cell 1","id":"1"},{"document_name":"table cell 2","id":"2"},{"document_name":"table cell 3","id":"3"}
+    data_doc = {"document_name":"table cell 1","link_doc":"https://storage.cloud.google.com/mitratel/DocExtraction/EDELWEISS%202_21TS08B5209%20BLU002%20-%20Perjanjian%20Kerja%20Sama.pdf","id":"1"},{"document_name":"table cell 2","link_doc":"https://storage.cloud.google.com/mitratel/DocExtraction/EDELWEISS%202_21TS08B5209%20BLU002%20-%20Perjanjian%20Kerja%20Sama.pdf","id":"2"},{"document_name":"table cell 3","link_doc":"https://storage.cloud.google.com/mitratel/DocExtraction/EDELWEISS%202_21TS08B5209%20BLU002%20-%20Perjanjian%20Kerja%20Sama.pdf","id":"3"}
     context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Upload Document"}, "data": data_doc, "perms": perms}
     return render(request,'theme_genai/document_extraction/index-1.html',context)
 @login_required(login_url="/login")

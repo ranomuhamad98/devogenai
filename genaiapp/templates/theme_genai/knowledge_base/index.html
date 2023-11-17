@@ -32,7 +32,7 @@
   const hours = now.getHours();
   const minutes = now.getMinutes();
   $('#chatbox').append("<li>"+
-                  "<div class=\"message my-message\"><img class=\"rounded-circle float-start chat-user-img img-30\" src=\"{% static 'assets/images/user/kb.jpg' %}\">"+
+                  "<div class=\"message my-message\" style=\"width:100%\"><img class=\"rounded-circle float-start chat-user-img img-30\" src=\"{% static 'assets/images/user/kb.jpg' %}\">"+
                     "<div class=\"message-data text-end\"><span class=\"message-data-time\">"+hours+":"+String(minutes).padStart(2, '0')+"</span></div>"+
                     "Hello, may I help you?"+
                   "</div>"+
@@ -249,8 +249,8 @@
       const hours = now.getHours();
       const minutes = now.getMinutes();
 
-      $('#chatbox').append("<li class=\"clearfix\" id=\"chatid123\">"+
-                    "<div class=\"message other-message pull-right\">"+
+      $('#chatbox').append("<li class=\"clearfix\">"+
+                    "<div class=\"message other-message pull-right\" style=\"width:100%\">"+
                       "<img class=\"rounded-circle float-end chat-user-img img-30\" src=\"{% static 'assets/images/user/user-chat.png' %}\">"+
                       "<div class=\"message-data\"><span class=\"message-data-time\">"+hours+":"+String(minutes).padStart(2, '0')+"</span></div>"+
                       String(chat_data[1].value) +
@@ -272,7 +272,7 @@
             $('#idle_kb').show();
             if(data_json.status){
               $('#chatbox').append("<li>"+
-                    "<div class=\"message my-message\"><img class=\"rounded-circle float-start chat-user-img img-30\""+
+                    "<div class=\"message my-message\" style=\"width:100%\"><img class=\"rounded-circle float-start chat-user-img img-30\""+
                         "src=\"{% static 'assets/images/user/kb.jpg' %}\">"+
                       "<div class=\"message-data text-end\"><span class=\"message-data-time\">"+hours+":"+String(minutes).padStart(2, '0')+"</span></div>"+
                       "new message from knowledge base"+
@@ -280,7 +280,7 @@
                   "</li>");
             }else{
               $('#chatbox').append("<li>"+
-                    "<div class=\"message my-message\"><img class=\"rounded-circle float-start chat-user-img img-30\""+
+                    "<div class=\"message my-message\" style=\"width:100%\"><img class=\"rounded-circle float-start chat-user-img img-30\""+
                         "src=\"{% static 'assets/images/user/kb.jpg' %}\">"+
                       "<div class=\"message-data text-end\"><span class=\"message-data-time\">"+hours+":"+String(minutes).padStart(2, '0')+"</span></div>"+
                       "I'm sorry, prompt failed to be process. try again later."+
