@@ -805,7 +805,7 @@ def kb_action_process(request):
     if request.method == "POST":
         data = request.POST
 
-        data_response = json.dumps({"status": 1, "message": "kb_action_process berhasil ["+str(data)+"]", "data_row": {"id":1,"doc_name":"table cell 4"}})
+        data_response = json.dumps({"status": 1, "message": "kb_action_process berhasil ["+str(data)+"]", "data_row": {"id":1,"doc_name":"table cell 4"}, "answer": "orang ganteng"})
         return HttpResponse(data_response)
     else:
         data_response = json.dumps({"status":0, "message": "unauthorized"})

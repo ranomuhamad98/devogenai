@@ -232,6 +232,22 @@
   };
 
   $('#btn_chat').click(function(){
+    submit_chat();
+  });
+
+  $(function() {
+    $("form").submit(function() { return false; });
+  });
+
+  $("#chat").keyup(function(event) {
+    if (event.keyCode === 13) {
+      submit_chat();
+    }
+  });
+
+  function submit_chat(){
+    $(".chat-validation").hide(); 
+    
     $("#btn_chat").prop('disabled', true)
     if (!$('#message-to-send').val()) {
       $(".chat-validation").show(); 
@@ -275,7 +291,7 @@
                     "<div class=\"message my-message\" style=\"width:100%\"><img class=\"rounded-circle float-start chat-user-img img-30\""+
                         "src=\"{% static 'assets/images/user/kb.jpg' %}\">"+
                       "<div class=\"message-data text-end\"><span class=\"message-data-time\">"+hours+":"+String(minutes).padStart(2, '0')+"</span></div>"+
-                      "new message from knowledge base"+
+                      data_json.answer+
                     "</div>"+
                   "</li>");
             }else{
@@ -296,7 +312,7 @@
           }
       })
     }
-  });
+  }
 
 </script>
 
