@@ -815,10 +815,12 @@ def kb_action_process(request):
 
 @login_required(login_url="/login")
 def dashboard_default(request):
-    check_user_permission(request,'dashboard')
+    val,rtn = check_user_permission(request,'dashboard')
+    if val==False: return rtn
+
     # context={"breadcrumb":{"parent":"Dashboard","child":"Document Extraction","child2":"Upload Document"}}
     # return render(request,'theme_genai/document_extraction/index-1.html',context)
-    context={"breadcrumb":{"parent":"Dashboard","child":"Default"}, "perms": check_user_permission(request,'document_extraction')}
+    context={"breadcrumb":{"parent":"Dashboard","child":"Default"}, "perms": rtn}
     return render(request,'general/dashboard/default/index.html',context)
 # .......
 
