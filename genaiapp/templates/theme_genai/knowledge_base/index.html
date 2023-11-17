@@ -1,0 +1,306 @@
+{% extends 'base-genai.html' %}{% load static %}
+{% load sass_tags %}
+{% block css %}
+<!-- Plugins css start-->
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/animate.scss' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/prism.scss' %}"> -->
+<link rel="stylesheet" type="text/css" href="{% static 'assets/scss/vendors/sweetalert2.scss' %}">
+<!-- Plugins css Ends-->
+{% endblock css %}
+{% block content %}
+
+<div class="page-body">
+  {% include 'layout/breadcrumb-dashboard.html' %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      {% include 'theme_genai/knowledge_base/components/chat-side.html' %}
+      {% include 'theme_genai/knowledge_base/components/chat-main.html' %}
+
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="{% static 'assets/js/sweet-alert/sweetalert.min.js' %}"></script>
+<script type="text/javascript">
+  const now = new Date();
+  const day = now.getDay(); // returns a number representing the day of the week, starting with 0 for Sunday
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  $('#chatbox').append("<li>"+
+                  "<div class=\"message my-message\"><img class=\"rounded-circle float-start chat-user-img img-30\" src=\"{% static 'assets/images/user/kb.jpg' %}\">"+
+                    "<div class=\"message-data text-end\"><span class=\"message-data-time\">"+hours+":"+String(minutes).padStart(2, '0')+"</span></div>"+
+                    "Hello, may I help you?"+
+                  "</div>"+
+                "</li>");
+
+  $('#loader_kb').hide()
+
+  $('#btn_form_step1').click(function(){
+    $(".new_doc").hide(); 
+    if ($('#new_doc').get(0).files.length === 0) {
+      $(".new_doc").show(); 
+      console.log("No files selected.");
+    }else{
+      $("#btn_form_step1").prop('disabled', true)
+      $("#btn_form_step1").html("<span class=\"pull-left\">Process&nbsp;&nbsp;</span>"+
+                    "<span id=\"loader_newdoc\" class=\"loader-box pull-right text-right\" style=\"float:left;height: 20px;\">"+
+                    "<span class=\"loader-2\" style=\"height: 20px;width:20px;border-left-color: #fff;border-right-color: #fff;\"></span>"+
+                    "</span>");
+                    
+      const formData = new FormData();
+      
+      const fileInput = document.getElementById('new_doc');
+      const file = fileInput.files[0];
+      var file_result = ""
+      
+      const reader = new FileReader();
+      reader.onloadend = () => { 
+      
+        formData.append('new_doc', reader.result);
+        formData.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val())
+ 
+        fetch('knowledge_base/action_newdoc', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data_json => {
+          console.log(data_json);
+          if(data_json.status){
+            var add_row = data_json.data_row
+            swal("Poof! Your document flawlessly uploaded", {
+              icon: "success"
+            }).then((value) => {
+              $('#modal_newdoc').modal('toggle');
+              
+              $('#list_doc').append("<li class=\"clearfix\" id=\"row-1\">"+
+                "<div class=\"media\">"+
+                  "<div class=\"media-body\">"+
+                    "<div class=\"row\">"+
+                      "<div class=\"col-lg-10 col-md-10\">"+
+                        "<div class=\"status\">"+
+                          "<a href=\"#\" target=\"_blank\" class=\"text-primary\">orang ganteng</a>"+
+                        "</div>"+
+                      "</div>"+
+                      "<div class=\"col-lg-2 col-md-2\">"+
+                        "<a href=\"#\" onclick=\"btn_del(this)\" data-del=\"1\"><i class=\"fa fa-trash-o fa-2x\" style=\"color:#ff386c\"></i></a>"+
+                      "</div>"+
+                    "</div>"+
+                  "</div>"+
+                "</div>"+
+              "</li>");
+
+              $('#form_step1')[0].reset();
+            });
+          }else{
+            swal("Failed!", "The document test you sent failed to be processed!", "error");
+          }
+        
+          $("#btn_form_step1").prop('disabled', false)
+          $("#btn_form_step1").html("<span class=\"pull-left\">Process&nbsp;&nbsp;</span>");                
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  function btn_docname(data){
+    var docname = $(data).data('docname');
+    $.ajax(
+    {
+        type:"GET",
+        url: "bank_statement/action_docname",
+        data:{post_id: docname},
+        success: function( response ) 
+        {
+          console.log(response);
+          data_json = JSON.parse(response);
+          if(data_json.status){
+            swal("Poof! Your document flawlessly loaded", {
+              icon: "success"
+            }).then((value) => {
+              // tab ocr result
+            $('#prefix').val(data_json.ocr_result.prefix)
+            // $('#sufix').val(data_json.ocr_result.sufix)
+            var tbl_trx_detail = data_json.ocr_result.table
+            
+            // tab free prompt
+            var tbl_free_prompt = data_json.free_prompt.table
+            $('#prefix_ocr').val(data_json.free_prompt.prefix_ocr)   
+            $('#prompt_dataframe').val(data_json.free_prompt.prompt_dataframe)   
+
+            // card extraction result
+            $('#er_bank_name').val(data_json.extraction_result.bank_name)   
+            $('#account_number').val(data_json.extraction_result.account_number)   
+            $('#account_holder').val(data_json.extraction_result.account_holder)
+            var tbl_extraction_result = data_json.extraction_result.table
+
+            // tbl 1
+            var row;
+            for (let index = 0; index < tbl_trx_detail.length; index++) {
+              row += "<tr>"+
+                        "<th scope=\"row\">"+(index+1)+"</th>"+
+                        "<td>"+tbl_trx_detail[index].TANGGAL+"</td>"+
+                        "<td>"+tbl_trx_detail[index].KETERANGAN+"</td>"+
+                        "<td>"+tbl_trx_detail[index].STATUS+"</td>"+
+                        "<td>"+tbl_trx_detail[index].AMMOUNT+"</td>"+
+                        "<td>"+tbl_trx_detail[index].SALDO+"</td>"+
+                    "</tr>";
+            }
+            $('table[id="table-transaction-detail"] tbody').html(row);
+            
+            // tbl 2
+            row = "";
+            for (let index = 0; index < tbl_free_prompt.length; index++) {
+              row += "<tr>"+
+                        "<th scope=\"row\">"+(index+1)+"</th>"+
+                        "<td>"+tbl_trx_detail[index].TANGGAL+"</td>"+
+                        "<td>"+tbl_trx_detail[index].KETERANGAN+"</td>"+
+                        "<td>"+tbl_trx_detail[index].STATUS+"</td>"+
+                        "<td>"+tbl_trx_detail[index].AMMOUNT+"</td>"+
+                        "<td>"+tbl_trx_detail[index].SALDO+"</td>"+
+                    "</tr>";
+            }
+            $('table[id="table-free-prompt"] tbody').html(row);
+
+            // tbl 3
+            row = "";
+            for (let index = 0; index < tbl_extraction_result.length; index++) {
+              row += "<tr>"+
+                      "<th scope=\"row\">"+(index+1)+"</th>"+
+                      "<td>"+tbl_extraction_result[index].Mounth_Year+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Count_Transaction+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Cash_Witdrawal_Sum+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Cash_Witdrawal_Count+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Pajak_Sum+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Pajak_Count+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Biaya_Admin_Sum+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Biaya_Admin_Count+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Deposit_Sum+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Deposit_Count+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Debit_Sum+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Debit_Count+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Credit_Sum+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Credit_Count+"</td>"+
+                      "<td>"+tbl_extraction_result[index].Spending_Category+"</td>"+
+                    "</tr>";
+            }
+            $('table[id="table-extraction-result"] tbody').html(row);
+            });
+          }else{
+            swal("Failed!", "The document test you sent failed to be processed!", "error");
+          }
+        }
+    })
+  };
+
+  function btn_del(request){
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this file!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            var datadel = $(request).data('del');
+            $.ajax(
+            {
+                type:"GET",
+                url: "bank_statement/action_docdel",
+                data:{post_id: datadel},
+                success: function( response ) 
+                {
+                  console.log(response);
+                  data_json = JSON.parse(response);
+                  $("#row-"+datadel).remove();
+                  swal("Poof! Your file has been deleted!", {
+                    icon: "success",
+                  });
+                }
+            })
+        } else {
+            swal("Your file is safe!");
+        }
+    }) 
+  };
+
+  $('#btn_chat').click(function(){
+    $("#btn_chat").prop('disabled', true)
+    if (!$('#message-to-send').val()) {
+      $(".chat-validation").show(); 
+      console.log("No files selected.");
+      $("#btn_chat").prop('disabled', false)
+    }else{
+      // let scroll_to_bottom = document.getElementById("chatbox");
+      // console.log(scroll_to_bottom.scrollHeight);
+      $('#loader_kb').show();
+      $('#idle_kb').hide();
+      chat_data = $("#chat").serializeArray();
+
+      const now = new Date();
+      const day = now.getDay(); // returns a number representing the day of the week, starting with 0 for Sunday
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+
+      $('#chatbox').append("<li class=\"clearfix\" id=\"chatid123\">"+
+                    "<div class=\"message other-message pull-right\">"+
+                      "<img class=\"rounded-circle float-end chat-user-img img-30\" src=\"{% static 'assets/images/user/user-chat.png' %}\">"+
+                      "<div class=\"message-data\"><span class=\"message-data-time\">"+hours+":"+String(minutes).padStart(2, '0')+"</span></div>"+
+                      String(chat_data[1].value) +
+                    "</div>"+
+                  "</li>");
+      
+      $('#scroll-chatbox').scrollTop($('#scroll-chatbox').height());
+      
+      $.ajax(
+      {
+          type:"POST",
+          url: "knowledge_base/action_process",
+          data: $('#chat').serialize(),
+          success: function( response )
+          {
+            console.log(response);
+            data_json = JSON.parse(response);
+            $('#loader_kb').hide();
+            $('#idle_kb').show();
+            if(data_json.status){
+              $('#chatbox').append("<li>"+
+                    "<div class=\"message my-message\"><img class=\"rounded-circle float-start chat-user-img img-30\""+
+                        "src=\"{% static 'assets/images/user/kb.jpg' %}\">"+
+                      "<div class=\"message-data text-end\"><span class=\"message-data-time\">"+hours+":"+String(minutes).padStart(2, '0')+"</span></div>"+
+                      "new message from knowledge base"+
+                    "</div>"+
+                  "</li>");
+            }else{
+              $('#chatbox').append("<li>"+
+                    "<div class=\"message my-message\"><img class=\"rounded-circle float-start chat-user-img img-30\""+
+                        "src=\"{% static 'assets/images/user/kb.jpg' %}\">"+
+                      "<div class=\"message-data text-end\"><span class=\"message-data-time\">"+hours+":"+String(minutes).padStart(2, '0')+"</span></div>"+
+                      "I'm sorry, prompt failed to be process. try again later."+
+                    "</div>"+
+                  "</li>");
+            }
+
+            $("html, #scroll-chatbox").animate({ 
+                scrollTop: $('html, #scroll-chatbox').get(0).scrollHeight 
+            }, 2000); 
+
+            $("#btn_chat").prop('disabled', false)
+          }
+      })
+    }
+  });
+
+</script>
+
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/fullscreen.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

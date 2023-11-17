@@ -54,6 +54,10 @@
           {% if perms.image_extraction %}
           <li class="dropdown"><a class="nav-link menu-title link-nav" href="/image_extraction"><i data-feather="image"></i><span>Image Extraction</span></a></li>
           {% endif %}
+
+          {% if perms.knowledge_base %}
+          <li class="dropdown"><a class="nav-link menu-title link-nav" href="/knowledge_base"><i data-feather="message-circle"></i><span>Knowledge Base</span></a></li>
+          {% endif %}
         </ul>
       </div>
       <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>

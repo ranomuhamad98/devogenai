@@ -59,6 +59,12 @@ urlpatterns = [
     path('image_extraction/action_showconf', views.ie_action_showconf,name='image_extraction_action_showconf'),
     path('image_extraction/action_search', views.ie_action_search,name='image_extraction_action_search'),
 
+    path('knowledge_base', views.knowledge_base,name='knowledge_base'),
+    path('knowledge_base/action_newdoc', views.kb_action_newdoc,name='knowledge_base_action_newdoc'),
+    path('knowledge_base/action_docname', views.kb_action_docname,name='knowledge_base_action_docname'),
+    path('knowledge_base/action_docdel', views.kb_action_docdel,name='knowledge_base_action_docdel'),
+    path('knowledge_base/action_process', views.kb_action_process,name='knowledge_base_action_process'),
+
     # dashboard paths
 
     path('', views.indexPage,name='indexPage'),

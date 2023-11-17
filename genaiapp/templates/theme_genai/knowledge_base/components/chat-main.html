@@ -1,0 +1,73 @@
+{% load static %}
+{% load sass_tags %}
+<div class="col call-chat-body">
+  <div class="card">
+    <div class="card-body p-0">
+      <div class="row chat-box">
+        <!-- Chat right side start-->
+        <div class="col chat-right-aside">
+          <!-- chat start-->
+          <div class="chat">
+            <!-- chat-header start-->
+            <div class="media chat-header clearfix"><img class="rounded-circle"
+                src="{% static 'assets/images/user/kb.jpg' %}" alt="">
+              <div class="media-body">
+                <div class="about">
+                  <div class="name">Knowledge Base</div>
+                  <div class="status digits">
+                    <span id="loader_kb" class="loader-box class="font-primary f-12" style="float:left;height: 12px;">
+                      <span style="font-size:12px;font-weight: 400;">Process  </span>&nbsp;
+                      <span class="loader-2" style="height: 12px;width:12px;border-left-color: #4d8aff;border-right-color: #4d8aff;"></span>
+                    </span>
+                    <span id="idle_kb" style="font-size:12px;font-weight: 400;">Idle</span>
+                  </div>
+                </div>
+              </div>
+              <ul class="list-inline float-start float-sm-end chat-menu-icons">
+                <li class="list-inline-item toogle-bar"><a href="javascript:void(0)"><i
+                      data-feather="align-justify"></i></a></li>
+              </ul>
+            </div>
+            <!-- chat-header end-->
+            <div id="scroll-chatbox" class="chat-history chat-msg-box custom-scrollbar">
+              <ul id="chatbox"></ul>
+            </div>
+            <!-- end chat-history-->
+            <div class="chat-message clearfix">
+              <div class="row">
+                <form class="needs-validation" id="chat" method="post" novalidate>
+                  <div class="col-xl-12 d-flex">
+                      <div class="input-group text-box">
+                        {% csrf_token %}
+                        <input class="form-control input-txt-bx" id="message-to-send" type="text" name="message-to-send"
+                          placeholder="Type a message......">
+                        <button class="btn btn-primary input-group-text" id="btn_chat" type="button">SEND</button>
+                      </div>
+                  </div>
+                </form>
+                <div class="invalid-feedback chat-validation">Need to enter the prompt</div>
+              </div>
+            </div>
+            <!-- end chat-message-->
+            <!-- chat end-->
+            <!-- Chat right side ends-->
+          </div>
+        </div>
+        <div class="col chat-menu">
+          <div class="user-profile">
+            <div class="image">
+              <div class="avatar text-center"><img alt="" src="{% static 'assets/images/user/kb.jpg' %}"></div>
+            </div>
+            <div class="user-content text-center">
+              <h5 class="text-uppercase">Levenshtein</h5>
+              <div class="text-center digits">
+                <p>Devoteam - Gen AI</p>
+                <p>Powered by Palm API</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

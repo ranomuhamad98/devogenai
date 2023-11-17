@@ -1,0 +1,85 @@
+{% load static %}
+{% load sass_tags %}
+<div class="col call-chat-sidebar">
+  <div class="card">
+    <div class="card-body chat-body">
+      <div class="chat-box">
+        <!-- Chat left side Start-->
+        <div class="chat-left-aside">
+          <div class="media">
+            <div class="media-body">
+              <div class="about">
+                <div class="row">
+                  <div class="col-md-10 name f-w-600">Knowledge Base</div>
+                  <div class="col-md-2">
+                    <a href="#" title="Add new document knowledge base" class="btn-sm btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#modal_newdoc"><i class="fa fa-plus"></i></a>
+                  </div>
+                  <div class="col-md-12 status">V1.0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="modal fade" id="modal_newdoc" tabindex="-1" role="dialog"
+            aria-labelledby="modal_newdoc" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Upload New Document</h5>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form class="needs-validation" id="form_step1" method="post" enctype="multipart/form-data" novalidate></form>
+                <div class="modal-body">
+                  <p class="m-0">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                      <label class="form-label" for="validationCustom01">Document Bank Statement</label>
+                      <input class="form-control" name="new_doc" id="new_doc" type="file" aria-label="file example" required="">
+                      <div class="invalid-feedback new_doc">Need to enter document bank statement</div>
+                    </div>
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-primary pull-left" id="btn_form_step1" type="button">
+                    <span class="pull-left">Process&nbsp;&nbsp;</span>
+                  </button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="people-list" id="people-list">
+            <!-- <div class="search">
+              <form class="theme-form">
+                <div class="form-group">
+                  <input class="form-control" type="text" placeholder="search"><i class="fa fa-search"></i>
+                </div>
+              </form>
+            </div> -->
+            <ul id="list_doc" class="list" style="max-height: 450px;overflow-x: auto;">
+              {% for doc_history in data_doc %}
+              <li class="clearfix" id="row-{{ doc_history.id }}">
+                <div class="media">
+                  <div class="media-body">
+                    <div class="row">
+                      <div class="col-lg-10 col-md-10">
+                        <div class="status">
+                          <a href="#" target="_blank" class="text-primary">{{ doc_history.document_name }}</a>
+                        </div>
+                      </div>
+                      <div class="col-lg-2 col-md-2">
+                        <a href="#" onclick="btn_del(this)" data-del="{{ doc_history.id }}"><i class="fa fa-trash-o fa-2x" style="color:#ff386c"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Chat left side Ends-->
+      </div>
+    </div>
+  </div>
+</div>

@@ -27,5 +27,6 @@ class RightsSupport(models.Model):
             ('bank_statement', 'global | bank statement'), 
             ('ktp_extraction', 'global | ktp extraction'), 
             ('image_extraction', 'global | image extraction'), 
+            ('knowledge_base', 'global | knowledge base'), 
             ('dashboard', 'global | dashboard'), 
         )
